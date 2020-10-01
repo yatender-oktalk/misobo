@@ -1,4 +1,7 @@
 defmodule MisoboWeb.Telemetry do
+  @moduledoc """
+  This module takes care of the telemetry events registration
+  """
   use Supervisor
   import Telemetry.Metrics
 

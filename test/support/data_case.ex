@@ -15,6 +15,7 @@ defmodule Misobo.DataCase do
   """
 
   use ExUnit.CaseTemplate
+  alias Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
@@ -28,10 +29,10 @@ defmodule Misobo.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Misobo.Repo)
+    :ok = Sandbox.checkout(Misobo.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Misobo.Repo, {:shared, self()})
+      Sandbox.mode(Misobo.Repo, {:shared, self()})
     end
 
     :ok
