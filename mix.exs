@@ -35,7 +35,10 @@ defmodule Misobo.MixProject do
     [
       # testing only
 
-      # dev
+      # dev only
+      {:credo, "~> 1.1", only: [:dev, :test], runtime: false},
+
+      # all
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
