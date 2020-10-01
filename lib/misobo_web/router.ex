@@ -7,6 +7,8 @@ defmodule MisoboWeb.Router do
 
   scope "/api", MisoboWeb do
     pipe_through :api
+
+    get("/", AccountController, :get)
   end
 
   # Enables LiveDashboard only for development
