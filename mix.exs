@@ -10,6 +10,7 @@ defmodule Misobo.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
+      dialyzer: dialyzer(),
       deps: deps()
     ]
   end
@@ -36,6 +37,7 @@ defmodule Misobo.MixProject do
       # testing only
 
       # dev only
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:credo, "~> 1.1", only: [:dev, :test], runtime: false},
 
       # all
@@ -67,6 +69,15 @@ defmodule Misobo.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+    ]
+  end
+
+  defp dialyzer() do
+    [
+      plt_add_deps: :app_tree,
+      plt_add_apps: [:ex_unit],
+      plt_ignore_apps: [],
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
     ]
   end
 end
