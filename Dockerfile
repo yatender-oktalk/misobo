@@ -1,4 +1,4 @@
-FROM elixir:1:10-alpine AS builder
+FROM bitwalker/alpine-elixir:latest AS builder
 
 ENV MIX_ENV prod
 ENV HEX_HTTP_CONCURRENCY 1
