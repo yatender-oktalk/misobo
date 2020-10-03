@@ -1,11 +1,15 @@
 FROM bitwalker/alpine-elixir:latest AS builder
 
-ENV MIX_ENV prod
-ENV HEX_HTTP_CONCURRENCY 1
+ENV HEX_HTTP_CONCURRENCY=1
+ENV DATABASE_URL=${DATABASE_URL}
+ENV SECRET_KEY_BASE=${SECRET_KEY_BASE}
+
+EXPOSE ${PORT}
 
 ENV MIX_ENV=prod \
   LANG=C.UTF-8 \
   PATH=/root/.mix/escripts:$PATH
+
 
 WORKDIR /src
 COPY . .

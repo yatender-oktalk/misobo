@@ -24,18 +24,34 @@ defmodule Misobo.Accounts do
   @doc """
   Gets a single user.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
+  Retruns `nil` if the User does not exist.
 
   ## Examples
 
-      iex> get_user!(123)
-      %User{}
+      iex> get_user(123)
+      {:ok, %User{}}
 
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_user(456)
+      {:ok, nil}
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user(id), do: Repo.get(User, id)
+
+  @doc """
+  Gets user by params.
+
+  Retruns `nil` if the User does not exist.
+
+  ## Examples
+
+      iex> get_user_by({phone: "8989898989"})
+      nil
+
+      iex> get_user_by({phone: "8989898989"})
+      %User{}
+
+  """
+  def get_user_by(params), do: Repo.get_by(User, params)
 
   @doc """
   Creates a user.
