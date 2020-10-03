@@ -1,4 +1,7 @@
 defmodule Misobo.Astrology.Horoscorpe do
+  @moduledoc """
+  This module takes care of horoscope schema
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

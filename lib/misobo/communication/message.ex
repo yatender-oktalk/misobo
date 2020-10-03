@@ -7,6 +7,6 @@ defmodule Misobo.Communication.Message do
     "Your otp for misobo is #{otp}"
   end
 
-  def generate_otp(), do: Enum.random(1000..9999)
+  def generate_otp, do: Enum.random(1000..9999)
   def add_prefix(phone), do: "91#{phone}"
 end
