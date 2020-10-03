@@ -7,6 +7,14 @@ defmodule MisoboWeb.Router do
 
   scope "/api", MisoboWeb do
     pipe_through :api
+
+    # Health endpoints
+    get("/health", HealthController, :index)
+
+    get("/account/:id", AccountController, :index)
+
+    post("/account/signup", AccountController, :create)
+    post("/account/login", AccountController, :login)
   end
 
   # Enables LiveDashboard only for development

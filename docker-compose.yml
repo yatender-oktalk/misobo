@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  database:
+    image: postgres
+    container_name: pg_container
+    volumes:
+       - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: misobo
+    links:
+     - database
+    environment:
+      - PGPASSWORD=${DB_PASSWORD}
+      - PGUSER=${DB_USERNAME}
+      - PGDATABASE=${DB_NAME}
+      - PGHOST=database
+      - PGPORT=5432
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - database
+
+volumes:
+  pgdata: {}

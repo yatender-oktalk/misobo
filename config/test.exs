@@ -6,11 +6,13 @@ use Mix.Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :misobo, Misobo.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "misobo_test#{System.get_env("MIX_TEST_PARTITION")}",
+  username: "blockfiadmin",
+  password: "blockfiadmin",
+  database: "misobo_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :misobo, :communication, sms: Misobo.Communication.SMSProvider.TextLocalMock
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
