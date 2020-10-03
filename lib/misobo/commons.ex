@@ -10,7 +10,7 @@ defmodule Misobo.Commons do
   end
 
   def still_validate?(otp_timeout) do
-    :lt == NaiveDateTime.compare(otp_timeout, NaiveDateTime.utc_now())
+    :lt == NaiveDateTime.compare(NaiveDateTime.utc_now(), otp_timeout)
   end
 
   def validate_otp(otp, valid_otp), do: {:sms, valid_otp == otp}
