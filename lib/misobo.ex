@@ -1,4 +1,4 @@
-defmodule MisoboWebMisobo do
+defmodule Misobo do
   @moduledoc """
   Misobo keeps the contexts that define your domain
   and business logic.
