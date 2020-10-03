@@ -6,9 +6,30 @@ defmodule Misobo.AccountsTest do
   describe "users" do
     alias Misobo.Accounts.User
 
-    @valid_attrs %{dob: ~N[2010-04-17 14:00:00], is_enabled: true, karma_points: 42, name: "some name", otp: 42, phone: "some phone"}
-    @update_attrs %{dob: ~N[2011-05-18 15:01:01], is_enabled: false, karma_points: 43, name: "some updated name", otp: 43, phone: "some updated phone"}
-    @invalid_attrs %{dob: nil, is_enabled: nil, karma_points: nil, name: nil, otp: nil, phone: nil}
+    @valid_attrs %{
+      dob: ~N[2010-04-17 14:00:00],
+      is_enabled: true,
+      karma_points: 42,
+      name: "some name",
+      otp: 42,
+      phone: "some phone"
+    }
+    @update_attrs %{
+      dob: ~N[2011-05-18 15:01:01],
+      is_enabled: false,
+      karma_points: 43,
+      name: "some updated name",
+      otp: 43,
+      phone: "some updated phone"
+    }
+    @invalid_attrs %{
+      dob: nil,
+      is_enabled: nil,
+      karma_points: nil,
+      name: nil,
+      otp: nil,
+      phone: nil
+    }
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =

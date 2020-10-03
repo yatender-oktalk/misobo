@@ -7,6 +7,5 @@ defmodule Misobo.Repo.Migrations.CreateHoroscopes do
 
       timestamps()
     end
-
   end
 end

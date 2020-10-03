@@ -1,5 +1,5 @@
 defmodule Misobo.Communication.SMSProvider.TextLocal do
- @moduledoc """
+  @moduledoc """
   The TextLocal communication interface.
   """
 

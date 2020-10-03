@@ -40,7 +40,10 @@ defmodule Misobo.AstrologyTest do
 
     test "update_horoscorpe/2 with valid data updates the horoscorpe" do
       horoscorpe = horoscorpe_fixture()
-      assert {:ok, %Horoscorpe{} = horoscorpe} = Astrology.update_horoscorpe(horoscorpe, @update_attrs)
+
+      assert {:ok, %Horoscorpe{} = horoscorpe} =
+               Astrology.update_horoscorpe(horoscorpe, @update_attrs)
+
       assert horoscorpe.name == "some updated name"
     end
 
