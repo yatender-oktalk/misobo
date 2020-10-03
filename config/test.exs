@@ -6,7 +6,9 @@ use Mix.Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :misobo, Misobo.Repo,
-  database: "misobo_test#{System.get_env("MIX_TEST_PARTITION")}",
+  username: "blockfiadmin",
+  password: "blockfiadmin",
+  database: "misobo_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 

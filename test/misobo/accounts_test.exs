@@ -8,11 +8,12 @@ defmodule Misobo.AccountsTest do
 
     @valid_attrs %{
       dob: ~N[2010-04-17 14:00:00],
+      otp_valid_time: ~N[2010-04-17 14:30:00],
       is_enabled: true,
       karma_points: 42,
       name: "some name",
       otp: 42,
-      phone: "some phone"
+      phone: "90909090"
     }
     @update_attrs %{
       dob: ~N[2011-05-18 15:01:01],
@@ -45,9 +46,9 @@ defmodule Misobo.AccountsTest do
       assert Accounts.list_users() == [user]
     end
 
-    test "get_user!/1 returns the user with given id" do
+    test "get_user/1 returns the user with given id" do
       user = user_fixture()
-      assert Accounts.get_user!(user.id) == user
+      assert Accounts.get_user(user.id) == user
     end
 
     test "create_user/1 with valid data creates a user" do
@@ -57,7 +58,7 @@ defmodule Misobo.AccountsTest do
       assert user.karma_points == 42
       assert user.name == "some name"
       assert user.otp == 42
-      assert user.phone == "some phone"
+      assert user.phone == "90909090"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -78,13 +79,13 @@ defmodule Misobo.AccountsTest do
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-      assert user == Accounts.get_user!(user.id)
+      assert user == Accounts.get_user(user.id)
     end
 
     test "delete_user/1 deletes the user" do
       user = user_fixture()
       assert {:ok, %User{}} = Accounts.delete_user(user)
-      assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(user.id) end
+      assert nil == Accounts.get_user(user.id)
     end
 
     test "change_user/1 returns a user changeset" do

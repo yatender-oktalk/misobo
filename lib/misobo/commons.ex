@@ -13,5 +13,5 @@ defmodule Misobo.Commons do
     :lt == NaiveDateTime.compare(NaiveDateTime.utc_now(), otp_timeout)
   end
 
-  def validate_otp(otp, valid_otp), do: {:sms, valid_otp == otp}
+  def validate_otp(otp, valid_otp), do: {:sms, to_string(valid_otp) == to_string(otp)}
 end
