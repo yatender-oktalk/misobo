@@ -2,6 +2,8 @@ defmodule Misobo.Category do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Misobo.SubCategory
+
   @required [:name]
   @optional [:desc, :is_enabled]
 
@@ -10,7 +12,8 @@ defmodule Misobo.Category do
              only: [
                :id,
                :name,
-               :desc
+               :desc,
+               :sub_category
              ]
            ]}
   schema "categories" do
@@ -18,6 +21,7 @@ defmodule Misobo.Category do
     field :name, :string
     field :is_enabled, :boolean, default: true
 
+    has_many(:sub_category, SubCategory)
     timestamps()
   end
 

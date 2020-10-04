@@ -7,7 +7,7 @@ defmodule Misobo.Categories do
   alias Misobo.Repo
 
   alias Misobo.Category
-  # alias Misobo.Category.Subcateogry
+  alias Misobo.SubCategory
 
   @doc """
   Returns the list of categories.
@@ -38,6 +38,8 @@ defmodule Misobo.Categories do
   """
   def get_category(id), do: Repo.get(Category, id)
 
+  def get_category_by(params), do: Repo.get_by(Category, params)
+
   @doc """
   Creates a category.
 
@@ -53,6 +55,24 @@ defmodule Misobo.Categories do
   def create_category(attrs \\ %{}) do
     %Category{}
     |> Category.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Creates a sub_category.
+
+  ## Examples
+
+      iex> create_sub_category(%{field: value})
+      {:ok, %SubCategory{}}
+
+      iex> create_sub_category(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_sub_category(attrs \\ %{}) do
+    %SubCategory{}
+    |> SubCategory.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -104,6 +124,18 @@ defmodule Misobo.Categories do
   end
 
   def get_categories_with_sub_categories() do
-    Repo.all(Category, preload: :sub_category)
+    preload_query = from sc in SubCategory, where: sc.is_enabled == true
+
+    base_category_query()
+    |> get_enabled_category()
+    |> preload_sub_categories(preload_query)
+    |> Repo.all()
   end
+
+  defp base_category_query(), do: from(u in Category)
+
+  defp get_enabled_category(query), do: query |> where([u], u.is_enabled == true)
+
+  defp preload_sub_categories(query, preload_query),
+    do: query |> preload(sub_category: ^preload_query)
 end
