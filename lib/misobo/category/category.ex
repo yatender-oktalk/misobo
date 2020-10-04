@@ -1,4 +1,8 @@
 defmodule Misobo.Category do
+  @moduledoc """
+  This module has schema of category
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

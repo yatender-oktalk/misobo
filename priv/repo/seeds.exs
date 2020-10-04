@@ -30,7 +30,6 @@ Repo.delete_all(Category)
 end)
 
 category = Categories.get_category_by(%{name: "Reduce Stress"})
-IO.inspect(category)
 
 (base_path <> "sub_category.json")
 |> Path.expand()

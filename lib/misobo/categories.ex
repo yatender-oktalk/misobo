@@ -123,7 +123,7 @@ defmodule Misobo.Categories do
     Category.changeset(category, attrs)
   end
 
-  def get_categories_with_sub_categories() do
+  def get_categories_with_sub_categories do
     preload_query = from sc in SubCategory, where: sc.is_enabled == true
 
     base_category_query()
@@ -132,7 +132,7 @@ defmodule Misobo.Categories do
     |> Repo.all()
   end
 
-  defp base_category_query(), do: from(u in Category)
+  defp base_category_query, do: from(u in Category)
 
   defp get_enabled_category(query), do: query |> where([u], u.is_enabled == true)
 
