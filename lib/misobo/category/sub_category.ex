@@ -3,7 +3,7 @@ defmodule Misobo.SubCategory do
   import Ecto.Changeset
 
   @required [:category_id, :name]
-  @optional [:desc]
+  @optional [:desc, :is_enabled]
 
   schema "sub_categories" do
     field :desc, :string

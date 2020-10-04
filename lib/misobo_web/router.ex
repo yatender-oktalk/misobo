@@ -13,6 +13,7 @@ defmodule MisoboWeb.Router do
 
     get("/account/:id", AccountController, :index)
 
+    get("/categories", CategoryController, :index)
     post("/account/signup", AccountController, :create)
     post("/account/login", AccountController, :login)
   end

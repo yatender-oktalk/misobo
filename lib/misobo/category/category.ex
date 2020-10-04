@@ -1,10 +1,18 @@
-defmodule Misobo.Account.Category do
+defmodule Misobo.Category do
   use Ecto.Schema
   import Ecto.Changeset
 
   @required [:name]
-  @optional [:desc]
+  @optional [:desc, :is_enabled]
 
+  @derive {Jason.Encoder,
+           [
+             only: [
+               :id,
+               :name,
+               :desc
+             ]
+           ]}
   schema "categories" do
     field :desc, :string
     field :name, :string
