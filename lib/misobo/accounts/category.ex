@@ -8,6 +8,7 @@ defmodule Misobo.Account.Category do
   schema "categories" do
     field :desc, :string
     field :name, :string
+    field :is_enabled, :boolean, default: true
 
     timestamps()
   end

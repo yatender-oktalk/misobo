@@ -9,6 +9,7 @@ defmodule Misobo.SubCategory do
     field :desc, :string
     field :name, :string
     field :category_id, :id
+    field :is_enabled, :boolean, default: true
 
     timestamps()
   end

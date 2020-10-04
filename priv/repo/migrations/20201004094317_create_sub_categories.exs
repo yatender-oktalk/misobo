@@ -6,6 +6,7 @@ defmodule Misobo.Repo.Migrations.CreateSubCategories do
       add :name, :string
       add :desc, :string
       add :category_id, references(:categories, on_delete: :nothing)
+      add :is_enabled, :boolean, default: true, null: false
 
       timestamps()
     end
