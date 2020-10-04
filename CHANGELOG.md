@@ -6,11 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -- Use the following format
 
-Added for new features.
+<!-- Added for new features.
 Changed for changes in existing functionality.
 Deprecated for soon-to-be removed features.
 Removed for now removed features.
 Fixed for any bug fixes.
-Security in case of vulnerabilities.
+Security in case of vulnerabilities. -->
 
-## [Unreleased]
+## [0.1.0]
+
+- Added user-signup 
+- Added the user login and token generation
+- Added the github-ci
+- Added the docker and docker-compose file
+- Added the db-schema for horoscopes and users
+- Added other project related settings
