@@ -57,8 +57,20 @@ defmodule MisoboWeb.AccountController do
     end
   end
 
-  # Private functions
+  def update(conn, %{"id" => id} = _params) do
+    with %User{} = user <- Accounts.get_user(id),
+         {:ok, %User{} = updated_user} = Accounts.update_user(user, conn.body_params) do
+      response(conn, 200, %{data: updated_user})
+    else
+      {:error, changeset} ->
+        error =
+          Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
 
+        error_response(conn, 400, error)
+    end
+  end
+
+  # Private functions
   defp error_response(conn, status, message) do
     data = %{data: message}
     response(conn, status, data)

@@ -17,6 +17,8 @@ defmodule MisoboWeb.Router do
     post("/account/login", AccountController, :login)
 
     # pipe auth
+
+    put("/account/:id", AccountController, :update)
     get("/categories", CategoryController, :index)
   end
 
