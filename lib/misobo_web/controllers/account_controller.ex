@@ -57,6 +57,8 @@ defmodule MisoboWeb.AccountController do
     end
   end
 
+  # Private functions
+
   defp error_response(conn, status, message) do
     data = %{data: message}
     response(conn, status, data)

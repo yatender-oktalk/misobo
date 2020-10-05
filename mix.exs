@@ -4,7 +4,7 @@ defmodule Misobo.MixProject do
   def project do
     [
       app: :misobo,
-      version: "0.1.0",
+      version: "0.2.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -68,6 +68,7 @@ defmodule Misobo.MixProject do
       setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.seed": ["run priv/repo/seeds.exs"],
       test: ["ecto.drop", "ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end

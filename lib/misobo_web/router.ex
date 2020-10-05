@@ -15,6 +15,9 @@ defmodule MisoboWeb.Router do
 
     post("/account/signup", AccountController, :create)
     post("/account/login", AccountController, :login)
+
+    # pipe auth
+    get("/categories", CategoryController, :index)
   end
 
   # Enables LiveDashboard only for development
