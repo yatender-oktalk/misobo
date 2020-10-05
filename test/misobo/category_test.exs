@@ -8,16 +8,17 @@ defmodule Misobo.CategoryTest do
 
   describe "categories" do
     alias Misobo.Category
-    # alias Misobo.SubCategory
 
     @valid_attrs %{
       name: "some-category-name",
       desc: "some-description"
     }
+
     @update_attrs %{
       name: "some-updated-name",
       desc: "some-updated-description"
     }
+
     @invalid_attrs %{
       name: nil,
       desc: nil
