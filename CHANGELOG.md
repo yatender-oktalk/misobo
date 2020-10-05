@@ -14,7 +14,8 @@ Fixed for any bug fixes.
 Security in case of vulnerabilities. -->
 
 ## [unreleased]
-- Added category-subcategory
+- Added category-subcategory.
+- Added the setup for seeds data.
 
 
 ## [0.1.0]
