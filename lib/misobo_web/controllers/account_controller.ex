@@ -59,7 +59,7 @@ defmodule MisoboWeb.AccountController do
 
   def update(conn, %{"id" => id} = _params) do
     with %User{} = user <- Accounts.get_user(id),
-         {:ok, %User{} = updated_user} = Accounts.update_user(user, conn.body_params) do
+         {:ok, %User{} = updated_user} <- Accounts.update_user(user, conn.body_params) do
       response(conn, 200, %{data: updated_user})
     else
       {:error, changeset} ->
