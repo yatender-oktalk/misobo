@@ -4,14 +4,21 @@ defmodule Misobo.Communication.SMSProvider.TextLocal do
   """
   alias Misobo.Communication.SMSProvider.TextLocalTesla
 
-  def send_sms(_phone, _msg) do
+  def send_sms(phone, message) do
     request = %{
       "apikey" => "xdKS7LOKnRI-lffJSFilOsRloyNIzedHigqZxgvqAg",
-      "sender" => "MNPUSR",
-      "numbers" => "8105139417",
-      "message" => "random msg"
+      "sender" => "MNPUSR"
     }
 
-    TextLocalTesla.post("/send/", request)
+    request =
+      Map.new()
+      |> Map.put("message", message)
+      |> Map.put("numbers", phone)
+      |> Map.merge(request)
+
+    case TextLocalTesla.post("/send/", request) do
+      {:ok, _} -> :ok
+      _ -> :error
+    end
   end
 end
