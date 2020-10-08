@@ -23,7 +23,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: misobo_test        
+          POSTGRES_DB: misobo_test
           POSTGRES_PASSWORD: blockfiadmin
           POSTGRES_USER: blockfiadmin
         ports:
@@ -65,4 +65,3 @@ jobs:
 
     - name: Run Tests
       run: mix test
-

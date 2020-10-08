@@ -4,7 +4,7 @@ defmodule Misobo.Communication.Message do
   """
 
   def get_signup_sms(otp) do
-    "Your otp for misobo is #{otp}"
+    "Thank you for registering with Misobo your OTP is #{otp}"
   end
 
   def generate_otp, do: Enum.random(1000..9999)
