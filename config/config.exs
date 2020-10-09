@@ -30,6 +30,9 @@ config :misobo, :communication, sms: Misobo.Communication.SMSProvider.TextLocal
 
 config :misobo, MisoboWeb.Authentication, namespace: "user_auth"
 
+config :misobo, Misobo.Communication.SMSProvider.TextLocal,
+  api_key: System.get_env("TEXT_LOCAL_API_KEY")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

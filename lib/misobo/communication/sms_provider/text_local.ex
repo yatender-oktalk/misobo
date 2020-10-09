@@ -3,10 +3,11 @@ defmodule Misobo.Communication.SMSProvider.TextLocal do
   The TextLocal communication interface.
   """
   alias Misobo.Communication.SMSProvider.TextLocalTesla
+  @api_key Application.get_env(:misobo, Misobo.Communication.SMSProvider.TextLocal)[:api_key]
 
   def send_sms(phone, message) do
     request = %{
-      "apikey" => "xdKS7LOKnRI-lffJSFilOsRloyNIzedHigqZxgvqAg",
+      "apikey" => @api_key,
       "sender" => "MNPUSR"
     }
 
