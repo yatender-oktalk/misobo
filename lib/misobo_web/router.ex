@@ -3,6 +3,11 @@ defmodule MisoboWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug MisoboWeb.DbHealthPlug
+  end
+
+  pipeline :authenticated do
+    plug MisoboWeb.AuthPlug
   end
 
   scope "/api", MisoboWeb do
@@ -11,15 +16,19 @@ defmodule MisoboWeb.Router do
     # Health endpoints
     get("/health", HealthController, :index)
 
-    get("/account/:id", AccountController, :index)
-
     post("/account/signup", AccountController, :create)
     post("/account/login", AccountController, :login)
 
     # pipe auth
+    scope("/") do
+      pipe_through :authenticated
+      # category
+      get("/categories", CategoryController, :index)
 
-    put("/account/:id", AccountController, :update)
-    get("/categories", CategoryController, :index)
+      # account
+      put("/account/:id", AccountController, :update)
+      get("/account/:id", AccountController, :index)
+    end
   end
 
   # Enables LiveDashboard only for development

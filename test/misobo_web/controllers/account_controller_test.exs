@@ -25,5 +25,17 @@ defmodule MisoboWeb.AccountControllerTest do
       conn = post(conn, Routes.account_path(conn, :login, %{"phone" => phone, "otp" => otp}))
       assert conn.status == 200
     end
+
+    test "verify fails when OTP is wrong", %{conn: conn} do
+      # create a new user
+      phone = "9090909092"
+      post(conn, Routes.account_path(conn, :create, %{phone: phone}))
+      # fetch the details then validate it
+      %User{otp: otp} = Accounts.get_user_by(%{phone: phone})
+
+      # login API
+      conn = post(conn, Routes.account_path(conn, :login, %{"phone" => phone, "otp" => otp + 1}))
+      assert conn.status == 400
+    end
   end
 end
