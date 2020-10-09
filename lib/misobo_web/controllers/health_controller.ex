@@ -1,5 +1,6 @@
 defmodule MisoboWeb.HealthController do
   use MisoboWeb, :controller
+  alias Ecto.Adapters.SQL
   alias Misobo.Repo
 
   def index(conn, _params) do
@@ -18,9 +19,8 @@ defmodule MisoboWeb.HealthController do
       * This method will return :down when database is not available
       * This method will return :up when database is available
   """
-  def db_health() do
-    try do
-      {:ok, _map} = Ecto.Adapters.SQL.query(Repo, "SELECT 1", [])
+  def db_health do
+      {:ok, _map} = SQL.query(Repo, "SELECT 1", [])
       :up
     rescue
       _e in DBConnection.ConnectionError -> :down
