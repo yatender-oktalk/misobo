@@ -20,11 +20,10 @@ defmodule MisoboWeb.HealthController do
       * This method will return :up when database is available
   """
   def db_health do
-      {:ok, _map} = SQL.query(Repo, "SELECT 1", [])
-      :up
-    rescue
-      _e in DBConnection.ConnectionError -> :down
-    end
+    {:ok, _map} = SQL.query(Repo, "SELECT 1", [])
+    :up
+  rescue
+    _e in DBConnection.ConnectionError -> :down
   end
 
   defp response(conn, status, data) do
