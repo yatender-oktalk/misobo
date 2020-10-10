@@ -1,9 +1,10 @@
-defmodule Misobo.Accounts.User do
+defmodule Misobo.Account.User do
   @moduledoc """
   Account related functions
   """
   use Ecto.Schema
   import Ecto.Changeset
+  alias Misobo.Account.LoginStreak
 
   @required [:phone, :otp_valid_time]
   @optional [:name, :is_enabled, :otp, :karma_points, :dob]
@@ -30,6 +31,7 @@ defmodule Misobo.Accounts.User do
     field :phone, :string
     field :horoscope_id, :id
 
+    has_one(:login_streak, LoginStreak)
     timestamps()
   end
 

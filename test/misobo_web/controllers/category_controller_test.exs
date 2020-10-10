@@ -4,17 +4,16 @@ defmodule MisoboWeb.CategoryControllerTest do
   """
   use MisoboWeb.ConnCase, async: true
   alias Misobo.Accounts
-  alias Misobo.Accounts.User
+  alias Misobo.Account.User
 
   describe "Fetch Categories" do
     setup %{conn: conn} do
       phone = "9090901234"
       # singup a new user then verify him and then set the token
-      post(conn, Routes.account_path(conn, :create, %{phone: phone}))
+      post(conn, Routes.user_path(conn, :create, %{phone: phone}))
       %User{otp: otp} = Accounts.get_user_by(%{phone: phone})
 
-      login_conn =
-        post(conn, Routes.account_path(conn, :login, %{"phone" => phone, "otp" => otp}))
+      login_conn = post(conn, Routes.user_path(conn, :login, %{"phone" => phone, "otp" => otp}))
 
       %{"token" => token} = Jason.decode!(login_conn.resp_body)
       {:ok, conn: put_req_header(conn, "token", token)}

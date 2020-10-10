@@ -7,7 +7,7 @@ defmodule MisoboWeb.AuthPlug do
   import Plug.Conn
   import Phoenix.Controller, only: [json: 2]
   alias Misobo.Accounts
-  alias Misobo.Accounts.User
+  alias Misobo.Account.User
 
   @spec init(any) :: any
   def init(params) do
