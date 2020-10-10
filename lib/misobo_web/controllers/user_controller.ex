@@ -2,7 +2,7 @@ defmodule MisoboWeb.UserController do
   use MisoboWeb, :controller
 
   alias Misobo.Accounts
-  alias Misobo.Account.User
+  alias Misobo.Accounts.User
   alias Misobo.Authentication
   alias Misobo.Communication.Message
   alias Misobo.Communication.SMSProvider

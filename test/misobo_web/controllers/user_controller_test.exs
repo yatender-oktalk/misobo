@@ -5,7 +5,7 @@ defmodule MisoboWeb.UserControllerTest do
   use MisoboWeb.ConnCase, async: true
 
   alias Misobo.Accounts
-  alias Misobo.Account.User
+  alias Misobo.Accounts.User
 
   describe "user account onboarding" do
     test "signup test", %{conn: conn} do

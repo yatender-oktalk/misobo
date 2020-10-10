@@ -4,7 +4,7 @@ defmodule MisoboWeb.CategoryControllerTest do
   """
   use MisoboWeb.ConnCase, async: true
   alias Misobo.Accounts
-  alias Misobo.Account.User
+  alias Misobo.Accounts.User
 
   describe "Fetch Categories" do
     setup %{conn: conn} do
