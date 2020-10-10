@@ -6,7 +6,7 @@ defmodule Misobo.Accounts do
   import Ecto.Query, warn: false
   alias Misobo.Repo
 
-  alias Misobo.Accounts.User
+  alias Misobo.Account.User
 
   @doc """
   Returns the list of users.

@@ -4,7 +4,7 @@ defmodule Misobo.AccountsTest do
   alias Misobo.Accounts
 
   describe "users" do
-    alias Misobo.Accounts.User
+    alias Misobo.Account.User
 
     @valid_attrs %{
       dob: ~N[2010-04-17 14:00:00],

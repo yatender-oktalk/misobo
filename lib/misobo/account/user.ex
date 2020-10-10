@@ -31,7 +31,7 @@ defmodule Misobo.Account.User do
     field :phone, :string
     field :horoscope_id, :id
 
-    has_one(:login_streak, LoginStreak)
+    # has_one(:login_streak, LoginStreak)
     timestamps()
   end
 
