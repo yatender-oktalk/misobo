@@ -4,9 +4,9 @@ defmodule Misobo.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias Misobo.Repo
-
   alias Misobo.Accounts.User
+  alias Misobo.Repo
+  import Misobo.TimeUtils
 
   @doc """
   Returns the list of users.
@@ -116,5 +116,122 @@ defmodule Misobo.Accounts do
   """
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
+  end
+
+  alias Misobo.Accounts.LoginStreak
+
+  @doc """
+  Returns the list of login_streaks.
+
+  ## Examples
+
+      iex> list_login_streaks()
+      [%LoginStreak{}, ...]
+
+  """
+  def list_login_streaks do
+    Repo.all(LoginStreak)
+  end
+
+  @doc """
+  Gets a single login_streak.
+
+  Raises `Ecto.NoResultsError` if the Login streak does not exist.
+
+  ## Examples
+
+      iex> get_login_streak!(123)
+      %LoginStreak{}
+
+      iex> get_login_streak!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_login_streak!(id), do: Repo.get!(LoginStreak, id)
+
+  def get_login_streak(id), do: Repo.get(LoginStreak, id)
+
+  @doc """
+  Creates a login_streak.
+
+  ## Examples
+
+      iex> create_login_streak(%{field: value})
+      {:ok, %LoginStreak{}}
+
+      iex> create_login_streak(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_login_streak(attrs \\ %{}) do
+    %LoginStreak{}
+    |> LoginStreak.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a login_streak.
+
+  ## Examples
+
+      iex> update_login_streak(login_streak, %{field: new_value})
+      {:ok, %LoginStreak{}}
+
+      iex> update_login_streak(login_streak, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_login_streak(%LoginStreak{} = login_streak, attrs) do
+    login_streak
+    |> LoginStreak.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a login_streak.
+
+  ## Examples
+
+      iex> delete_login_streak(login_streak)
+      {:ok, %LoginStreak{}}
+
+      iex> delete_login_streak(login_streak)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_login_streak(%LoginStreak{} = login_streak) do
+    Repo.delete(login_streak)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking login_streak changes.
+
+  ## Examples
+
+      iex> change_login_streak(login_streak)
+      %Ecto.Changeset{data: %LoginStreak{}}
+
+  """
+  def change_login_streak(%LoginStreak{} = login_streak, attrs \\ %{}) do
+    LoginStreak.changeset(login_streak, attrs)
+  end
+
+  def handle_login_streak(%User{id: id} = _user) do
+    day_of_week = get_day_of_week_today()
+
+    id
+    |> checkout_login_streak()
+    |> LoginStreak.changeset(%{"#{day_of_week}": true})
+    |> Repo.insert_or_update()
+  end
+
+  defp checkout_login_streak(user_id) do
+    case result = get_login_streak(user_id) do
+      nil ->
+        %LoginStreak{user_id: user_id}
+
+      _ ->
+        result
+    end
   end
 end
