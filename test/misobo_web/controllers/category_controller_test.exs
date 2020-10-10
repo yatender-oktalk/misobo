@@ -2,7 +2,7 @@ defmodule MisoboWeb.CategoryControllerTest do
   @moduledoc """
   This module tests the category controller logic
   """
-  use MisoboWeb.ConnCase, async: true
+  use MisoboWeb.ConnCase, async: false
   alias Misobo.Accounts
   alias Misobo.Accounts.User
 
