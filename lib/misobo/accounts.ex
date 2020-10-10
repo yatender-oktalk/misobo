@@ -4,8 +4,9 @@ defmodule Misobo.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias Misobo.Repo
+  import Misobo.TimeUtils
 
+  alias Misobo.Repo
   alias Misobo.Accounts.User
 
   @doc """
@@ -149,6 +150,8 @@ defmodule Misobo.Accounts do
   """
   def get_login_streak!(id), do: Repo.get!(LoginStreak, id)
 
+  def get_login_streak(id), do: Repo.get(LoginStreak, id)
+
   @doc """
   Creates a login_streak.
 
@@ -212,5 +215,23 @@ defmodule Misobo.Accounts do
   """
   def change_login_streak(%LoginStreak{} = login_streak, attrs \\ %{}) do
     LoginStreak.changeset(login_streak, attrs)
+  end
+
+  def handle_login_streak(%User{id: id} = _user) do
+    day_of_week = get_day_of_week_today()
+
+    checkout_login_streak(id)
+    |> LoginStreak.changeset(%{"#{day_of_week}": true})
+    |> Repo.insert_or_update()
+  end
+
+  defp checkout_login_streak(user_id) do
+    case result = get_login_streak(user_id) do
+      nil ->
+        %LoginStreak{user_id: user_id}
+
+      _ ->
+        result
+    end
   end
 end

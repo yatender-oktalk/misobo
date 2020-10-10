@@ -2,6 +2,7 @@ defmodule Misobo.AccountsTest do
   use Misobo.DataCase
 
   alias Misobo.Accounts
+  alias Misobo.Accounts.LoginStreak
 
   describe "users" do
     alias Misobo.Accounts.User
@@ -223,6 +224,29 @@ defmodule Misobo.AccountsTest do
       user = user_fixture_for_login(%{phone: "9090909094"})
       login_streak = login_streak_fixture(%{user_id: user.id})
       assert %Ecto.Changeset{} = Accounts.change_login_streak(login_streak)
+    end
+
+    test "login streak check" do
+      # setup
+      user = user_fixture_for_login(%{phone: "9090909096"})
+      login_streak_default = login_streak_fixture(Map.merge(@update_attrs, %{user_id: user.id}))
+      day_of_week = Misobo.TimeUtils.get_day_of_week_today()
+
+      assert false == get_term_from_day(login_streak_default, day_of_week)
+      {:ok, streak} = Accounts.handle_login_streak(user)
+      assert true == get_term_from_day(streak, day_of_week)
+    end
+
+    defp get_term_from_day(streak, day) do
+      case day do
+        1 -> streak."1"
+        2 -> streak."2"
+        3 -> streak."3"
+        4 -> streak."4"
+        5 -> streak."5"
+        6 -> streak."6"
+        7 -> streak."7"
+      end
     end
   end
 end
