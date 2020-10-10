@@ -16,8 +16,8 @@ defmodule MisoboWeb.Router do
     # Health endpoints
     get("/health", HealthController, :index)
 
-    post("/account/signup", AccountController, :create)
-    post("/account/login", AccountController, :login)
+    post("/user/signup", UserController, :create)
+    post("/user/login", UserController, :login)
 
     # pipe auth
     scope("/") do
@@ -25,9 +25,9 @@ defmodule MisoboWeb.Router do
       # category
       get("/categories", CategoryController, :index)
 
-      # account
-      put("/account/:id", AccountController, :update)
-      get("/account/:id", AccountController, :index)
+      # user
+      put("/user/:id", UserController, :update)
+      get("/user/:id", UserController, :index)
     end
   end
 

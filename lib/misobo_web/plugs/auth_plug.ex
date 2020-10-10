@@ -20,13 +20,15 @@ defmodule MisoboWeb.AuthPlug do
          {:ok, %{id: id} = _data} <- Misobo.Authentication.verify(headers["token"]),
          %User{id: user_id, is_enabled: true} = user <- Accounts.get_user(id),
          true <- id == user_id do
+      # handle the logic of user login streak here
+      spawn(fn -> Misobo.Accounts.handle_login_streak(user) end)
       conn |> assign(:token_info, user)
     else
-      {:error, :invalid} -> unauth(conn, "unauthorized token")
-      false -> unauth(conn, "invalid token for this user")
-      %User{is_enabled: false} -> unauth(conn, "User not enabled")
-      nil -> unauth(conn, "invalid user")
-      _ -> unauth(conn, "unauthorized!")
+      {:error, :invalid} -> unauth(conn, %{data: "unauthorized token"})
+      false -> unauth(conn, %{data: "invalid token for this user"})
+      %User{is_enabled: false} -> unauth(conn, %{data: "User not enabled"})
+      nil -> unauth(conn, %{data: "invalid user"})
+      _ -> unauth(conn, %{data: "unauthorized!"})
     end
   end
 

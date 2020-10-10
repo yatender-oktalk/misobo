@@ -1,4 +1,4 @@
-defmodule MisoboWeb.AccountController do
+defmodule MisoboWeb.UserController do
   use MisoboWeb, :controller
 
   alias Misobo.Accounts
