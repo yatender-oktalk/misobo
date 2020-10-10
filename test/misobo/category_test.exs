@@ -2,7 +2,7 @@ defmodule Misobo.CategoryTest do
   @moduledoc """
   This module has tests related to category endpoint
   """
-  use Misobo.DataCase
+  use Misobo.DataCase, async: false
 
   alias Misobo.Categories
 

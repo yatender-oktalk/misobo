@@ -1,5 +1,5 @@
 defmodule Misobo.AstrologyTest do
-  use Misobo.DataCase
+  use Misobo.DataCase, async: false
 
   alias Misobo.Astrology
 
