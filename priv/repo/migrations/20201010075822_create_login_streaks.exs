@@ -11,7 +11,9 @@ defmodule Misobo.Repo.Migrations.CreateLoginStreaks do
       add :"5", :boolean, default: false, null: false
       add :"6", :boolean, default: false, null: false
       add :"7", :boolean, default: false, null: false
-      add :user_id, references(:users, name: "login_streak_user_ibfk_1", on_delete: :delete_all), null: false
+
+      add :user_id, references(:users, name: "login_streak_user_ibfk_1", on_delete: :delete_all),
+        null: false
 
       timestamps()
     end
