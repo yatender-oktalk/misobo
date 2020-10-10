@@ -4,10 +4,9 @@ defmodule Misobo.Accounts do
   """
 
   import Ecto.Query, warn: false
-  import Misobo.TimeUtils
-
-  alias Misobo.Repo
   alias Misobo.Accounts.User
+  alias Misobo.Repo
+  import Misobo.TimeUtils
 
   @doc """
   Returns the list of users.
@@ -220,7 +219,8 @@ defmodule Misobo.Accounts do
   def handle_login_streak(%User{id: id} = _user) do
     day_of_week = get_day_of_week_today()
 
-    checkout_login_streak(id)
+    id
+    |> checkout_login_streak()
     |> LoginStreak.changeset(%{"#{day_of_week}": true})
     |> Repo.insert_or_update()
   end

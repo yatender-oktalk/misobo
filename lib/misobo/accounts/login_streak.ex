@@ -1,4 +1,7 @@
 defmodule Misobo.Accounts.LoginStreak do
+  @moduledoc """
+  This module takes care of the login streak
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
