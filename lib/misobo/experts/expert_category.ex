@@ -4,10 +4,19 @@ defmodule Misobo.Experts.ExpertCategory do
   """
   use Ecto.Schema
   import Ecto.Changeset
+  @required [:name, :enabled_at]
+  @optional [:is_enabled]
 
+  @derive {Jason.Encoder,
+           [
+             only: [
+               :id,
+               :name
+             ]
+           ]}
   schema "expert_categories" do
     field :enabled_at, :naive_datetime
-    field :is_enabled, :boolean, default: false
+    field :is_enabled, :boolean, default: true
     field :name, :string
 
     timestamps()
@@ -16,7 +25,7 @@ defmodule Misobo.Experts.ExpertCategory do
   @doc false
   def changeset(expert_category, attrs) do
     expert_category
-    |> cast(attrs, [:name, :is_enabled, :enabled_at])
-    |> validate_required([:name, :is_enabled, :enabled_at])
+    |> cast(attrs, @required ++ @optional)
+    |> validate_required(@optional)
   end
 end
