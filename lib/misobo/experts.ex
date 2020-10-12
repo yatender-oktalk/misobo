@@ -134,6 +134,22 @@ defmodule Misobo.Experts do
   def get_expert!(id), do: Repo.get!(Expert, id)
 
   @doc """
+  Gets a single expert.
+
+  Raises `Ecto.NoResultsError` if the Expert does not exist.
+
+  ## Examples
+
+      iex> get_expert(123)
+      {:ok, %Expert{}}
+
+      iex> get_expert(456)
+      nil
+
+  """
+  def get_expert(id), do: Repo.get(Expert, id)
+
+  @doc """
   Creates a expert.
 
   ## Examples
@@ -290,7 +306,28 @@ defmodule Misobo.Experts do
       %Ecto.Changeset{data: %ExpertCategoryMapping{}}
 
   """
-  def change_expert_category_mapping(%ExpertCategoryMapping{} = expert_category_mapping, attrs \\ %{}) do
+  def change_expert_category_mapping(
+        %ExpertCategoryMapping{} = expert_category_mapping,
+        attrs \\ %{}
+      ) do
     ExpertCategoryMapping.changeset(expert_category_mapping, attrs)
+  end
+
+  def upsert_expert_expert_categories(expert, expert_categories)
+      when is_list(expert_categories) do
+    expert_categories =
+      ExpertCategory
+      |> where([expert_category], expert_category.id in ^expert_categories)
+      |> Repo.all()
+
+    with {:ok, _struct} <-
+           expert
+           |> Expert.changeset_update_expert_categories(expert_categories)
+           |> Repo.update() do
+      {:ok, get_expert(expert.id)}
+    else
+      error ->
+        error
+    end
   end
 end

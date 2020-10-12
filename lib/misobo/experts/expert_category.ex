@@ -7,6 +7,8 @@ defmodule Misobo.Experts.ExpertCategory do
   @required [:name, :enabled_at]
   @optional [:is_enabled]
 
+  alias Misobo.Experts.Expert
+
   @derive {Jason.Encoder,
            [
              only: [
@@ -18,6 +20,13 @@ defmodule Misobo.Experts.ExpertCategory do
     field :enabled_at, :naive_datetime
     field :is_enabled, :boolean, default: true
     field :name, :string
+
+    many_to_many(
+      :experts,
+      Expert,
+      join_through: "expert_category_mappings",
+      on_replace: :delete
+    )
 
     timestamps()
   end

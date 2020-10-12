@@ -5,6 +5,9 @@ defmodule Misobo.Experts.Expert do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Misobo.Experts.ExpertCategory
+  alias Misobo.Experts.Expert
+
   @required [:language, :name]
   @optional [
     :about,
@@ -45,6 +48,14 @@ defmodule Misobo.Experts.Expert do
     field :order, :integer
     field :rating, :decimal
     field :total_consultations, :integer, default: 0
+
+    many_to_many(
+      :expert_categories,
+      ExpertCategory,
+      join_through: "expert_category_mappings",
+      on_replace: :delete
+    )
+
     timestamps()
   end
 
@@ -53,5 +64,12 @@ defmodule Misobo.Experts.Expert do
     expert
     |> cast(attrs, @required ++ @optional)
     |> validate_required(@required)
+  end
+
+  def changeset_update_expert_categories(%Expert{} = expert, expert_categories) do
+    expert
+    |> cast(%{}, @required ++ @optional)
+    # associate categories to the expert
+    |> put_assoc(:expert_categories, expert_categories)
   end
 end
