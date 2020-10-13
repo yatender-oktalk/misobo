@@ -66,11 +66,12 @@ Repo.delete_all(Expert)
   exp = Repo.preload(exp, :expert_categories)
 
   expert_categories =
-    Enum.map(expert["categories"], fn exp_category ->
+    expert["categories"]
+    |> Enum.map(fn exp_category ->
       Repo.get_by(ExpertCategory, %{name: exp_category})
     end)
     |> Enum.map(fn expert -> expert.id end)
 
-  IO.inspect(expert_categories)
+  # IO.inspect(expert_categories)
   Experts.upsert_expert_expert_categories(exp, expert_categories)
 end)
