@@ -7,7 +7,11 @@ defmodule Misobo.ExpertsTest do
     alias Misobo.Experts.ExpertCategory
 
     @valid_attrs %{enabled_at: ~N[2010-04-17 14:00:00], is_enabled: true, name: "some name"}
-    @update_attrs %{enabled_at: ~N[2011-05-18 15:01:01], is_enabled: false, name: "some updated name"}
+    @update_attrs %{
+      enabled_at: ~N[2011-05-18 15:01:01],
+      is_enabled: false,
+      name: "some updated name"
+    }
     @invalid_attrs %{enabled_at: nil, is_enabled: nil, name: nil}
 
     def expert_category_fixture(attrs \\ %{}) do
@@ -30,7 +34,9 @@ defmodule Misobo.ExpertsTest do
     end
 
     test "create_expert_category/1 with valid data creates a expert_category" do
-      assert {:ok, %ExpertCategory{} = expert_category} = Experts.create_expert_category(@valid_attrs)
+      assert {:ok, %ExpertCategory{} = expert_category} =
+               Experts.create_expert_category(@valid_attrs)
+
       assert expert_category.enabled_at == ~N[2010-04-17 14:00:00]
       assert expert_category.is_enabled == true
       assert expert_category.name == "some name"
@@ -42,7 +48,10 @@ defmodule Misobo.ExpertsTest do
 
     test "update_expert_category/2 with valid data updates the expert_category" do
       expert_category = expert_category_fixture()
-      assert {:ok, %ExpertCategory{} = expert_category} = Experts.update_expert_category(expert_category, @update_attrs)
+
+      assert {:ok, %ExpertCategory{} = expert_category} =
+               Experts.update_expert_category(expert_category, @update_attrs)
+
       assert expert_category.enabled_at == ~N[2011-05-18 15:01:01]
       assert expert_category.is_enabled == false
       assert expert_category.name == "some updated name"
@@ -50,7 +59,10 @@ defmodule Misobo.ExpertsTest do
 
     test "update_expert_category/2 with invalid data returns error changeset" do
       expert_category = expert_category_fixture()
-      assert {:error, %Ecto.Changeset{}} = Experts.update_expert_category(expert_category, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Experts.update_expert_category(expert_category, @invalid_attrs)
+
       assert expert_category == Experts.get_expert_category!(expert_category.id)
     end
 
@@ -69,9 +81,45 @@ defmodule Misobo.ExpertsTest do
   describe "experts" do
     alias Misobo.Experts.Expert
 
-    @valid_attrs %{about: "some about", category_order: 42, consult_karma: 42, experience: 42, img: "some img", is_enabled: true, language: "some language", name: "some name", order: 42, rating: "120.5", total_consultations: 42}
-    @update_attrs %{about: "some updated about", category_order: 43, consult_karma: 43, experience: 43, img: "some updated img", is_enabled: false, language: "some updated language", name: "some updated name", order: 43, rating: "456.7", total_consultations: 43}
-    @invalid_attrs %{about: nil, category_order: nil, consult_karma: nil, experience: nil, img: nil, is_enabled: nil, language: nil, name: nil, order: nil, rating: nil, total_consultations: nil}
+    @valid_attrs %{
+      about: "some about",
+      category_order: 42,
+      consult_karma: 42,
+      experience: 42,
+      img: "some img",
+      is_enabled: true,
+      language: "some language",
+      name: "some name",
+      order: 42,
+      rating: "120.5",
+      total_consultations: 42
+    }
+    @update_attrs %{
+      about: "some updated about",
+      category_order: 43,
+      consult_karma: 43,
+      experience: 43,
+      img: "some updated img",
+      is_enabled: false,
+      language: "some updated language",
+      name: "some updated name",
+      order: 43,
+      rating: "456.7",
+      total_consultations: 43
+    }
+    @invalid_attrs %{
+      about: nil,
+      category_order: nil,
+      consult_karma: nil,
+      experience: nil,
+      img: nil,
+      is_enabled: nil,
+      language: nil,
+      name: nil,
+      order: nil,
+      rating: nil,
+      total_consultations: nil
+    }
 
     def expert_fixture(attrs \\ %{}) do
       {:ok, expert} =
@@ -145,60 +193,74 @@ defmodule Misobo.ExpertsTest do
     end
   end
 
-  describe "expert_category_mappings" do
-    alias Misobo.Experts.ExpertCategoryMapping
+  # describe "expert_category_mappings" do
+  #   alias Misobo.Experts.ExpertCategoryMapping
 
-    @valid_attrs %{}
-    @update_attrs %{}
-    @invalid_attrs %{}
+  #   @valid_attrs %{}
+  #   @update_attrs %{}
+  #   @invalid_attrs %{}
 
-    def expert_category_mapping_fixture(attrs \\ %{}) do
-      {:ok, expert_category_mapping} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Experts.create_expert_category_mapping()
+  #   def expert_category_mapping_fixture(attrs \\ %{}) do
+  #     {:ok, expert_category_mapping} =
+  #       attrs
+  #       |> Enum.into(@valid_attrs)
+  #       |> Experts.create_expert_category_mapping()
 
-      expert_category_mapping
-    end
+  #     expert_category_mapping
+  #   end
 
-    test "list_expert_category_mappings/0 returns all expert_category_mappings" do
-      expert_category_mapping = expert_category_mapping_fixture()
-      assert Experts.list_expert_category_mappings() == [expert_category_mapping]
-    end
+  #   test "list_expert_category_mappings/0 returns all expert_category_mappings" do
+  #     expert_category_mapping = expert_category_mapping_fixture()
+  #     assert Experts.list_expert_category_mappings() == [expert_category_mapping]
+  #   end
 
-    test "get_expert_category_mapping!/1 returns the expert_category_mapping with given id" do
-      expert_category_mapping = expert_category_mapping_fixture()
-      assert Experts.get_expert_category_mapping!(expert_category_mapping.id) == expert_category_mapping
-    end
+  #   test "get_expert_category_mapping!/1 returns the expert_category_mapping with given id" do
+  #     expert_category_mapping = expert_category_mapping_fixture()
 
-    test "create_expert_category_mapping/1 with valid data creates a expert_category_mapping" do
-      assert {:ok, %ExpertCategoryMapping{} = expert_category_mapping} = Experts.create_expert_category_mapping(@valid_attrs)
-    end
+  #     assert Experts.get_expert_category_mapping!(expert_category_mapping.id) ==
+  #              expert_category_mapping
+  #   end
 
-    test "create_expert_category_mapping/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Experts.create_expert_category_mapping(@invalid_attrs)
-    end
+  #   test "create_expert_category_mapping/1 with valid data creates a expert_category_mapping" do
+  #     assert {:ok, %ExpertCategoryMapping{} = expert_category_mapping} =
+  #              Experts.create_expert_category_mapping(@valid_attrs)
+  #   end
 
-    test "update_expert_category_mapping/2 with valid data updates the expert_category_mapping" do
-      expert_category_mapping = expert_category_mapping_fixture()
-      assert {:ok, %ExpertCategoryMapping{} = expert_category_mapping} = Experts.update_expert_category_mapping(expert_category_mapping, @update_attrs)
-    end
+  #   test "create_expert_category_mapping/1 with invalid data returns error changeset" do
+  #     assert {:error, %Ecto.Changeset{}} = Experts.create_expert_category_mapping(@invalid_attrs)
+  #   end
 
-    test "update_expert_category_mapping/2 with invalid data returns error changeset" do
-      expert_category_mapping = expert_category_mapping_fixture()
-      assert {:error, %Ecto.Changeset{}} = Experts.update_expert_category_mapping(expert_category_mapping, @invalid_attrs)
-      assert expert_category_mapping == Experts.get_expert_category_mapping!(expert_category_mapping.id)
-    end
+  #   test "update_expert_category_mapping/2 with valid data updates the expert_category_mapping" do
+  #     expert_category_mapping = expert_category_mapping_fixture()
 
-    test "delete_expert_category_mapping/1 deletes the expert_category_mapping" do
-      expert_category_mapping = expert_category_mapping_fixture()
-      assert {:ok, %ExpertCategoryMapping{}} = Experts.delete_expert_category_mapping(expert_category_mapping)
-      assert_raise Ecto.NoResultsError, fn -> Experts.get_expert_category_mapping!(expert_category_mapping.id) end
-    end
+  #     assert {:ok, %ExpertCategoryMapping{} = expert_category_mapping} =
+  #              Experts.update_expert_category_mapping(expert_category_mapping, @update_attrs)
+  #   end
 
-    test "change_expert_category_mapping/1 returns a expert_category_mapping changeset" do
-      expert_category_mapping = expert_category_mapping_fixture()
-      assert %Ecto.Changeset{} = Experts.change_expert_category_mapping(expert_category_mapping)
-    end
-  end
+  #   test "update_expert_category_mapping/2 with invalid data returns error changeset" do
+  #     expert_category_mapping = expert_category_mapping_fixture()
+
+  #     assert {:error, %Ecto.Changeset{}} =
+  #              Experts.update_expert_category_mapping(expert_category_mapping, @invalid_attrs)
+
+  #     assert expert_category_mapping ==
+  #              Experts.get_expert_category_mapping!(expert_category_mapping.id)
+  #   end
+
+  #   test "delete_expert_category_mapping/1 deletes the expert_category_mapping" do
+  #     expert_category_mapping = expert_category_mapping_fixture()
+
+  #     assert {:ok, %ExpertCategoryMapping{}} =
+  #              Experts.delete_expert_category_mapping(expert_category_mapping)
+
+  #     assert_raise Ecto.NoResultsError, fn ->
+  #       Experts.get_expert_category_mapping!(expert_category_mapping.id)
+  #     end
+  #   end
+
+  #   test "change_expert_category_mapping/1 returns a expert_category_mapping changeset" do
+  #     expert_category_mapping = expert_category_mapping_fixture()
+  #     assert %Ecto.Changeset{} = Experts.change_expert_category_mapping(expert_category_mapping)
+  #   end
+  # end
 end

@@ -54,23 +54,23 @@ Repo.delete_all(ExpertCategory)
   Experts.create_expert_category(expert_category)
 end)
 
-Repo.delete_all(Expert)
+# Repo.delete_all(Expert)
 
-(base_path <> "expert.json")
-|> Path.expand()
-|> File.read!()
-|> Jason.decode!()
-|> Enum.map(fn expert ->
-  {:ok, exp} = Experts.create_expert(expert)
+# (base_path <> "expert.json")
+# |> Path.expand()
+# |> File.read!()
+# |> Jason.decode!()
+# |> Enum.map(fn expert ->
+#   {:ok, exp} = Experts.create_expert(expert)
 
-  exp = Repo.preload(exp, :expert_categories)
+#   exp = Repo.preload(exp, :expert_categories)
 
-  expert_categories =
-    Enum.map(expert["categories"], fn exp_category ->
-      Repo.get_by(ExpertCategory, %{name: exp_category})
-    end)
-    |> Enum.map(fn expert -> expert.id end)
+#   expert_categories =
+#     Enum.map(expert["categories"], fn exp_category ->
+#       Repo.get_by(ExpertCategory, %{name: exp_category})
+#     end)
+#     |> Enum.map(fn expert -> expert.id end)
 
-  IO.inspect(expert_categories)
-  Experts.upsert_expert_expert_categories(exp, expert_categories)
-end)
+#   IO.inspect(expert_categories)
+#   Experts.upsert_expert_expert_categories(exp, expert_categories)
+# end)

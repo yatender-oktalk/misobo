@@ -5,11 +5,11 @@ defmodule Misobo.Experts.ExpertCategoryMapping do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Misobo.Experts.ExpertCategory
   alias Misobo.Experts.Expert
+  alias Misobo.Experts.ExpertCategory
 
   @already_exists "ALREADY_EXISTS"
-  @required [:category_id, :expert_id]
+  @required [:expert_category_id, :expert_id]
 
   @primary_key false
   schema "expert_category_mappings" do
@@ -24,7 +24,7 @@ defmodule Misobo.Experts.ExpertCategoryMapping do
     expert_category_mapping
     |> cast(attrs, @required)
     |> validate_required(@required)
-    |> foreign_key_constraint(:category_id)
+    |> foreign_key_constraint(:expert_category_id)
     |> foreign_key_constraint(:expert_id)
     |> unique_constraint([:user, :project],
       name: :expert_category_id_expert_id_unique_index,

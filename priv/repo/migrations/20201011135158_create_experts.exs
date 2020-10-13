@@ -17,6 +17,5 @@ defmodule Misobo.Repo.Migrations.CreateExperts do
 
       timestamps()
     end
-
   end
 end

@@ -5,8 +5,8 @@ defmodule Misobo.Experts.Expert do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Misobo.Experts.ExpertCategory
   alias Misobo.Experts.Expert
+  alias Misobo.Experts.ExpertCategory
   alias Misobo.Experts.ExpertCategoryMapping
 
   @required [:language, :name]

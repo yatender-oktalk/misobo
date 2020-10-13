@@ -9,6 +9,5 @@ defmodule Misobo.Repo.Migrations.CreateExpertCategories do
 
       timestamps()
     end
-
   end
 end

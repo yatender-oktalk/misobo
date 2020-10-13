@@ -320,14 +320,17 @@ defmodule Misobo.Experts do
       |> where([expert_category], expert_category.id in ^expert_categories)
       |> Repo.all()
 
-    with {:ok, _struct} <-
-           expert
-           |> Expert.changeset_update_expert_categories(expert_categories)
-           |> Repo.update() do
-      {:ok, get_expert(expert.id)}
-    else
+    resp =
+      expert
+      |> Expert.changeset_update_expert_categories(expert_categories)
+      |> Repo.update()
+
+    case resp do
+      {:ok, _struct} ->
+        {:ok, get_expert(expert.id)}
+
       error ->
-        error
+        {:error, error}
     end
   end
 end
