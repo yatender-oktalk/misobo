@@ -8,6 +8,7 @@ defmodule Misobo.Experts.ExpertCategory do
   @optional [:is_enabled]
 
   alias Misobo.Experts.Expert
+  alias Misobo.Experts.ExpertCategoryMapping
 
   @derive {Jason.Encoder,
            [
@@ -24,7 +25,7 @@ defmodule Misobo.Experts.ExpertCategory do
     many_to_many(
       :experts,
       Expert,
-      join_through: "expert_category_mappings",
+      join_through: ExpertCategoryMapping,
       on_replace: :delete
     )
 

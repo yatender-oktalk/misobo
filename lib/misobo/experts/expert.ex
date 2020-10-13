@@ -7,6 +7,7 @@ defmodule Misobo.Experts.Expert do
 
   alias Misobo.Experts.ExpertCategory
   alias Misobo.Experts.Expert
+  alias Misobo.Experts.ExpertCategoryMapping
 
   @required [:language, :name]
   @optional [
@@ -52,7 +53,7 @@ defmodule Misobo.Experts.Expert do
     many_to_many(
       :expert_categories,
       ExpertCategory,
-      join_through: "expert_category_mappings",
+      join_through: ExpertCategoryMapping,
       on_replace: :delete
     )
 
@@ -69,6 +70,7 @@ defmodule Misobo.Experts.Expert do
   def changeset_update_expert_categories(%Expert{} = expert, expert_categories) do
     expert
     |> cast(%{}, @required ++ @optional)
+    |> validate_required(@required)
     # associate categories to the expert
     |> put_assoc(:expert_categories, expert_categories)
   end
