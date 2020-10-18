@@ -36,21 +36,15 @@ defmodule MisoboWeb.Router do
       )
 
       get(
-        "/registration/:registration_id/categories",
-        CategoryController,
-        :registration_categories
+        "/registration/:registration_id",
+        RegistrationController,
+        :show
       )
 
       put(
         "/registration/:registration_id/sub_categories",
         CategoryController,
         :update_registration_sub_categories
-      )
-
-      get(
-        "/registration/:registration_id/sub_categories",
-        CategoryController,
-        :registration_sub_categories
       )
     end
 
