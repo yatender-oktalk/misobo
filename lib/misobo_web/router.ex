@@ -28,7 +28,13 @@ defmodule MisoboWeb.Router do
     scope("/") do
       pipe_through :registration_authenticated
       get("/categories", CategoryController, :index)
-      put("/registration/:registration_id/categories", CategoryController, :add_category)
+      put("/registration/:registration_id/categories", CategoryController, :add_categories)
+
+      get(
+        "/registration/:registration_id/categories",
+        CategoryController,
+        :registration_categories
+      )
     end
 
     # pipe auth
