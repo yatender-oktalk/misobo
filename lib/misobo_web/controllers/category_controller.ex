@@ -6,9 +6,9 @@ defmodule MisoboWeb.CategoryController do
   """
   use MisoboWeb, :controller
 
-  alias Misobo.Categories
   alias Misobo.Accounts
   alias Misobo.Accounts.Registration
+  alias Misobo.Categories
 
   def index(conn, _params) do
     data = Categories.get_categories_with_sub_categories()

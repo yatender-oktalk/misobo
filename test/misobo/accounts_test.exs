@@ -287,13 +287,19 @@ defmodule Misobo.AccountsTest do
 
     test "update_registration/2 with valid data updates the registration" do
       registration = registration_fixture()
-      assert {:ok, %Registration{} = registration} = Accounts.update_registration(registration, @update_attrs)
+
+      assert {:ok, %Registration{} = registration} =
+               Accounts.update_registration(registration, @update_attrs)
+
       assert registration.device_id == "some updated device_id"
     end
 
     test "update_registration/2 with invalid data returns error changeset" do
       registration = registration_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_registration(registration, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.update_registration(registration, @invalid_attrs)
+
       assert registration == Accounts.get_registration!(registration.id)
     end
 

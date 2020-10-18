@@ -11,9 +11,11 @@ defmodule Misobo.Repo.Migrations.CreateRegistrationSubCategories do
 
     create index(:registration_sub_categories, [:registration_id])
     create index(:registration_sub_categories, [:sub_category_id])
+
     create(
       unique_index(:registration_sub_categories, [:registration_id, :sub_category_id],
         name: :sub_category_id_registration_id_unique_index
-      ))
+      )
+    )
   end
 end

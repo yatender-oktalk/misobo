@@ -7,6 +7,5 @@ defmodule Misobo.Repo.Migrations.CreateRegistrations do
 
       timestamps()
     end
-
   end
 end

@@ -15,6 +15,7 @@ defmodule Misobo.Repo.Migrations.CreateRegistrationCategories do
     create(
       unique_index(:registration_categories, [:registration_id, :category_id],
         name: :category_id_registration_id_unique_index
-      ))
+      )
+    )
   end
 end

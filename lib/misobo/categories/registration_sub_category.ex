@@ -1,4 +1,8 @@
 defmodule Misobo.Categories.RegistrationSubCategory do
+  @moduledoc """
+  This module contains the registration sub category schema
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

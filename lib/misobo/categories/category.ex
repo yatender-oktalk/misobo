@@ -5,9 +5,9 @@ defmodule Misobo.Categories.Category do
 
   use Ecto.Schema
   import Ecto.Changeset
+  alias Misobo.Accounts.Registration
   alias Misobo.Categories.RegistrationCategory
   alias Misobo.Categories.SubCategory
-  alias Misobo.Accounts.Registration
 
   @required [:name]
   @optional [:desc, :is_enabled]

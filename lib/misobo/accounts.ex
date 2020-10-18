@@ -5,11 +5,11 @@ defmodule Misobo.Accounts do
 
   import Ecto.Query, warn: false
   alias Misobo.Accounts.User
-  alias Misobo.Repo
   alias Misobo.Categories.Category
-  alias Misobo.Categories.SubCategory
   alias Misobo.Categories.RegistrationCategory
   alias Misobo.Categories.RegistrationSubCategory
+  alias Misobo.Categories.SubCategory
+  alias Misobo.Repo
   import Misobo.TimeUtils
 
   @doc """
@@ -283,7 +283,7 @@ defmodule Misobo.Accounts do
 
   """
   def get_registration(id),
-    do: Repo.get(Registration, id) |> Repo.preload([:categories, :sub_categories])
+    do: Registration |> Repo.get(id) |> Repo.preload([:categories, :sub_categories])
 
   @doc """
   Creates a registration.

@@ -1,13 +1,17 @@
 defmodule Misobo.Accounts.Registration do
+  @moduledoc """
+  This module contains the registration schema
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
   alias Misobo.Accounts.Registration
 
   alias Misobo.Categories.Category
-  alias Misobo.Categories.SubCategory
   alias Misobo.Categories.RegistrationCategory
   alias Misobo.Categories.RegistrationSubCategory
+  alias Misobo.Categories.SubCategory
 
   @required [:device_id]
   @optional []
