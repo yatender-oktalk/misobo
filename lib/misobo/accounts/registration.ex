@@ -44,13 +44,6 @@ defmodule Misobo.Accounts.Registration do
     timestamps()
   end
 
-  @doc false
-  def changeset(registration, attrs) do
-    registration
-    |> cast(attrs, [:device_id])
-    |> validate_required([:device_id])
-  end
-
   def changeset_update_registration_categories(%Registration{} = registration, categories) do
     registration
     |> cast(%{}, @required ++ @optional)
