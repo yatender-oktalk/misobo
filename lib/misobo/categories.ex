@@ -6,8 +6,8 @@ defmodule Misobo.Categories do
   import Ecto.Query, warn: false
   alias Misobo.Repo
 
-  alias Misobo.Category
-  alias Misobo.SubCategory
+  alias Misobo.Categories.Category
+  alias Misobo.Categories.SubCategory
 
   @doc """
   Returns the list of categories.
@@ -39,6 +39,13 @@ defmodule Misobo.Categories do
   def get_category(id), do: Repo.get(Category, id)
 
   def get_category_by(params), do: Repo.get_by(Category, params)
+
+  def get_categories(ids) when is_list(ids) do
+    Category
+    |> where([c], c.id in ^ids)
+    |> preload([x], :sub_category)
+    |> Repo.all()
+  end
 
   @doc """
   Creates a category.
@@ -138,4 +145,208 @@ defmodule Misobo.Categories do
 
   defp preload_sub_categories(query, preload_query),
     do: query |> preload(sub_category: ^preload_query)
+
+  alias Misobo.Categories.RegistrationCategory
+
+  @doc """
+  Returns the list of registration_categories.
+
+  ## Examples
+
+      iex> list_registration_categories()
+      [%RegistrationCategory{}, ...]
+
+  """
+  def list_registration_categories do
+    Repo.all(RegistrationCategory)
+  end
+
+  @doc """
+  Gets a single registration_category.
+
+  Raises `Ecto.NoResultsError` if the Registration category does not exist.
+
+  ## Examples
+
+      iex> get_registration_category!(123)
+      %RegistrationCategory{}
+
+      iex> get_registration_category!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_registration_category!(id), do: Repo.get!(RegistrationCategory, id)
+
+  @doc """
+  Creates a registration_category.
+
+  ## Examples
+
+      iex> create_registration_category(%{field: value})
+      {:ok, %RegistrationCategory{}}
+
+      iex> create_registration_category(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_registration_category(attrs \\ %{}) do
+    %RegistrationCategory{}
+    |> RegistrationCategory.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a registration_category.
+
+  ## Examples
+
+      iex> update_registration_category(registration_category, %{field: new_value})
+      {:ok, %RegistrationCategory{}}
+
+      iex> update_registration_category(registration_category, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_registration_category(%RegistrationCategory{} = registration_category, attrs) do
+    registration_category
+    |> RegistrationCategory.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a registration_category.
+
+  ## Examples
+
+      iex> delete_registration_category(registration_category)
+      {:ok, %RegistrationCategory{}}
+
+      iex> delete_registration_category(registration_category)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_registration_category(%RegistrationCategory{} = registration_category) do
+    Repo.delete(registration_category)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking registration_category changes.
+
+  ## Examples
+
+      iex> change_registration_category(registration_category)
+      %Ecto.Changeset{data: %RegistrationCategory{}}
+
+  """
+  def change_registration_category(%RegistrationCategory{} = registration_category, attrs \\ %{}) do
+    RegistrationCategory.changeset(registration_category, attrs)
+  end
+
+  alias Misobo.Categories.RegistrationSubCategory
+
+  @doc """
+  Returns the list of registration_sub_categories.
+
+  ## Examples
+
+      iex> list_registration_sub_categories()
+      [%RegistrationSubCategory{}, ...]
+
+  """
+  def list_registration_sub_categories do
+    Repo.all(RegistrationSubCategory)
+  end
+
+  @doc """
+  Gets a single registration_sub_category.
+
+  Raises `Ecto.NoResultsError` if the Registration sub category does not exist.
+
+  ## Examples
+
+      iex> get_registration_sub_category!(123)
+      %RegistrationSubCategory{}
+
+      iex> get_registration_sub_category!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_registration_sub_category!(id), do: Repo.get!(RegistrationSubCategory, id)
+
+  @doc """
+  Creates a registration_sub_category.
+
+  ## Examples
+
+      iex> create_registration_sub_category(%{field: value})
+      {:ok, %RegistrationSubCategory{}}
+
+      iex> create_registration_sub_category(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_registration_sub_category(attrs \\ %{}) do
+    %RegistrationSubCategory{}
+    |> RegistrationSubCategory.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a registration_sub_category.
+
+  ## Examples
+
+      iex> update_registration_sub_category(registration_sub_category, %{field: new_value})
+      {:ok, %RegistrationSubCategory{}}
+
+      iex> update_registration_sub_category(registration_sub_category, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_registration_sub_category(
+        %RegistrationSubCategory{} = registration_sub_category,
+        attrs
+      ) do
+    registration_sub_category
+    |> RegistrationSubCategory.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a registration_sub_category.
+
+  ## Examples
+
+      iex> delete_registration_sub_category(registration_sub_category)
+      {:ok, %RegistrationSubCategory{}}
+
+      iex> delete_registration_sub_category(registration_sub_category)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_registration_sub_category(%RegistrationSubCategory{} = registration_sub_category) do
+    Repo.delete(registration_sub_category)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking registration_sub_category changes.
+
+  ## Examples
+
+      iex> change_registration_sub_category(registration_sub_category)
+      %Ecto.Changeset{data: %RegistrationSubCategory{}}
+
+  """
+  def change_registration_sub_category(
+        %RegistrationSubCategory{} = registration_sub_category,
+        attrs \\ %{}
+      ) do
+    RegistrationSubCategory.changeset(registration_sub_category, attrs)
+  end
+
+  def get_sub_categories(ids) when is_list(ids) do
+    SubCategory
+    |> where([c], c.id in ^ids)
+    |> Repo.all()
+  end
 end

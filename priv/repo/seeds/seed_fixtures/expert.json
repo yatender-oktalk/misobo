@@ -1,0 +1,26 @@
+[
+  {
+    "name": "expert-1",
+    "language": "Hindi",
+    "categories": [
+      "Astologer",
+      "Therapist"
+    ]
+  },
+  {
+    "name": "expert-2",
+    "language": "English",
+    "categories": [
+      "Therapist",
+      "Psychologist"
+    ]
+  },
+  {
+    "name": "expert-3",
+    "language": "Hindi",
+    "categories": [
+      "Psychologist",
+      "Therapist"
+    ]
+  }
+]

@@ -249,4 +249,69 @@ defmodule Misobo.AccountsTest do
       end
     end
   end
+
+  describe "registrations" do
+    alias Misobo.Accounts.Registration
+
+    @valid_attrs %{device_id: "some device_id"}
+    @update_attrs %{device_id: "some updated device_id"}
+    @invalid_attrs %{device_id: nil}
+
+    def registration_fixture(attrs \\ %{}) do
+      {:ok, registration} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_registration()
+
+      registration
+    end
+
+    test "list_registrations/0 returns all registrations" do
+      registration = registration_fixture()
+      assert Accounts.list_registrations() == [registration]
+    end
+
+    test "get_registration!/1 returns the registration with given id" do
+      registration = registration_fixture()
+      assert Accounts.get_registration!(registration.id) == registration
+    end
+
+    test "create_registration/1 with valid data creates a registration" do
+      assert {:ok, %Registration{} = registration} = Accounts.create_registration(@valid_attrs)
+      assert registration.device_id == "some device_id"
+    end
+
+    test "create_registration/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_registration(@invalid_attrs)
+    end
+
+    test "update_registration/2 with valid data updates the registration" do
+      registration = registration_fixture()
+
+      assert {:ok, %Registration{} = registration} =
+               Accounts.update_registration(registration, @update_attrs)
+
+      assert registration.device_id == "some updated device_id"
+    end
+
+    test "update_registration/2 with invalid data returns error changeset" do
+      registration = registration_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.update_registration(registration, @invalid_attrs)
+
+      assert registration == Accounts.get_registration!(registration.id)
+    end
+
+    test "delete_registration/1 deletes the registration" do
+      registration = registration_fixture()
+      assert {:ok, %Registration{}} = Accounts.delete_registration(registration)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_registration!(registration.id) end
+    end
+
+    test "change_registration/1 returns a registration changeset" do
+      registration = registration_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_registration(registration)
+    end
+  end
 end
