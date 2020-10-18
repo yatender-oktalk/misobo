@@ -6,8 +6,8 @@ defmodule Misobo.Categories do
   import Ecto.Query, warn: false
   alias Misobo.Repo
 
-  alias Misobo.Category
-  alias Misobo.SubCategory
+  alias Misobo.Categories.Category
+  alias Misobo.Categories.SubCategory
 
   @doc """
   Returns the list of categories.
