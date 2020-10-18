@@ -13,6 +13,20 @@ Removed for now removed features.
 Fixed for any bug fixes.
 Security in case of vulnerabilities. -->
 
+## [0.4.0]
+
+# unreleased
+
+## [0.3.0]
+
+# Added
+
+- Changed the onboarding flow
+- Added the get_slots functionlity
+- Added the expert module
+- Added the expert categories mapping module
+
+
 ## [0.2.0]
 
 # Added
