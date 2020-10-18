@@ -34,18 +34,6 @@ defmodule MisoboWeb.CategoryController do
     response(conn, 200, :ok)
   end
 
-  def registration_categories(conn, %{"registration_id" => registration_id}) do
-    resp = Accounts.registration_catgories(registration_id)
-
-    case resp do
-      %Registration{} = registration ->
-        response(conn, 200, %{data: registration})
-
-      _err ->
-        error_response(conn, 400, "registration not found")
-    end
-  end
-
   @spec update_registration_sub_categories(Plug.Conn.t(), map) :: Plug.Conn.t()
   def update_registration_sub_categories(
         conn,
@@ -68,7 +56,6 @@ defmodule MisoboWeb.CategoryController do
 
   def registration_sub_categories(conn, %{"registration_id" => registration_id}) do
     resp = Accounts.registration_sub_catgories(registration_id)
-    IO.inspect(resp)
 
     case resp do
       %Registration{} = registration ->
