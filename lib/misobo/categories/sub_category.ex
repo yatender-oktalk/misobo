@@ -1,4 +1,4 @@
-defmodule Misobo.SubCategory do
+defmodule Misobo.Categories.SubCategory do
   @moduledoc """
   This module has schema of sub_category
   """
