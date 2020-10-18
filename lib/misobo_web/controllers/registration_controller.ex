@@ -22,6 +22,18 @@ defmodule MisoboWeb.RegistrationController do
     end
   end
 
+  def show(conn, %{"registration_id" => registration_id}) do
+    resp = Accounts.registration_catgories(registration_id)
+
+    case resp do
+      %Registration{} = registration ->
+        response(conn, 200, %{data: registration})
+
+      _err ->
+        error_response(conn, 400, "registration not found")
+    end
+  end
+
   # Private functions
   defp error_response(conn, status, message) do
     data = %{data: message}
