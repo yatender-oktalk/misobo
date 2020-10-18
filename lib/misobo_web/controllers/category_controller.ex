@@ -7,17 +7,50 @@ defmodule MisoboWeb.CategoryController do
   use MisoboWeb, :controller
 
   alias Misobo.Categories
+  alias Misobo.Accounts
+  alias Misobo.Accounts.Registration
 
   def index(conn, _params) do
     data = Categories.get_categories_with_sub_categories()
     response(conn, 200, %{data: data})
   end
 
+  def update_registration_categories(
+        conn,
+        %{"registration_id" => registration_id, "categories" => categories} = _params
+      ) do
+    with registration <- Accounts.registration_categories_preloaded(registration_id),
+         {:ok, %Registration{}} <-
+           Accounts.upsert_registration_categories(registration, categories) do
+      response(conn, 200, %{data: "Successfully updated!"})
+    else
+      nil ->
+        error_response(conn, 400, "registration not found")
+
+      _err ->
+        error_response(conn, 500, "something unexpected occured")
+    end
+
+    response(conn, 200, :ok)
+  end
+
+  def registration_categories(conn, %{"registration_id" => registration_id}) do
+    resp = Accounts.registration_catgories(registration_id)
+
+    case resp do
+      %Registration{} = registration ->
+        response(conn, 200, %{data: registration})
+
+      err ->
+        error_response(conn, 400, "registration not found")
+    end
+  end
+
   # Private functions
-  # defp error_response(conn, status, message) do
-  #   data = %{data: message}
-  #   response(conn, status, data)
-  # end
+  defp error_response(conn, status, message) do
+    data = %{data: message}
+    response(conn, status, data)
+  end
 
   defp response(conn, status, data) do
     conn

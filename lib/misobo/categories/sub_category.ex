@@ -6,7 +6,7 @@ defmodule Misobo.Categories.SubCategory do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Misobo.Category
+  alias Misobo.Categories.Category
 
   @required [:category_id, :name]
   @optional [:desc, :is_enabled]

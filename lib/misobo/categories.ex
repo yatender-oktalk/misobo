@@ -40,6 +40,13 @@ defmodule Misobo.Categories do
 
   def get_category_by(params), do: Repo.get_by(Category, params)
 
+  def get_categories(ids) when is_list(ids) do
+    Category
+    |> where([c], c.id in ^ids)
+    |> preload([x], :sub_category)
+    |> Repo.all()
+  end
+
   @doc """
   Creates a category.
 

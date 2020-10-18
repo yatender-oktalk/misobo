@@ -6,6 +6,8 @@ defmodule Misobo.Accounts do
   import Ecto.Query, warn: false
   alias Misobo.Accounts.User
   alias Misobo.Repo
+  alias Misobo.Categories.Category
+  alias Misobo.Categories.RegistrationCategory
   import Misobo.TimeUtils
 
   @doc """
@@ -343,5 +345,47 @@ defmodule Misobo.Accounts do
   """
   def change_registration(%Registration{} = registration, attrs \\ %{}) do
     Registration.changeset(registration, attrs)
+  end
+
+  def registration_catgories(registration_id) do
+    q =
+      from u in Category,
+        inner_join: rc in RegistrationCategory,
+        on: rc.category_id == u.id,
+        where: rc.registration_id == ^registration_id,
+        select: %{
+          name: u.name,
+          id: u.id
+        }
+
+    categories = Repo.all(q)
+
+    registration_id
+    |> get_registration()
+    |> Map.put(:categories, categories)
+  end
+
+  def registration_categories_preloaded(registration_id) do
+    registration_id
+    |> get_registration()
+    |> Repo.preload(:categories)
+  end
+
+  def upsert_registration_categories(registration, categories)
+      when is_list(categories) do
+    categories = Misobo.Categories.get_categories(categories)
+
+    resp =
+      registration
+      |> Registration.changeset_update_registration_categories(categories)
+      |> Repo.update()
+
+    case resp do
+      {:ok, _struct} ->
+        {:ok, get_registration(registration.id)}
+
+      error ->
+        {:error, error}
+    end
   end
 end

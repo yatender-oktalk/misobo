@@ -26,7 +26,7 @@ defmodule Misobo.Experts.ExpertCategoryMapping do
     |> validate_required(@required)
     |> foreign_key_constraint(:expert_category_id)
     |> foreign_key_constraint(:expert_id)
-    |> unique_constraint([:user, :project],
+    |> unique_constraint([:expert, :expert_category],
       name: :expert_category_id_expert_id_unique_index,
       message: @already_exists
     )
