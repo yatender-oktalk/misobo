@@ -1,12 +1,13 @@
-defmodule Misobo.Category do
+defmodule Misobo.Categories.Category do
   @moduledoc """
   This module has schema of category
   """
 
   use Ecto.Schema
   import Ecto.Changeset
-
-  alias Misobo.SubCategory
+  alias Misobo.Accounts.Registration
+  alias Misobo.Categories.RegistrationCategory
+  alias Misobo.Categories.SubCategory
 
   @required [:name]
   @optional [:desc, :is_enabled]
@@ -26,6 +27,14 @@ defmodule Misobo.Category do
     field :is_enabled, :boolean, default: true
 
     has_many(:sub_category, SubCategory)
+
+    many_to_many(
+      :registrations,
+      Registration,
+      join_through: RegistrationCategory,
+      on_replace: :delete
+    )
+
     timestamps()
   end
 

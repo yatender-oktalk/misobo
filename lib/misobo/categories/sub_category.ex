@@ -1,4 +1,4 @@
-defmodule Misobo.SubCategory do
+defmodule Misobo.Categories.SubCategory do
   @moduledoc """
   This module has schema of sub_category
   """
@@ -6,7 +6,7 @@ defmodule Misobo.SubCategory do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Misobo.Category
+  alias Misobo.Categories.Category
 
   @required [:category_id, :name]
   @optional [:desc, :is_enabled]

@@ -1,4 +1,4 @@
-defmodule Misobo.CategoryTest do
+defmodule Misobo.Categories.CategoryTest do
   @moduledoc """
   This module has tests related to category endpoint
   """
@@ -7,7 +7,7 @@ defmodule Misobo.CategoryTest do
   alias Misobo.Categories
 
   describe "categories" do
-    alias Misobo.Category
+    alias Misobo.Categories.Category
 
     @valid_attrs %{
       name: "some-category-name",
