@@ -40,6 +40,18 @@ defmodule MisoboWeb.Router do
         CategoryController,
         :registration_categories
       )
+
+      put(
+        "/registration/:registration_id/sub_categories",
+        CategoryController,
+        :update_registration_sub_categories
+      )
+
+      get(
+        "/registration/:registration_id/sub_categories",
+        CategoryController,
+        :registration_sub_categories
+      )
     end
 
     # pipe auth

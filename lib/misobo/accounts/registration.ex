@@ -3,8 +3,11 @@ defmodule Misobo.Accounts.Registration do
   import Ecto.Changeset
 
   alias Misobo.Accounts.Registration
+
   alias Misobo.Categories.Category
+  alias Misobo.Categories.SubCategory
   alias Misobo.Categories.RegistrationCategory
+  alias Misobo.Categories.RegistrationSubCategory
 
   @required [:device_id]
   @optional []
@@ -13,7 +16,8 @@ defmodule Misobo.Accounts.Registration do
              only: [
                :id,
                :device_id,
-               :categories
+               :categories,
+               :sub_categories
              ]
            ]}
   schema "registrations" do
@@ -23,6 +27,13 @@ defmodule Misobo.Accounts.Registration do
       :categories,
       Category,
       join_through: RegistrationCategory,
+      on_replace: :delete
+    )
+
+    many_to_many(
+      :sub_categories,
+      SubCategory,
+      join_through: RegistrationSubCategory,
       on_replace: :delete
     )
 
@@ -42,5 +53,13 @@ defmodule Misobo.Accounts.Registration do
     |> validate_required(@required)
     # associate categories to the registration
     |> put_assoc(:categories, categories)
+  end
+
+  def changeset_update_registration_sub_categories(%Registration{} = registration, sub_categories) do
+    registration
+    |> cast(%{}, @required ++ @optional)
+    |> validate_required(@required)
+    # associate categories to the registration
+    |> put_assoc(:sub_categories, sub_categories)
   end
 end

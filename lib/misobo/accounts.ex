@@ -7,7 +7,9 @@ defmodule Misobo.Accounts do
   alias Misobo.Accounts.User
   alias Misobo.Repo
   alias Misobo.Categories.Category
+  alias Misobo.Categories.SubCategory
   alias Misobo.Categories.RegistrationCategory
+  alias Misobo.Categories.RegistrationSubCategory
   import Misobo.TimeUtils
 
   @doc """
@@ -280,7 +282,8 @@ defmodule Misobo.Accounts do
       nil
 
   """
-  def get_registration(id), do: Repo.get(Registration, id)
+  def get_registration(id),
+    do: Repo.get(Registration, id) |> Repo.preload([:categories, :sub_categories])
 
   @doc """
   Creates a registration.
@@ -365,10 +368,34 @@ defmodule Misobo.Accounts do
     |> Map.put(:categories, categories)
   end
 
+  def registration_sub_catgories(registration_id) do
+    q =
+      from u in SubCategory,
+        inner_join: rc in RegistrationSubCategory,
+        on: rc.sub_category_id == u.id,
+        where: rc.registration_id == ^registration_id,
+        select: %{
+          name: u.name,
+          id: u.id
+        }
+
+    sub_categories = Repo.all(q)
+
+    registration_id
+    |> get_registration()
+    |> Map.put(:sub_categories, sub_categories)
+  end
+
   def registration_categories_preloaded(registration_id) do
     registration_id
     |> get_registration()
     |> Repo.preload(:categories)
+  end
+
+  def registration_sub_categories_preloaded(registration_id) do
+    registration_id
+    |> get_registration()
+    |> Repo.preload(:sub_categories)
   end
 
   def upsert_registration_categories(registration, categories)
@@ -378,6 +405,24 @@ defmodule Misobo.Accounts do
     resp =
       registration
       |> Registration.changeset_update_registration_categories(categories)
+      |> Repo.update()
+
+    case resp do
+      {:ok, _struct} ->
+        {:ok, get_registration(registration.id)}
+
+      error ->
+        {:error, error}
+    end
+  end
+
+  def upsert_registration_sub_categories(registration, sub_categories)
+      when is_list(sub_categories) do
+    sub_categories = Misobo.Categories.get_sub_categories(sub_categories)
+
+    resp =
+      registration
+      |> Registration.changeset_update_registration_sub_categories(sub_categories)
       |> Repo.update()
 
     case resp do
