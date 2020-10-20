@@ -5,8 +5,9 @@ defmodule Misobo.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias Misobo.Accounts.LoginStreak
+  alias Misobo.Accounts.Registration
 
-  @required [:phone, :otp_valid_time]
+  @required [:phone, :otp_valid_time, :registration_id]
   @optional [:name, :is_enabled, :otp, :karma_points, :dob]
 
   @derive {Jason.Encoder,
@@ -31,6 +32,7 @@ defmodule Misobo.Accounts.User do
     field :phone, :string
     field :horoscope_id, :id
 
+    belongs_to :registration, Registration
     has_one(:login_streak, LoginStreak, on_delete: :delete_all)
     timestamps()
   end

@@ -22,9 +22,6 @@ defmodule MisoboWeb.Router do
 
     post("/registration", RegistrationController, :create)
 
-    post("/user/signup", UserController, :create)
-    post("/user/login", UserController, :login)
-
     scope("/") do
       pipe_through :registration_authenticated
       get("/categories", CategoryController, :index)
@@ -46,6 +43,9 @@ defmodule MisoboWeb.Router do
         CategoryController,
         :update_registration_sub_categories
       )
+
+      post("/user", UserController, :create)
+      post("/user/:user_id/verify", UserController, :verify)
     end
 
     # pipe auth

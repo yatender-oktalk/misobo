@@ -20,7 +20,7 @@ defmodule MisoboWeb.RegistrationAuthPlug do
          {:ok, %{id: id} = _data} <- Misobo.Authentication.verify(headers["token"]),
          %Registration{id: registration_id} = registration <- Accounts.get_registration(id),
          true <- id == registration_id do
-      conn |> assign(:token_info, registration)
+      conn |> assign(:registration, registration)
     else
       {:error, :invalid} -> unauth(conn, %{data: "unauthorized token"})
       false -> unauth(conn, %{data: "invalid token for this user"})
