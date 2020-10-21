@@ -6,9 +6,9 @@ defmodule MisoboWeb.Router do
     plug MisoboWeb.DbHealthPlug
   end
 
-  pipeline :authenticated do
-    plug MisoboWeb.AuthPlug
-  end
+  # pipeline :authenticated do
+  #   plug MisoboWeb.AuthPlug
+  # end
 
   pipeline :registration_authenticated do
     plug MisoboWeb.RegistrationAuthPlug
@@ -21,9 +21,6 @@ defmodule MisoboWeb.Router do
     get("/health", HealthController, :index)
 
     post("/registration", RegistrationController, :create)
-
-    post("/user/signup", UserController, :create)
-    post("/user/login", UserController, :login)
 
     scope("/") do
       pipe_through :registration_authenticated
@@ -46,16 +43,12 @@ defmodule MisoboWeb.Router do
         CategoryController,
         :update_registration_sub_categories
       )
-    end
 
-    # pipe auth
-    scope("/") do
-      pipe_through :authenticated
-      # category
+      post("/user", UserController, :create)
+      post("/user/:user_id/verify", UserController, :verify)
 
-      # user
-      put("/user/:id", UserController, :update)
       get("/user/:id", UserController, :index)
+      put("/user/:id", UserController, :update)
     end
   end
 

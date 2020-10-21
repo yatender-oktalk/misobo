@@ -433,4 +433,8 @@ defmodule Misobo.Accounts do
         {:error, error}
     end
   end
+
+  def existing_registration?(%Registration{id: id}) do
+    get_user_by(registration_id: id) == nil
+  end
 end
