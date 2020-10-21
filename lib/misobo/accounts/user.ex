@@ -19,7 +19,8 @@ defmodule Misobo.Accounts.User do
                :is_enabled,
                :karma_points,
                :name,
-               :horoscope_id
+               :horoscope_id,
+               :registration_id
              ]
            ]}
   schema "users" do
