@@ -8,7 +8,7 @@ defmodule Misobo.Accounts.User do
   alias Misobo.Accounts.Registration
 
   @required [:phone, :otp_valid_time, :registration_id]
-  @optional [:name, :is_enabled, :otp, :karma_points, :dob]
+  @optional [:name, :is_enabled, :otp, :karma_points, :dob, :daily_reminder]
 
   @derive {Jason.Encoder,
            [
