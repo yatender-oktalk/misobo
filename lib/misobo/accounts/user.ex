@@ -8,7 +8,7 @@ defmodule Misobo.Accounts.User do
   alias Misobo.Accounts.Registration
 
   @required [:phone, :otp_valid_time, :registration_id]
-  @optional [:name, :is_enabled, :otp, :karma_points, :dob]
+  @optional [:name, :is_enabled, :otp, :karma_points, :dob, :daily_reminder]
 
   @derive {Jason.Encoder,
            [
@@ -20,7 +20,8 @@ defmodule Misobo.Accounts.User do
                :karma_points,
                :name,
                :horoscope_id,
-               :registration_id
+               :registration_id,
+               :daily_reminder
              ]
            ]}
   schema "users" do
@@ -32,6 +33,7 @@ defmodule Misobo.Accounts.User do
     field :otp, :integer
     field :phone, :string
     field :horoscope_id, :id
+    field :daily_reminder, :integer
 
     belongs_to :registration, Registration
     has_one(:login_streak, LoginStreak, on_delete: :delete_all)
