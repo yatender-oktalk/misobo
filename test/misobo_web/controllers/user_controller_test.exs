@@ -34,26 +34,29 @@ defmodule MisoboWeb.UserControllerTest do
     end
 
     test "verify user test", %{conn: conn} do
-      # create a new user
       phone = "9090909091"
-      post(conn, Routes.user_path(conn, :create, %{phone: phone}))
-      # fetch the details then validate it
-      %User{otp: otp} = Accounts.get_user_by(%{phone: phone})
+      connx = post(conn, Routes.user_path(conn, :create, %{phone: phone}))
 
-      # login API
-      conn = post(conn, Routes.user_path(conn, :login, %{"phone" => phone, "otp" => otp}))
+      %{"data" => %{"id" => id}} = Jason.decode!(connx.resp_body)
+
+      %User{otp: otp, is_enabled: false} = Accounts.get_user(id)
+      conn = post(conn, Routes.user_path(conn, :verify, id, phone: phone, otp: otp))
+      # fetch the details then validate it
+      %User{is_enabled: true} = Accounts.get_user(id)
       assert conn.status == 200
     end
 
     test "verify fails when OTP is wrong", %{conn: conn} do
-      # create a new user
       phone = "9090909092"
-      post(conn, Routes.user_path(conn, :create, %{phone: phone}))
-      # fetch the details then validate it
-      %User{otp: otp} = Accounts.get_user_by(%{phone: phone})
+      connx = post(conn, Routes.user_path(conn, :create, %{phone: phone}))
+      # create a new user
+      %{"data" => %{"id" => id}} = Jason.decode!(connx.resp_body)
 
-      # login API
-      conn = post(conn, Routes.user_path(conn, :login, %{"phone" => phone, "otp" => otp + 1}))
+      %User{otp: otp, is_enabled: false} = Accounts.get_user(id)
+
+      conn = post(conn, Routes.user_path(conn, :verify, id, phone: phone, otp: otp - 1))
+      # fetch the details then validate it
+      %User{is_enabled: false} = Accounts.get_user(id)
       assert conn.status == 400
     end
   end
