@@ -53,8 +53,8 @@ defmodule Misobo.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:typed_struct, "~>0.2"},
       {:tesla, "~> 1.3.0"},
-      {:timex, "~> 3.5"}
-
+      {:timex, "~> 3.5"},
+      {:scrivener_ecto, "~> 2.0"}
       # dev internal
     ]
   end

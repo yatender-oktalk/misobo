@@ -34,8 +34,11 @@ defmodule Misobo.AccountsTest do
     }
 
     def user_fixture(attrs \\ %{}) do
+      registration = registration_fixture_d()
+
       {:ok, user} =
         attrs
+        |> Map.merge(%{registration_id: registration.id})
         |> Enum.into(@valid_attrs)
         |> Accounts.create_user()
 
@@ -53,13 +56,18 @@ defmodule Misobo.AccountsTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
+      registration = registration_fixture_d()
+
+      assert {:ok, %User{} = user} =
+               Accounts.create_user(Map.merge(@valid_attrs, %{registration_id: registration.id}))
+
       assert user.dob == ~N[2010-04-17 14:00:00]
       assert user.is_enabled == true
       assert user.karma_points == 42
       assert user.name == "some name"
       assert user.otp == 42
       assert user.phone == "90909090"
+      assert user.registration_id == registration.id
     end
 
     test "update_user/2 with valid data updates the user" do
@@ -135,6 +143,8 @@ defmodule Misobo.AccountsTest do
     end
 
     def user_fixture_for_login(attrs \\ %{}) do
+      registration = registration_fixture_d()
+
       attrs =
         Map.merge(
           %{
@@ -144,7 +154,8 @@ defmodule Misobo.AccountsTest do
             karma_points: 42,
             name: "some name",
             otp: 42,
-            phone: "90909090"
+            phone: "90909090",
+            registration_id: registration.id
           },
           attrs
         )
@@ -152,6 +163,19 @@ defmodule Misobo.AccountsTest do
       {:ok, user} = attrs |> Accounts.create_user()
 
       user
+    end
+
+    def registration_fixture_d(attrs \\ %{}) do
+      attrs =
+        Map.merge(
+          %{
+            device_id: Ecto.UUID.generate()
+          },
+          attrs
+        )
+
+      {:ok, registration} = attrs |> Accounts.create_registration()
+      registration
     end
 
     test "list_login_streaks/0 returns all login_streaks" do

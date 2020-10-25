@@ -3,7 +3,6 @@ defmodule MisoboWeb.UserController do
 
   alias Misobo.Accounts
   alias Misobo.Accounts.User
-  alias Misobo.Authentication
   alias Misobo.Communication.Message
   alias Misobo.Communication.SMSProvider
 
@@ -13,16 +12,26 @@ defmodule MisoboWeb.UserController do
     response(conn, 200, :ok)
   end
 
-  def create(conn, %{"phone" => phone} = params) do
-    with otp <- Message.generate_otp(),
+  def create(%{assigns: %{registration: registration}} = conn, %{"phone" => phone} = params) do
+    with true <- Accounts.existing_registration?(registration),
+         otp <- Message.generate_otp(),
          otp_valid_time <- get_otp_timeout(),
          params <- params |> Map.put("otp", otp) |> Map.put("otp_valid_time", otp_valid_time),
-         {:ok, %User{} = _user} <- Accounts.create_user(params),
+         params <- Map.put(params, "registration_id", registration.id),
+         user <- Accounts.get_user_by(%{phone: phone}),
+         {:ok, %User{} = user} <- Accounts.handle_create_user(params, user),
          phone <- Message.add_prefix(phone),
          message <- Message.get_signup_sms(otp),
          :ok <- SMSProvider.send_sms(phone, message) do
-      response(conn, 201, %{data: "user created successfully"})
+      response(conn, 201, %{data: user})
     else
+      false ->
+        error_response(
+          conn,
+          400,
+          "Existing registration, please start a new registration for this device"
+        )
+
       {:error, changeset} ->
         error =
           Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
@@ -31,20 +40,23 @@ defmodule MisoboWeb.UserController do
     end
   end
 
-  def login(conn, %{"phone" => phone, "otp" => otp} = _params) do
-    with %User{otp_valid_time: otp_timeout, otp: valid_otp} = user <-
-           Accounts.get_user_by(%{phone: phone}),
+  def verify(
+        %{assigns: %{registration: registration}} = conn,
+        %{"phone" => phone, "otp" => otp, "user_id" => id} = _params
+      ) do
+    with %User{otp_valid_time: otp_timeout, otp: valid_otp, phone: ^phone} = user <-
+           Accounts.get_user(id),
          {:sms, true} <- validate_otp(otp, valid_otp),
          true <- still_validate?(otp_timeout),
-         {:ok, %User{} = user} <- Accounts.update_user(user, %{is_enabled: true}),
-         token <- Authentication.generate_token(user) do
-      response(conn, 200, %{data: user, token: token})
+         {:ok, %User{} = user} <-
+           Accounts.update_user(user, %{is_enabled: true, registration_id: registration.id}) do
+      response(conn, 200, %{data: user})
     else
       nil ->
         error_response(conn, 400, "User not found")
 
       {:sms, false} ->
-        error_response(conn, 400, "invalid OTP")
+        error_response(conn, 400, "Invalid OTP")
 
       false ->
         error_response(conn, 400, "OTP not valid now please generate new one")
@@ -54,14 +66,50 @@ defmodule MisoboWeb.UserController do
           Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
 
         error_response(conn, 400, error)
+
+      _ ->
+        error_response(conn, 400, "are you sure that request params are valid?")
     end
   end
 
-  def update(conn, %{"id" => id} = _params) do
-    with %User{} = user <- Accounts.get_user(id),
-         {:ok, %User{} = updated_user} <- Accounts.update_user(user, conn.body_params) do
-      response(conn, 200, %{data: updated_user})
+  def update(%{assigns: %{user: %User{id: user_id}}} = conn, %{"id" => id} = _params) do
+    with true <- to_string(user_id) == id,
+         %User{is_enabled: true} = user <- Accounts.get_user(id),
+         {:ok, %User{} = user} <-
+           Accounts.update_user(user, conn.body_params) do
+      response(conn, 200, %{data: user})
     else
+      %User{is_enabled: false} ->
+        error_response(conn, 400, "User has not verified the OTP")
+
+      false ->
+        error_response(conn, 400, "bad request, not allow to modify this user's data")
+
+      {:error, changeset} ->
+        error =
+          Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
+
+        error_response(conn, 400, error)
+    end
+  end
+
+  def calculate_bmi(
+        %{assigns: %{user: %User{id: user_id}}} = conn,
+        %{"height" => height, "weight" => weight, "user_id" => id} = _params
+      ) do
+    with true <- to_string(user_id) == id,
+         %User{is_enabled: true} = user <- Accounts.get_user(id),
+         {:ok, data} = Accounts.calculate_bmi(height, weight),
+         {:ok, %User{} = _user} <-
+           Accounts.update_user(user, Map.merge(data, %{"height" => height})) do
+      response(conn, 200, %{data: data})
+    else
+      %User{is_enabled: false} ->
+        error_response(conn, 400, "User has not verified the OTP")
+
+      false ->
+        error_response(conn, 400, "bad request, not allow to modify this user's data")
+
       {:error, changeset} ->
         error =
           Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)

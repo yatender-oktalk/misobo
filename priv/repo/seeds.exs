@@ -77,23 +77,3 @@ Repo.delete_all(Expert)
   # IO.inspect(expert_categories)
   Experts.upsert_expert_expert_categories(exp, expert_categories)
 end)
-
-(base_path <> "registration.json")
-|> Path.expand()
-|> File.read!()
-|> Jason.decode!()
-|> Enum.map(fn registration ->
-  {:ok, reg} = Accounts.create_registration(registration)
-
-  exp = Repo.preload(reg, :categories)
-
-  expert_categories =
-    expert["categories"]
-    |> Enum.map(fn exp_category ->
-      Repo.get_by(ExpertCategory, %{name: exp_category})
-    end)
-    |> Enum.map(fn expert -> expert.id end)
-
-  # IO.inspect(expert_categories)
-  Experts.upsert_expert_expert_categories(exp, expert_categories)
-end)

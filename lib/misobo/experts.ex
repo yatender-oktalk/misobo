@@ -214,6 +214,14 @@ defmodule Misobo.Experts do
     Expert.changeset(expert, attrs)
   end
 
+  def fetch_experts(page) do
+    Expert
+    |> where([p], p.language == "Hindi")
+    |> order_by(desc: :order)
+    # |> preload(:expert_categories)
+    |> Repo.paginate(page: page, page_size: 2)
+  end
+
   alias Misobo.Experts.ExpertCategoryMapping
 
   @doc """

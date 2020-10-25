@@ -75,6 +75,22 @@ defmodule Misobo.Accounts do
     |> Repo.insert()
   end
 
+  def handle_create_user(attrs \\ %{}, user)
+
+  def handle_create_user(attrs, nil) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def handle_create_user(attrs, %User{} = user) do
+    attrs = Map.drop(attrs, "registration_id")
+
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Updates a user.
 
@@ -431,6 +447,34 @@ defmodule Misobo.Accounts do
 
       error ->
         {:error, error}
+    end
+  end
+
+  def existing_registration?(%Registration{id: id}) do
+    get_user_by(registration_id: id) == nil
+  end
+
+  def calculate_bmi(height, weight) do
+    bmi = weight / (height * height)
+    {:ok, %{"bmi" => Float.ceil(bmi, 2), "result" => bmi_result(bmi)}}
+  end
+
+  defp bmi_result(bmi) do
+    cond do
+      bmi <= 18.5 ->
+        "underweight"
+
+      18.5 < bmi && bmi <= 24.9 ->
+        "normal"
+
+      24.9 < bmi && bmi <= 29.9 ->
+        "overweight"
+
+      bmi > 29.9 ->
+        "obese"
+
+      true ->
+        "Nothing"
     end
   end
 end

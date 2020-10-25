@@ -22,5 +22,27 @@
       "Psychologist",
       "Therapist"
     ]
+  },
+  {
+    "name": "expert-4",
+    "language": "Hindi",
+    "categories": [
+      "Psychologist",
+      "Astologer"
+    ]
+  },
+  {
+    "name": "expert-5",
+    "language": "Hindi",
+    "categories": [
+      "Therapist"
+    ]
+  },
+  {
+    "name": "expert-6",
+    "language": "Hindi",
+    "categories": [
+      "Psychologist"
+    ]
   }
 ]
