@@ -75,6 +75,22 @@ defmodule Misobo.Accounts do
     |> Repo.insert()
   end
 
+  def handle_create_user(attrs \\ %{}, user)
+
+  def handle_create_user(attrs, nil) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def handle_create_user(attrs, %User{} = user) do
+    attrs = Map.drop(attrs, "registration_id")
+
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Updates a user.
 

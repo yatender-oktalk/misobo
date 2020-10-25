@@ -39,7 +39,7 @@ defmodule MisoboWeb.UserControllerTest do
 
       %{"data" => %{"id" => id}} = Jason.decode!(connx.resp_body)
 
-      %User{otp: otp, is_enabled: false} = Accounts.get_user(id)
+      %User{otp: otp} = Accounts.get_user(id)
       conn = post(conn, Routes.user_path(conn, :verify, id, phone: phone, otp: otp))
       # fetch the details then validate it
       %User{is_enabled: true} = Accounts.get_user(id)

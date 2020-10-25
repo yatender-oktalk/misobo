@@ -117,6 +117,10 @@ defmodule Misobo.Experts do
     Repo.all(Expert)
   end
 
+  def list_experts_by(params) do
+    Repo.get_by(Expert, params)
+  end
+
   @doc """
   Gets a single expert.
 
@@ -212,6 +216,14 @@ defmodule Misobo.Experts do
   """
   def change_expert(%Expert{} = expert, attrs \\ %{}) do
     Expert.changeset(expert, attrs)
+  end
+
+  def fetch_experts(page) do
+    Expert
+    |> where([p], p.language == "Hindi")
+    |> order_by(desc: :order)
+    # |> preload(:expert_categories)
+    |> Repo.paginate(page: page, page_size: 2)
   end
 
   alias Misobo.Experts.ExpertCategoryMapping

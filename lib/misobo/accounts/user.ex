@@ -21,7 +21,8 @@ defmodule Misobo.Accounts.User do
                :name,
                :horoscope_id,
                :registration_id,
-               :daily_reminder
+               :daily_reminder,
+               :img
              ]
            ]}
   schema "users" do
@@ -34,6 +35,7 @@ defmodule Misobo.Accounts.User do
     field :phone, :string
     field :horoscope_id, :id
     field :daily_reminder, :integer
+    field :img, :string
 
     belongs_to :registration, Registration
     has_one(:login_streak, LoginStreak, on_delete: :delete_all)
