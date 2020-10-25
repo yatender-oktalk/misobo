@@ -2,13 +2,12 @@ use Mix.Config
 
 # Configure your database
 config :misobo, Misobo.Repo,
-  username: "doadmin",
-  password: "khj0lsw9f7dj1jy6",
-  database: "misobo",
-  hostname: "db-postgresql-blr1-78568-do-user-8119281-0.b.db.ondigitalocean.com",
+  username: "blockfiadmin",
+  password: "blockfiadmin",
+  database: "misobo_dev",
+  hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10,
-  ssl: true
+  pool_size: 10
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
