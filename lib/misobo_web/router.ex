@@ -47,6 +47,7 @@ defmodule MisoboWeb.Router do
 
       post("/user", UserController, :create)
       post("/user/:user_id/verify", UserController, :verify)
+      post("/user/:user_id/bmi", UserController, :calculate_bmi)
 
       get("/user/:id", UserController, :index)
       put("/user/:id", UserController, :update)

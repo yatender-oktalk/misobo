@@ -117,8 +117,7 @@ defmodule Misobo.Experts do
     Repo.all(Expert)
   end
 
-  def list_experts_by(params) do
-    Repo.get_by(Expert, params)
+  def list_experts(params) do
   end
 
   @doc """

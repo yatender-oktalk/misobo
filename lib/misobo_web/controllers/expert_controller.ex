@@ -7,7 +7,7 @@ defmodule MisoboWeb.ExpertController do
   import Misobo.Commons
 
   def index(conn, params) do
-    Experts.list_experts_by(params)
+    experts = Experts.list_experts(params)
     response(conn, 200, :ok)
   end
 
