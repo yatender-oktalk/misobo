@@ -117,9 +117,6 @@ defmodule Misobo.Experts do
     Repo.all(Expert)
   end
 
-  def list_experts(params) do
-  end
-
   @doc """
   Gets a single expert.
 
