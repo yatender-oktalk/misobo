@@ -18,7 +18,8 @@ defmodule MisoboWeb.UserController do
          otp_valid_time <- get_otp_timeout(),
          params <- params |> Map.put("otp", otp) |> Map.put("otp_valid_time", otp_valid_time),
          params <- Map.put(params, "registration_id", registration.id),
-         {:ok, %User{} = user} <- Accounts.create_user(params),
+         user <- Accounts.get_user_by(%{phone: phone}),
+         {:ok, %User{} = user} <- Accounts.handle_create_user(params, user),
          phone <- Message.add_prefix(phone),
          message <- Message.get_signup_sms(otp),
          :ok <- SMSProvider.send_sms(phone, message) do
@@ -39,18 +40,18 @@ defmodule MisoboWeb.UserController do
     end
   end
 
-  def verify(conn, %{"phone" => phone, "otp" => otp, "user_id" => id} = _params) do
-    with %User{otp_valid_time: otp_timeout, otp: valid_otp, is_enabled: false, phone: ^phone} =
-           user <-
+  def verify(
+        %{assigns: %{registration: registration}} = conn,
+        %{"phone" => phone, "otp" => otp, "user_id" => id} = _params
+      ) do
+    with %User{otp_valid_time: otp_timeout, otp: valid_otp, phone: ^phone} = user <-
            Accounts.get_user(id),
          {:sms, true} <- validate_otp(otp, valid_otp),
          true <- still_validate?(otp_timeout),
-         {:ok, %User{} = user} <- Accounts.update_user(user, %{is_enabled: true}) do
+         {:ok, %User{} = user} <-
+           Accounts.update_user(user, %{is_enabled: true, registration_id: registration.id}) do
       response(conn, 200, %{data: user})
     else
-      %User{is_enabled: true} ->
-        error_response(conn, 400, "User already verified")
-
       nil ->
         error_response(conn, 400, "User not found")
 
