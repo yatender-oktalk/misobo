@@ -1,24 +1,21 @@
 defmodule MisoboWeb.ExpertController do
   use MisoboWeb, :controller
 
-  alias Misobo.Experts
-  alias Misobo.Experts.Expert
+  # alias Misobo.Experts
+  # alias Misobo.Experts.Expert
 
-  import Misobo.Commons
+  # import Misobo.Commons
 
-  def index(conn, params) do
-    experts = Experts.list_experts(params)
+  def index(conn, _params) do
+    # _experts = Experts.list_experts(params)
     response(conn, 200, :ok)
   end
 
-  def create(%{assigns: %{registration: registration}} = conn, %{"phone" => phone} = params) do
-  end
-
   # Private functions
-  defp error_response(conn, status, message) do
-    data = %{data: message}
-    response(conn, status, data)
-  end
+  # defp error_response(conn, status, message) do
+  #   data = %{data: message}
+  #   response(conn, status, data)
+  # end
 
   defp response(conn, status, data) do
     conn
