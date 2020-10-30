@@ -23,6 +23,8 @@ defmodule MisoboWeb.Router do
     # Registration realated APIs
     post("/registration", RegistrationController, :create)
 
+    get("/experts", ExpertController, :fetch)
+
     scope("/") do
       pipe_through :registration_authenticated
       get("/categories", CategoryController, :index)
