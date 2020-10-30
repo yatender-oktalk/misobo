@@ -7,7 +7,7 @@ defmodule MisoboWeb.ExpertController do
     experts = Experts.list_experts()
     response(conn, 200, experts)
   end
-  
+
   def show(conn, %{"id" => id} = _params) do
     expert = Experts.get_expert(id)
     response(conn, 200, %{data: expert})
