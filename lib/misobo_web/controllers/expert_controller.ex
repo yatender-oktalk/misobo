@@ -1,14 +1,21 @@
 defmodule MisoboWeb.ExpertController do
   use MisoboWeb, :controller
 
-  # alias Misobo.Experts
-  # alias Misobo.Experts.Expert
-
-  # import Misobo.Commons
+  alias Misobo.Experts
 
   def index(conn, _params) do
-    # _experts = Experts.list_experts(params)
-    response(conn, 200, :ok)
+    experts = Experts.list_experts()
+    response(conn, 200, experts)
+  end
+
+  def show(conn, %{"id" => id} = _params) do
+    expert = Experts.get_expert(id)
+    response(conn, 200, %{data: expert})
+  end
+
+  def fetch(conn, %{"page" => page} = _params) do
+    data = Experts.fetch_experts(page)
+    response(conn, 200, Map.from_struct(data))
   end
 
   # Private functions

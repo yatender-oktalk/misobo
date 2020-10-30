@@ -215,12 +215,17 @@ defmodule Misobo.Experts do
   end
 
   def fetch_experts(page) do
-    Expert
-    |> where([p], p.language == "Hindi")
-    |> order_by(desc: :order)
-    # |> preload(:expert_categories)
-    |> Repo.paginate(page: page, page_size: 2)
+    expert_base() |> fetch_experts_remaining(page)
   end
+
+  def fetch_experts_remaining(query, page) do
+    query
+    |> order_by(asc: :order)
+    |> preload(:expert_categories)
+    |> Repo.paginate(page: page)
+  end
+
+  def expert_base, do: from(u in Expert)
 
   alias Misobo.Experts.ExpertCategoryMapping
 
@@ -340,5 +345,17 @@ defmodule Misobo.Experts do
       error ->
         {:error, error}
     end
+  end
+
+  def get_experts_for_category(id, page) do
+    q =
+      from u in ExpertCategoryMapping,
+        join: c in Expert,
+        on: c.id == u.expert_id,
+        where: u.expert_category_id == ^id,
+        where: c.is_enabled == true,
+        select: c
+
+    Repo.paginate(q, page: page)
   end
 end
