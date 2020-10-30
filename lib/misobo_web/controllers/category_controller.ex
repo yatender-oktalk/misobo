@@ -9,10 +9,16 @@ defmodule MisoboWeb.CategoryController do
   alias Misobo.Accounts
   alias Misobo.Accounts.Registration
   alias Misobo.Categories
+  alias Misobo.Experts
 
   def index(conn, _params) do
     data = Categories.get_categories_with_sub_categories()
     response(conn, 200, %{data: data})
+  end
+
+  def category_experts(conn, %{"id" => id} = params) do
+    data = Experts.get_experts_for_category(id, params["page"])
+    response(conn, 200, Map.from_struct(data))
   end
 
   def update_registration_categories(

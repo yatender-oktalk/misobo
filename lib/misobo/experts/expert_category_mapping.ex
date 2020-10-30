@@ -12,6 +12,7 @@ defmodule Misobo.Experts.ExpertCategoryMapping do
   @required [:expert_category_id, :expert_id]
 
   @primary_key false
+  @derive {Jason.Encoder, [only: [:expert_id, :expert_category_id]]}
   schema "expert_category_mappings" do
     belongs_to :expert_category, ExpertCategory, primary_key: true
     belongs_to :expert, Expert, primary_key: true
