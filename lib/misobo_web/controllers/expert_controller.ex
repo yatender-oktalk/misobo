@@ -2,9 +2,6 @@ defmodule MisoboWeb.ExpertController do
   use MisoboWeb, :controller
 
   alias Misobo.Experts
-  # alias Misobo.Experts.Expert
-
-  # import Misobo.Commons
 
   def index(conn, _params) do
     experts = Experts.list_experts()
@@ -16,8 +13,8 @@ defmodule MisoboWeb.ExpertController do
     response(conn, 200, %{data: expert})
   end
 
-  def fetch(conn, params) do
-    data = Experts.fetch_experts(params)
+  def fetch(conn, %{"page" => page} = _params) do
+    data = Experts.fetch_experts(page)
     response(conn, 200, Map.from_struct(data))
   end
 

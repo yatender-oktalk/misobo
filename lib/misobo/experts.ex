@@ -346,4 +346,16 @@ defmodule Misobo.Experts do
         {:error, error}
     end
   end
+
+  def get_experts_for_category(id, page) do
+    q =
+      from u in ExpertCategoryMapping,
+        join: c in Expert,
+        on: c.id == u.expert_id,
+        where: u.expert_category_id == ^id,
+        where: c.is_enabled == true,
+        select: c
+
+    Repo.paginate(q, page: page)
+  end
 end
