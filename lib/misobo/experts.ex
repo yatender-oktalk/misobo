@@ -147,7 +147,7 @@ defmodule Misobo.Experts do
       nil
 
   """
-  def get_expert(id), do: Repo.get(Expert, id, preload: :expert_categories)
+  def get_expert(id), do: Repo.get(Expert, id)
 
   @doc """
   Creates a expert.
