@@ -24,11 +24,9 @@ defmodule MisoboWeb.Router do
     post("/registration", RegistrationController, :create)
 
     get("/experts", ExpertController, :fetch)
-<<<<<<< Updated upstream
-=======
+
     get("/experts/:id", ExpertController, :show)
     get("/category_experts/:id", CategoryController, :category_experts)
->>>>>>> Stashed changes
 
     scope("/") do
       pipe_through :registration_authenticated
