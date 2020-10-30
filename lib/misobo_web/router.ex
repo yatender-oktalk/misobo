@@ -24,6 +24,7 @@ defmodule MisoboWeb.Router do
     post("/registration", RegistrationController, :create)
 
     get("/experts", ExpertController, :fetch)
+    get("/experts/:id", ExpertController, :show)
 
     scope("/") do
       pipe_through :registration_authenticated

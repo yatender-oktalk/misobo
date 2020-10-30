@@ -11,6 +11,11 @@ defmodule MisoboWeb.ExpertController do
     response(conn, 200, experts)
   end
 
+  def show(conn, %{"id" => id} = _params) do
+    expert = Experts.get_expert(id)
+    response(conn, 200, %{data: expert})
+  end
+
   def fetch(conn, params) do
     data = Experts.fetch_experts(params)
     response(conn, 200, Map.from_struct(data))
