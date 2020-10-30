@@ -26,7 +26,6 @@ defmodule MisoboWeb.Router do
     get("/experts", ExpertController, :fetch)
     get("/experts/:id", ExpertController, :show)
 
-    get("/experts/:id", ExpertController, :show)
     get("/category_experts/:id", CategoryController, :category_experts)
 
     scope("/") do

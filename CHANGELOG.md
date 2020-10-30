@@ -13,9 +13,25 @@ Removed for now removed features.
 Fixed for any bug fixes.
 Security in case of vulnerabilities. -->
 
-## [0.4.0]
+## [0.4.2]
 
-# unreleased
+# Added 
+
+- Category Experts API
+- Experts API
+- Expert API
+
+
+## [0.4.1]
+
+# Fixed
+
+- Registration API fixes
+
+# Added
+
+- BMI API added
+
 
 ## [0.3.0]
 
