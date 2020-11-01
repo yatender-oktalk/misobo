@@ -94,22 +94,14 @@ defmodule MisoboWeb.UserController do
   end
 
   def calculate_bmi(
-        %{assigns: %{user: %User{id: user_id}}} = conn,
+        conn,
         %{"height" => height, "weight" => weight, "user_id" => id} = _params
       ) do
-    with true <- to_string(user_id) == id,
-         %User{is_enabled: true} = user <- Accounts.get_user(id),
-         {:ok, data} = Accounts.calculate_bmi(height, weight),
-         {:ok, %User{} = _user} <-
-           Accounts.update_user(user, Map.merge(data, %{"height" => height})) do
+    # %{assigns: %{registration: %Registration{id: user_id}}} = conn
+
+    with {:ok, data} = Accounts.calculate_bmi(height, weight) do
       response(conn, 200, %{data: data})
     else
-      %User{is_enabled: false} ->
-        error_response(conn, 400, "User has not verified the OTP")
-
-      false ->
-        error_response(conn, 400, "bad request, not allow to modify this user's data")
-
       {:error, changeset} ->
         error =
           Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
