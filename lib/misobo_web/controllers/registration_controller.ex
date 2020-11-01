@@ -3,6 +3,7 @@ defmodule MisoboWeb.RegistrationController do
 
   alias Misobo.Accounts
   alias Misobo.Accounts.Registration
+  alias Misobo.Accounts.User
   alias Misobo.Authentication
 
   def index(conn, _params) do
@@ -10,7 +11,8 @@ defmodule MisoboWeb.RegistrationController do
   end
 
   def create(conn, %{"device_id" => _device_id} = params) do
-    with {:ok, %Registration{} = registration} <- Accounts.create_registration(params),
+    with {:ok, {%Registration{} = registration, %User{} = _user}} <-
+           Accounts.create_registration_user(params),
          token <- Authentication.generate_token(registration) do
       response(conn, 201, %{
         data: %{msg: "user registered successfully", token: token, id: registration.id}

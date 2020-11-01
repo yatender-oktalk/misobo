@@ -319,6 +319,22 @@ defmodule Misobo.Accounts do
     |> Repo.insert()
   end
 
+  def create_registration_user(attrs) do
+    Repo.transaction(fn ->
+      with {:ok, %Registration{id: id} = registration} <- create_registration(attrs),
+           {:ok, %User{} = user} <- create_user(%{registration_id: id}) do
+        {registration, user}
+      else
+        {:error, changeset} ->
+          error =
+            Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
+
+          Repo.rollback(error)
+          {:error, error}
+      end
+    end)
+  end
+
   @doc """
   Updates a registration.
 

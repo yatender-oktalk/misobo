@@ -7,8 +7,10 @@ defmodule Misobo.Accounts.User do
   alias Misobo.Accounts.LoginStreak
   alias Misobo.Accounts.Registration
 
-  @required [:phone, :otp_valid_time, :registration_id]
+  @required [:registration_id]
   @optional [
+    :phone,
+    :otp_valid_time,
     :name,
     :is_enabled,
     :otp,
@@ -42,7 +44,7 @@ defmodule Misobo.Accounts.User do
   schema "users" do
     field :dob, :naive_datetime
     field :otp_valid_time, :naive_datetime
-    field :is_enabled, :boolean, default: false
+    field :is_enabled, :boolean, default: true
     field :karma_points, :integer, default: 0
     field :name, :string
     field :otp, :integer
