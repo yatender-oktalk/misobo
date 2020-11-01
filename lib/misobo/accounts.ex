@@ -84,7 +84,7 @@ defmodule Misobo.Accounts do
   end
 
   def handle_create_user(attrs, %User{} = user) do
-    attrs = Map.drop(attrs, "registration_id")
+    attrs = Map.delete(attrs, "registration_id")
 
     user
     |> User.changeset(attrs)
