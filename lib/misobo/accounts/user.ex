@@ -7,8 +7,10 @@ defmodule Misobo.Accounts.User do
   alias Misobo.Accounts.LoginStreak
   alias Misobo.Accounts.Registration
 
-  @required [:phone, :otp_valid_time, :registration_id]
+  @required [:registration_id]
   @optional [
+    :phone,
+    :otp_valid_time,
     :name,
     :is_enabled,
     :otp,
@@ -47,7 +49,7 @@ defmodule Misobo.Accounts.User do
     field :name, :string
     field :otp, :integer
     field :phone, :string
-    field :horoscope_id, :id
+    field :horoscope_id, :integer
     field :daily_reminder, :integer
     field :img, :string
     field :weight, :float
@@ -64,6 +66,5 @@ defmodule Misobo.Accounts.User do
     user
     |> cast(attrs, @required ++ @optional)
     |> validate_required(@required)
-    |> unique_constraint(:phone, name: :users_phone_index)
   end
 end

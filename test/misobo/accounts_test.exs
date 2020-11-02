@@ -26,7 +26,7 @@ defmodule Misobo.AccountsTest do
     }
     @invalid_attrs %{
       dob: nil,
-      is_enabled: nil,
+      is_enabled: "random",
       karma_points: nil,
       name: nil,
       otp: nil,
@@ -81,6 +81,7 @@ defmodule Misobo.AccountsTest do
       assert user.phone == "some updated phone"
     end
 
+    @tag :wip
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)

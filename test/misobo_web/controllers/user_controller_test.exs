@@ -17,7 +17,7 @@ defmodule MisoboWeb.UserControllerTest do
     end
 
     test "signup test", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create, %{phone: "9090909090"}))
+      conn = post(conn, Routes.user_path(conn, :register_phone, %{phone: "9090909090"}))
       assert conn.status == 201
 
       assert %{
@@ -35,7 +35,7 @@ defmodule MisoboWeb.UserControllerTest do
 
     test "verify user test", %{conn: conn} do
       phone = "9090909091"
-      connx = post(conn, Routes.user_path(conn, :create, %{phone: phone}))
+      connx = post(conn, Routes.user_path(conn, :register_phone, %{phone: phone}))
 
       %{"data" => %{"id" => id}} = Jason.decode!(connx.resp_body)
 
@@ -48,7 +48,7 @@ defmodule MisoboWeb.UserControllerTest do
 
     test "verify fails when OTP is wrong", %{conn: conn} do
       phone = "9090909092"
-      connx = post(conn, Routes.user_path(conn, :create, %{phone: phone}))
+      connx = post(conn, Routes.user_path(conn, :register_phone, %{phone: phone}))
       # create a new user
       %{"data" => %{"id" => id}} = Jason.decode!(connx.resp_body)
 
