@@ -44,12 +44,12 @@ defmodule Misobo.Accounts.User do
   schema "users" do
     field :dob, :naive_datetime
     field :otp_valid_time, :naive_datetime
-    field :is_enabled, :boolean, default: true
+    field :is_enabled, :boolean, default: false
     field :karma_points, :integer, default: 0
     field :name, :string
     field :otp, :integer
     field :phone, :string
-    field :horoscope_id, :id
+    field :horoscope_id, :integer
     field :daily_reminder, :integer
     field :img, :string
     field :weight, :float
@@ -66,6 +66,5 @@ defmodule Misobo.Accounts.User do
     user
     |> cast(attrs, @required ++ @optional)
     |> validate_required(@required)
-    |> unique_constraint(:phone, name: :users_phone_index)
   end
 end

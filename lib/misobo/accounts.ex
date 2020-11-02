@@ -75,17 +75,7 @@ defmodule Misobo.Accounts do
     |> Repo.insert()
   end
 
-  def handle_create_user(attrs \\ %{}, user)
-
-  def handle_create_user(attrs, nil) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def handle_create_user(attrs, %User{} = user) do
-    attrs = Map.delete(attrs, "registration_id")
-
+  def handle_update_phone(attrs, %User{} = user) do
     user
     |> User.changeset(attrs)
     |> Repo.update()

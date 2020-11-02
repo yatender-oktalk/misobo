@@ -2,6 +2,7 @@ defmodule MisoboWeb.UserController do
   use MisoboWeb, :controller
 
   alias Misobo.Accounts
+  alias Misobo.Accounts.Registration
   alias Misobo.Accounts.User
   alias Misobo.Communication.Message
   alias Misobo.Communication.SMSProvider
@@ -12,26 +13,20 @@ defmodule MisoboWeb.UserController do
     response(conn, 200, :ok)
   end
 
-  def create(%{assigns: %{registration: registration}} = conn, %{"phone" => phone} = params) do
-    with true <- Accounts.existing_registration?(registration),
-         otp <- Message.generate_otp(),
+  def register_phone(
+        %{assigns: %{registration: registration}} = conn,
+        %{"phone" => phone} = params
+      ) do
+    with otp <- Message.generate_otp(),
          otp_valid_time <- get_otp_timeout(),
          params <- params |> Map.put("otp", otp) |> Map.put("otp_valid_time", otp_valid_time),
-         params <- Map.put(params, "registration_id", registration.id),
-         user <- Accounts.get_user_by(%{phone: phone}),
-         {:ok, %User{} = user} <- Accounts.handle_create_user(params, user),
+         user <- Accounts.get_user_by(%{registration_id: registration.id}),
+         {:ok, %User{} = user} <- Accounts.update_user(user, params),
          phone <- Message.add_prefix(phone),
          message <- Message.get_signup_sms(otp),
          :ok <- SMSProvider.send_sms(phone, message) do
       response(conn, 201, %{data: user})
     else
-      false ->
-        error_response(
-          conn,
-          400,
-          "Existing registration, please start a new registration for this device"
-        )
-
       {:error, changeset} ->
         error =
           Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
@@ -94,11 +89,9 @@ defmodule MisoboWeb.UserController do
   end
 
   def calculate_bmi(
-        conn,
+        %{assigns: %{registration: %Registration{id: user_id}}} = conn,
         %{"height" => height, "weight" => weight, "user_id" => id} = _params
       ) do
-    # %{assigns: %{registration: %Registration{id: user_id}}} = conn
-
     with {:ok, data} = Accounts.calculate_bmi(height, weight) do
       response(conn, 200, %{data: data})
     else

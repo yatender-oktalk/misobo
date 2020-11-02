@@ -51,7 +51,7 @@ defmodule MisoboWeb.Router do
         :update_registration_sub_categories
       )
 
-      post("/user", UserController, :create)
+      post("/user", UserController, :register_phone)
       post("/user/:user_id/verify", UserController, :verify)
 
       get("/user/:id", UserController, :index)
