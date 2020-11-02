@@ -27,7 +27,6 @@ defmodule MisoboWeb.Router do
     get("/experts/:id", ExpertController, :show)
 
     get("/category_experts/:id", CategoryController, :category_experts)
-    post("/user/:user_id/bmi", UserController, :calculate_bmi)
 
     scope("/") do
       pipe_through :registration_authenticated
@@ -53,6 +52,7 @@ defmodule MisoboWeb.Router do
 
       post("/user", UserController, :register_phone)
       post("/user/:user_id/verify", UserController, :verify)
+      post("/user/:user_id/bmi", UserController, :calculate_bmi)
 
       get("/user/:id", UserController, :index)
       put("/user/:id", UserController, :update)

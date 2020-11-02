@@ -2,7 +2,6 @@ defmodule MisoboWeb.UserController do
   use MisoboWeb, :controller
 
   alias Misobo.Accounts
-  alias Misobo.Accounts.Registration
   alias Misobo.Accounts.User
   alias Misobo.Communication.Message
   alias Misobo.Communication.SMSProvider
@@ -89,12 +88,18 @@ defmodule MisoboWeb.UserController do
   end
 
   def calculate_bmi(
-        %{assigns: %{registration: %Registration{id: user_id}}} = conn,
+        %{assigns: %{user: %User{id: user_id}}} = conn,
         %{"height" => height, "weight" => weight, "user_id" => id} = _params
       ) do
-    with {:ok, data} = Accounts.calculate_bmi(height, weight) do
+    with true <- to_string(user_id) == id,
+         {:ok, %{"bmi" => bmi} = data} <- Accounts.calculate_bmi(height, weight),
+         %User{} = user <- Accounts.get_user(user_id),
+         {:ok, %User{}} <- Accounts.update_user(user, %{height: height, weight: weight, bmi: bmi}) do
       response(conn, 200, %{data: data})
     else
+      false ->
+        error_response(conn, 400, "Token not valid for user")
+
       {:error, changeset} ->
         error =
           Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
