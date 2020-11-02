@@ -75,17 +75,7 @@ defmodule Misobo.Accounts do
     |> Repo.insert()
   end
 
-  def handle_create_user(attrs \\ %{}, user)
-
-  def handle_create_user(attrs, nil) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def handle_create_user(attrs, %User{} = user) do
-    attrs = Map.delete(attrs, "registration_id")
-
+  def handle_update_phone(attrs, %User{} = user) do
     user
     |> User.changeset(attrs)
     |> Repo.update()
@@ -317,6 +307,22 @@ defmodule Misobo.Accounts do
     %Registration{}
     |> Registration.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_registration_user(attrs) do
+    Repo.transaction(fn ->
+      with {:ok, %Registration{id: id} = registration} <- create_registration(attrs),
+           {:ok, %User{} = user} <- create_user(%{registration_id: id}) do
+        {registration, user}
+      else
+        {:error, changeset} ->
+          error =
+            Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
+
+          Repo.rollback(error)
+          {:error, error}
+      end
+    end)
   end
 
   @doc """

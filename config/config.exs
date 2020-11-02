@@ -13,7 +13,7 @@ config :misobo,
 # Configures the endpoint
 config :misobo, MisoboWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "bxKdlRIUPLMlaMXQEtNn9uObohZEyJuqMnanhGwpNAjpYj8xNmPb6Zx4JVdkjDQG",
+  secret_key_base: "DnUYDIBX616rMHUGPLAxgQFYBsWmsTSa16d1qZCiLuTnr0ML1YWO1ixsz4Gqqm0M",
   render_errors: [view: MisoboWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: Misobo.PubSub,
   live_view: [signing_salt: "RVxKLfu3"]
