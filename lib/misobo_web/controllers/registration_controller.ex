@@ -11,11 +11,16 @@ defmodule MisoboWeb.RegistrationController do
   end
 
   def create(conn, %{"device_id" => _device_id} = params) do
-    with {:ok, {%Registration{} = registration, %User{} = _user}} <-
+    with {:ok, {%Registration{} = registration, %User{} = user}} <-
            Accounts.create_registration_user(params),
          token <- Authentication.generate_token(registration) do
       response(conn, 201, %{
-        data: %{msg: "user registered successfully", token: token, id: registration.id}
+        data: %{
+          msg: "user registered successfully",
+          token: token,
+          id: registration.id,
+          user_id: user.id
+        }
       })
     else
       {:error, changeset} ->
