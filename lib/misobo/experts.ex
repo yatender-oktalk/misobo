@@ -5,8 +5,8 @@ defmodule Misobo.Experts do
 
   import Ecto.Query, warn: false
   alias Misobo.Repo
-
   alias Misobo.Experts.ExpertCategory
+  alias Misobo.TimeUtils
 
   @doc """
   Returns the list of expert_categories.
@@ -357,5 +357,19 @@ defmodule Misobo.Experts do
         select: c
 
     Repo.paginate(q, page: page)
+  end
+
+  def get_available_slots(_id, date) do
+    date
+    |> TimeUtils.get_all_slots_for_day()
+    |> Enum.map(fn [start_time, _] ->
+      date = start_time |> Timex.from_unix()
+      %{date: date, is_booked: start_time in booked_slots()}
+    end)
+  end
+
+  # We'll fetch the booked slots from here in seconds
+  defp booked_slots() do
+    [1_604_484_000, 1_604_487_600, 1_604_509_200]
   end
 end

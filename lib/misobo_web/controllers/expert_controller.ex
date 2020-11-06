@@ -23,6 +23,11 @@ defmodule MisoboWeb.ExpertController do
     response(conn, 200, data)
   end
 
+  def expert_slots(conn, %{"id" => id, "date" => date}) do
+    data = Experts.get_available_slots(id, date)
+    response(conn, 200, data)
+  end
+
   # Private functions
   # defp error_response(conn, status, message) do
   #   data = %{data: message}

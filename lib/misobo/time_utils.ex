@@ -24,6 +24,7 @@ defmodule Misobo.TimeUtils do
     end_time = get_end_of_day_time(start_of_day)
     # so from start of the day we'll just take the slots in that duration
     # having the slot of 30 minutes each i.e. 1800 seconds
+
     get_slots(start_time, end_time)
   end
 
