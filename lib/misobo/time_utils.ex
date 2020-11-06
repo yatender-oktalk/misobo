@@ -15,9 +15,11 @@ defmodule Misobo.TimeUtils do
 
   def get_all_slots_for_day(date) do
     # let's say start time is 10 AM and end time is 6 PM
-    # so last stot would be at 5:30 if we say 30 min slot each
+    # so last slot would be at 5:30 if we say 30 min slot each
     # we'll add the 600 minutes from the start of the day
-    start_of_day = date |> Timex.beginning_of_day() |> Timex.to_unix()
+    # {:ok, result} = Timex.parse("2016-12-29", "{YYYY}-{0M}-{D}")
+    {:ok, result} = date |> Timex.parse("{YYYY}-{0M}-{D}")
+    start_of_day = result |> Timex.beginning_of_day() |> Timex.to_unix()
     start_time = get_start_of_day_time(start_of_day)
     end_time = get_end_of_day_time(start_of_day)
     # so from start of the day we'll just take the slots in that duration
