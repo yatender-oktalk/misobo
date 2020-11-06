@@ -27,6 +27,7 @@ defmodule MisoboWeb.Router do
     get("/experts/:id", ExpertController, :show)
 
     get("/category_experts/:id", CategoryController, :category_experts)
+    get("/expert_categories", ExpertController, :get_categories)
 
     scope("/") do
       pipe_through :registration_authenticated

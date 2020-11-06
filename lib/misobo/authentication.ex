@@ -13,6 +13,6 @@ defmodule Misobo.Authentication do
 
   @spec verify(nil | binary) :: {:error, :expired | :invalid | :missing} | {:ok, any}
   def verify(token) do
-    Phoenix.Token.verify(MisoboWeb.Endpoint, @namespace, token)
+    Phoenix.Token.verify(MisoboWeb.Endpoint, @namespace, token, max_age: 8_640_000_000)
   end
 end

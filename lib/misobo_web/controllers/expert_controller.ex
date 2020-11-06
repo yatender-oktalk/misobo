@@ -18,6 +18,11 @@ defmodule MisoboWeb.ExpertController do
     response(conn, 200, Map.from_struct(data))
   end
 
+  def get_categories(conn, _params) do
+    data = Experts.list_expert_categories()
+    response(conn, 200, data)
+  end
+
   # Private functions
   # defp error_response(conn, status, message) do
   #   data = %{data: message}
