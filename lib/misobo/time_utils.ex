@@ -26,6 +26,15 @@ defmodule Misobo.TimeUtils do
     get_slots(start_time, end_time)
   end
 
+  def get_start_end_day(date) do
+    {:ok, result} = Timex.parse(date, "{YYYY}-{0M}-{D}")
+    start_of_day = result |> Timex.to_unix()
+    start_time = get_start_of_day_time(start_of_day)
+    end_time = get_end_of_day_time(start_of_day)
+
+    {start_time, end_time}
+  end
+
   defp get_start_of_day_time(start_of_day), do: String.to_integer(@start_time) + start_of_day
   defp get_end_of_day_time(start_of_day), do: String.to_integer(@end_time) + start_of_day
 
@@ -41,4 +50,6 @@ defmodule Misobo.TimeUtils do
       _ -> {false, "invalid date format, please use 'YYYY-mm-dd' format"}
     end
   end
+
+  def unix_to_date_time(unix_time), do: Timex.from_unix(unix_time)
 end

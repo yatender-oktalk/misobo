@@ -28,7 +28,6 @@ defmodule MisoboWeb.Router do
 
     get("/category_experts/:id", CategoryController, :category_experts)
     get("/expert_categories", ExpertController, :get_categories)
-    post("/expert/:id/slots", ExpertController, :expert_slots)
 
     scope("/") do
       pipe_through :registration_authenticated
@@ -58,6 +57,9 @@ defmodule MisoboWeb.Router do
 
       get("/user/:id", UserController, :index)
       put("/user/:id", UserController, :update)
+
+      post("/expert/:id/slots", ExpertController, :expert_slots)
+      post("/expert/:expert_id/book_slot", ExpertController, :book_slot)
     end
   end
 

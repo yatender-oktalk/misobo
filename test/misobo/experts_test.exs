@@ -263,4 +263,67 @@ defmodule Misobo.ExpertsTest do
   #     assert %Ecto.Changeset{} = Experts.change_expert_category_mapping(expert_category_mapping)
   #   end
   # end
+
+  describe "bookings" do
+    alias Misobo.Experts.Booking
+
+    @valid_attrs %{end_time_unix: 42, karma: 42, start_time_unix: 42}
+    @update_attrs %{end_time_unix: 43, karma: 43, start_time_unix: 43}
+    @invalid_attrs %{end_time_unix: nil, karma: nil, start_time_unix: nil}
+
+    def booking_fixture(attrs \\ %{}) do
+      {:ok, booking} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Experts.create_booking()
+
+      booking
+    end
+
+    test "list_bookings/0 returns all bookings" do
+      booking = booking_fixture()
+      assert Experts.list_bookings() == [booking]
+    end
+
+    test "get_booking!/1 returns the booking with given id" do
+      booking = booking_fixture()
+      assert Experts.get_booking!(booking.id) == booking
+    end
+
+    test "create_booking/1 with valid data creates a booking" do
+      assert {:ok, %Booking{} = booking} = Experts.create_booking(@valid_attrs)
+      assert booking.end_time_unix == 42
+      assert booking.karma == 42
+      assert booking.start_time_unix == 42
+    end
+
+    test "create_booking/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Experts.create_booking(@invalid_attrs)
+    end
+
+    test "update_booking/2 with valid data updates the booking" do
+      booking = booking_fixture()
+      assert {:ok, %Booking{} = booking} = Experts.update_booking(booking, @update_attrs)
+      assert booking.end_time_unix == 43
+      assert booking.karma == 43
+      assert booking.start_time_unix == 43
+    end
+
+    test "update_booking/2 with invalid data returns error changeset" do
+      booking = booking_fixture()
+      assert {:error, %Ecto.Changeset{}} = Experts.update_booking(booking, @invalid_attrs)
+      assert booking == Experts.get_booking!(booking.id)
+    end
+
+    test "delete_booking/1 deletes the booking" do
+      booking = booking_fixture()
+      assert {:ok, %Booking{}} = Experts.delete_booking(booking)
+      assert_raise Ecto.NoResultsError, fn -> Experts.get_booking!(booking.id) end
+    end
+
+    test "change_booking/1 returns a booking changeset" do
+      booking = booking_fixture()
+      assert %Ecto.Changeset{} = Experts.change_booking(booking)
+    end
+  end
 end

@@ -4,9 +4,12 @@ defmodule Misobo.Experts do
   """
 
   import Ecto.Query, warn: false
-  alias Misobo.Repo
+  alias Misobo.Experts.Booking
   alias Misobo.Experts.ExpertCategory
+  alias Misobo.Repo
   alias Misobo.TimeUtils
+
+  @slot_duration Application.get_env(:misobo, :env)[:slot_duration]
 
   @doc """
   Returns the list of expert_categories.
@@ -359,17 +362,146 @@ defmodule Misobo.Experts do
     Repo.paginate(q, page: page)
   end
 
-  def get_available_slots(_id, date) do
+  def get_available_slots(date, booked_slots) do
     date
     |> TimeUtils.get_all_slots_for_day()
-    |> Enum.map(fn [start_time, _] ->
-      date = start_time |> Timex.from_unix()
-      %{date: date, is_booked: start_time in booked_slots()}
+    |> Enum.map(fn [start_time_unix, _] ->
+      date = start_time_unix |> TimeUtils.unix_to_date_time()
+
+      %{
+        date: date,
+        is_booked: start_time_unix in booked_slots,
+        unix_time: start_time_unix
+      }
     end)
   end
 
-  # We'll fetch the booked slots from here in seconds
-  defp booked_slots() do
-    [1_604_484_000, 1_604_487_600, 1_604_509_200]
+  def get_booked_slots_for_day(expert_id, date) do
+    {start_time_unix, end_time_unix} = TimeUtils.get_start_end_day(date)
+
+    query =
+      from u in Booking,
+        where: u.expert_id == ^expert_id,
+        where: u.start_time_unix >= ^start_time_unix,
+        where: u.start_time_unix <= ^end_time_unix,
+        select: [u.start_time_unix]
+
+    query |> Repo.all() |> List.flatten()
+  end
+
+  @doc """
+  Returns the list of bookings.
+
+  ## Examples
+
+      iex> list_bookings()
+      [%Booking{}, ...]
+
+  """
+  def list_bookings do
+    Repo.all(Booking)
+  end
+
+  @doc """
+  Gets a single booking.
+
+  Raises `Ecto.NoResultsError` if the Booking does not exist.
+
+  ## Examples
+
+      iex> get_booking!(123)
+      %Booking{}
+
+      iex> get_booking!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_booking!(id), do: Repo.get!(Booking, id)
+
+  def get_booking_by(params), do: Repo.get_by(Booking, params)
+
+  @doc """
+  Creates a booking.
+
+  ## Examples
+
+      iex> create_booking(%{field: value})
+      {:ok, %Booking{}}
+
+      iex> create_booking(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_booking(attrs \\ %{}) do
+    %Booking{}
+    |> Booking.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a booking.
+
+  ## Examples
+
+      iex> update_booking(booking, %{field: new_value})
+      {:ok, %Booking{}}
+
+      iex> update_booking(booking, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_booking(%Booking{} = booking, attrs) do
+    booking
+    |> Booking.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a booking.
+
+  ## Examples
+
+      iex> delete_booking(booking)
+      {:ok, %Booking{}}
+
+      iex> delete_booking(booking)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_booking(%Booking{} = booking) do
+    Repo.delete(booking)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking booking changes.
+
+  ## Examples
+
+      iex> change_booking(booking)
+      %Ecto.Changeset{data: %Booking{}}
+
+  """
+  def change_booking(%Booking{} = booking, attrs \\ %{}) do
+    Booking.changeset(booking, attrs)
+  end
+
+  def slot_available?(params), do: get_booking_by(params) == nil
+
+  def create_expert_booking(user_id, expert_id, start_time_unix, karma) do
+    end_time_unix = start_time_unix + String.to_integer(@slot_duration)
+    start_time = start_time_unix |> TimeUtils.unix_to_date_time()
+    end_time = end_time_unix |> TimeUtils.unix_to_date_time()
+
+    data = %{
+      end_time: end_time,
+      end_time_unix: end_time_unix,
+      start_time: start_time,
+      start_time_unix: start_time_unix,
+      expert_id: expert_id,
+      user_id: user_id,
+      karma: karma
+    }
+
+    create_booking(data)
   end
 end
