@@ -28,7 +28,8 @@ defmodule Misobo.Experts.Booking do
                :expert_id,
                :user_id,
                :start_time,
-               :end_time
+               :end_time,
+               :expert
              ]
            ]}
   schema "bookings" do
