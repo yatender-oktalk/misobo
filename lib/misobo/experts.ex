@@ -504,4 +504,15 @@ defmodule Misobo.Experts do
 
     create_booking(data)
   end
+
+  def user_expert_bookings(id, page) do
+    q =
+      from u in Booking,
+        where: u.user_id == ^id,
+        select: u,
+        order_by: u.inserted_at,
+        preload: :expert
+
+    Repo.paginate(q, page: page)
+  end
 end
