@@ -24,15 +24,20 @@ defmodule MisoboWeb.ExpertController do
   end
 
   def expert_slots(conn, %{"id" => id, "date" => date}) do
-    data = Experts.get_available_slots(id, date)
-    response(conn, 200, data)
+    with {true, date} <- Misobo.TimeUtils.valid_date_format?(date),
+         data <- Experts.get_available_slots(id, date) do
+      response(conn, 200, data)
+    else
+      {false, error} ->
+        error_response(conn, 400, error)
+    end
   end
 
   # Private functions
-  # defp error_response(conn, status, message) do
-  #   data = %{data: message}
-  #   response(conn, status, data)
-  # end
+  defp error_response(conn, status, message) do
+    data = %{data: message}
+    response(conn, status, data)
+  end
 
   defp response(conn, status, data) do
     conn

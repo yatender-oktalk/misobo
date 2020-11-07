@@ -18,13 +18,11 @@ defmodule Misobo.TimeUtils do
     # so last slot would be at 5:30 if we say 30 min slot each
     # we'll add the 600 minutes from the start of the day
     # {:ok, result} = Timex.parse("2016-12-29", "{YYYY}-{0M}-{D}")
-    {:ok, result} = date |> Timex.parse("{YYYY}-{0M}-{D}")
-    start_of_day = result |> Timex.beginning_of_day() |> Timex.to_unix()
+    start_of_day = date |> Timex.beginning_of_day() |> Timex.to_unix()
     start_time = get_start_of_day_time(start_of_day)
     end_time = get_end_of_day_time(start_of_day)
     # so from start of the day we'll just take the slots in that duration
     # having the slot of 30 minutes each i.e. 1800 seconds
-
     get_slots(start_time, end_time)
   end
 
@@ -35,5 +33,12 @@ defmodule Misobo.TimeUtils do
     start_time..end_time
     |> Enum.take_every(String.to_integer(@slot_duration))
     |> Enum.chunk_every(2, 1, :discard)
+  end
+
+  def valid_date_format?(date) do
+    case date |> Timex.parse("{YYYY}-{0M}-{D}") do
+      {:ok, result} -> {true, result}
+      _ -> {false, "invalid date format, please use 'YYYY-mm-dd' format"}
+    end
   end
 end
