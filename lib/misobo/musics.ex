@@ -101,4 +101,100 @@ defmodule Misobo.Musics do
   def change_music(%Music{} = music, attrs \\ %{}) do
     Music.changeset(music, attrs)
   end
+
+  alias Misobo.Musics.UserMusicProgress
+
+  @doc """
+  Returns the list of user_music_progress.
+
+  ## Examples
+
+      iex> list_user_music_progress()
+      [%UserMusicProgress{}, ...]
+
+  """
+  def list_user_music_progress do
+    Repo.all(UserMusicProgress)
+  end
+
+  @doc """
+  Gets a single user_music_progress.
+
+  Raises `Ecto.NoResultsError` if the User music progress does not exist.
+
+  ## Examples
+
+      iex> get_user_music_progress!(123)
+      %UserMusicProgress{}
+
+      iex> get_user_music_progress!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_user_music_progress!(id), do: Repo.get!(UserMusicProgress, id)
+
+  @doc """
+  Creates a user_music_progress.
+
+  ## Examples
+
+      iex> create_user_music_progress(%{field: value})
+      {:ok, %UserMusicProgress{}}
+
+      iex> create_user_music_progress(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_user_music_progress(attrs \\ %{}) do
+    %UserMusicProgress{}
+    |> UserMusicProgress.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a user_music_progress.
+
+  ## Examples
+
+      iex> update_user_music_progress(user_music_progress, %{field: new_value})
+      {:ok, %UserMusicProgress{}}
+
+      iex> update_user_music_progress(user_music_progress, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_music_progress(%UserMusicProgress{} = user_music_progress, attrs) do
+    user_music_progress
+    |> UserMusicProgress.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a user_music_progress.
+
+  ## Examples
+
+      iex> delete_user_music_progress(user_music_progress)
+      {:ok, %UserMusicProgress{}}
+
+      iex> delete_user_music_progress(user_music_progress)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_user_music_progress(%UserMusicProgress{} = user_music_progress) do
+    Repo.delete(user_music_progress)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking user_music_progress changes.
+
+  ## Examples
+
+      iex> change_user_music_progress(user_music_progress)
+      %Ecto.Changeset{data: %UserMusicProgress{}}
+
+  """
+  def change_user_music_progress(%UserMusicProgress{} = user_music_progress, attrs \\ %{}) do
+    UserMusicProgress.changeset(user_music_progress, attrs)
+  end
 end

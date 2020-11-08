@@ -73,4 +73,63 @@ defmodule Misobo.MusicsTest do
       assert %Ecto.Changeset{} = Musics.change_music(music)
     end
   end
+
+  describe "user_music_progress" do
+    alias Misobo.Musics.UserMusicProgress
+
+    @valid_attrs %{progress: 42}
+    @update_attrs %{progress: 43}
+    @invalid_attrs %{progress: nil}
+
+    def user_music_progress_fixture(attrs \\ %{}) do
+      {:ok, user_music_progress} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Musics.create_user_music_progress()
+
+      user_music_progress
+    end
+
+    test "list_user_music_progress/0 returns all user_music_progress" do
+      user_music_progress = user_music_progress_fixture()
+      assert Musics.list_user_music_progress() == [user_music_progress]
+    end
+
+    test "get_user_music_progress!/1 returns the user_music_progress with given id" do
+      user_music_progress = user_music_progress_fixture()
+      assert Musics.get_user_music_progress!(user_music_progress.id) == user_music_progress
+    end
+
+    test "create_user_music_progress/1 with valid data creates a user_music_progress" do
+      assert {:ok, %UserMusicProgress{} = user_music_progress} = Musics.create_user_music_progress(@valid_attrs)
+      assert user_music_progress.progress == 42
+    end
+
+    test "create_user_music_progress/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Musics.create_user_music_progress(@invalid_attrs)
+    end
+
+    test "update_user_music_progress/2 with valid data updates the user_music_progress" do
+      user_music_progress = user_music_progress_fixture()
+      assert {:ok, %UserMusicProgress{} = user_music_progress} = Musics.update_user_music_progress(user_music_progress, @update_attrs)
+      assert user_music_progress.progress == 43
+    end
+
+    test "update_user_music_progress/2 with invalid data returns error changeset" do
+      user_music_progress = user_music_progress_fixture()
+      assert {:error, %Ecto.Changeset{}} = Musics.update_user_music_progress(user_music_progress, @invalid_attrs)
+      assert user_music_progress == Musics.get_user_music_progress!(user_music_progress.id)
+    end
+
+    test "delete_user_music_progress/1 deletes the user_music_progress" do
+      user_music_progress = user_music_progress_fixture()
+      assert {:ok, %UserMusicProgress{}} = Musics.delete_user_music_progress(user_music_progress)
+      assert_raise Ecto.NoResultsError, fn -> Musics.get_user_music_progress!(user_music_progress.id) end
+    end
+
+    test "change_user_music_progress/1 returns a user_music_progress changeset" do
+      user_music_progress = user_music_progress_fixture()
+      assert %Ecto.Changeset{} = Musics.change_user_music_progress(user_music_progress)
+    end
+  end
 end
