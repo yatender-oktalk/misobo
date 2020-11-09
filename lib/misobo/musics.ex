@@ -133,6 +133,8 @@ defmodule Misobo.Musics do
   """
   def get_user_music_progress!(id), do: Repo.get!(UserMusicProgress, id)
 
+  def get_user_music_progress_by(params), do: Repo.get_by(UserMusicProgress, params)
+
   @doc """
   Creates a user_music_progress.
 
@@ -196,5 +198,25 @@ defmodule Misobo.Musics do
   """
   def change_user_music_progress(%UserMusicProgress{} = user_music_progress, attrs \\ %{}) do
     UserMusicProgress.changeset(user_music_progress, attrs)
+  end
+
+  def track_user_music_progress(id, user_id, progress) do
+    result =
+      case get_user_music_progress_by(%{music_id: id, user_id: user_id}) do
+        # Entry not found, we build one
+        nil -> %UserMusicProgress{}
+        # Entry exists, let's use it
+        post -> post
+      end
+      |> UserMusicProgress.changeset(%{music_id: id, user_id: user_id, progress: progress})
+      |> Repo.insert_or_update()
+
+    case result do
+      {:ok, struct} ->
+        {:ok, struct}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 end

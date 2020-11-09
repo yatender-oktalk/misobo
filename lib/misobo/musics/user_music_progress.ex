@@ -5,7 +5,7 @@ defmodule Misobo.Musics.UserMusicProgress do
   alias Misobo.Musics.Music
   alias Misobo.Accounts.User
 
-  @required [:user_id, :registration_id, :progress]
+  @required [:user_id, :music_id, :progress]
   @optional []
 
   schema "user_music_progress" do
