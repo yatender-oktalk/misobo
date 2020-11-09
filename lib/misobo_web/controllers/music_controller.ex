@@ -5,7 +5,7 @@ defmodule MisoboWeb.MusicController do
 
   def track_user_music_progress(
         conn,
-        %{"id" => id, "user_id" => user_id, "progress" => progress} = params
+        %{"id" => id, "user_id" => user_id, "progress" => progress} = _params
       ) do
     with {:ok, data} <- Musics.track_user_music_progress(id, user_id, progress) do
       response(conn, 200, %{data: data})
