@@ -8,6 +8,17 @@ defmodule Misobo.Musics.UserMusicProgress do
   @required [:user_id, :music_id, :progress]
   @optional []
 
+  @derive {Jason.Encoder,
+           [
+             only: [
+               :id,
+               :progress,
+               :user_id,
+               :music_id,
+               :inserted_at,
+               :updated_at
+             ]
+           ]}
   schema "user_music_progress" do
     field :progress, :integer
 
