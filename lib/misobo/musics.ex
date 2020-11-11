@@ -21,6 +21,11 @@ defmodule Misobo.Musics do
     Repo.all(Music)
   end
 
+  def list_musics_paginated(page) do
+    Music
+    |> Repo.paginate(page: page)
+  end
+
   @doc """
   Gets a single music.
 

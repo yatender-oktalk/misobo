@@ -2,6 +2,7 @@ defmodule MisoboWeb.MusicController do
   use MisoboWeb, :controller
 
   alias Misobo.Musics
+  alias Misobo.Musics.Music
 
   def track_user_music_progress(
         conn,
@@ -15,6 +16,20 @@ defmodule MisoboWeb.MusicController do
           Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
 
         error_response(conn, 400, error)
+    end
+  end
+
+  def index(conn, %{"page" => page} = _params) do
+    data = Musics.list_musics_paginated(page)
+    response(conn, 200, Map.from_struct(data))
+  end
+
+  def show(conn, %{"id" => id} = _params) do
+    data = Musics.get_music!(id)
+
+    case data do
+      %Music{} -> response(conn, 200, %{data: data})
+      _ -> response(conn, 404, "invalid music id")
     end
   end
 
