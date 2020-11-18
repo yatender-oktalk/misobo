@@ -6,9 +6,33 @@ defmodule Misobo.MusicsTest do
   describe "musics" do
     alias Misobo.Musics.Music
 
-    @valid_attrs %{author_name: "some author_name", duration: 42, hls_url: "some hls_url", karma: 42, production_name: "some production_name", title: "some title", url: "some url"}
-    @update_attrs %{author_name: "some updated author_name", duration: 43, hls_url: "some updated hls_url", karma: 43, production_name: "some updated production_name", title: "some updated title", url: "some updated url"}
-    @invalid_attrs %{author_name: nil, duration: nil, hls_url: nil, karma: nil, production_name: nil, title: nil, url: nil}
+    @valid_attrs %{
+      author_name: "some author_name",
+      duration: 42,
+      hls_url: "some hls_url",
+      karma: 42,
+      production_name: "some production_name",
+      title: "some title",
+      url: "some url"
+    }
+    @update_attrs %{
+      author_name: "some updated author_name",
+      duration: 43,
+      hls_url: "some updated hls_url",
+      karma: 43,
+      production_name: "some updated production_name",
+      title: "some updated title",
+      url: "some updated url"
+    }
+    @invalid_attrs %{
+      author_name: nil,
+      duration: nil,
+      hls_url: nil,
+      karma: nil,
+      production_name: nil,
+      title: nil,
+      url: nil
+    }
 
     def music_fixture(attrs \\ %{}) do
       {:ok, music} =
@@ -101,7 +125,9 @@ defmodule Misobo.MusicsTest do
     end
 
     test "create_user_music_progress/1 with valid data creates a user_music_progress" do
-      assert {:ok, %UserMusicProgress{} = user_music_progress} = Musics.create_user_music_progress(@valid_attrs)
+      assert {:ok, %UserMusicProgress{} = user_music_progress} =
+               Musics.create_user_music_progress(@valid_attrs)
+
       assert user_music_progress.progress == 42
     end
 
@@ -111,20 +137,29 @@ defmodule Misobo.MusicsTest do
 
     test "update_user_music_progress/2 with valid data updates the user_music_progress" do
       user_music_progress = user_music_progress_fixture()
-      assert {:ok, %UserMusicProgress{} = user_music_progress} = Musics.update_user_music_progress(user_music_progress, @update_attrs)
+
+      assert {:ok, %UserMusicProgress{} = user_music_progress} =
+               Musics.update_user_music_progress(user_music_progress, @update_attrs)
+
       assert user_music_progress.progress == 43
     end
 
     test "update_user_music_progress/2 with invalid data returns error changeset" do
       user_music_progress = user_music_progress_fixture()
-      assert {:error, %Ecto.Changeset{}} = Musics.update_user_music_progress(user_music_progress, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Musics.update_user_music_progress(user_music_progress, @invalid_attrs)
+
       assert user_music_progress == Musics.get_user_music_progress!(user_music_progress.id)
     end
 
     test "delete_user_music_progress/1 deletes the user_music_progress" do
       user_music_progress = user_music_progress_fixture()
       assert {:ok, %UserMusicProgress{}} = Musics.delete_user_music_progress(user_music_progress)
-      assert_raise Ecto.NoResultsError, fn -> Musics.get_user_music_progress!(user_music_progress.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Musics.get_user_music_progress!(user_music_progress.id)
+      end
     end
 
     test "change_user_music_progress/1 returns a user_music_progress changeset" do

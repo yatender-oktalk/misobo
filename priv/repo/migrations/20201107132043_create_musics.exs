@@ -13,6 +13,5 @@ defmodule Misobo.Repo.Migrations.CreateMusics do
 
       timestamps()
     end
-
   end
 end
