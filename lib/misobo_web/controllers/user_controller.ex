@@ -104,6 +104,11 @@ defmodule MisoboWeb.UserController do
     end
   end
 
+  def expert_bookings(conn, %{"id" => id, "page" => page} = _params) do
+    bookings = Misobo.Experts.user_expert_bookings(id, page)
+    response(conn, 200, %{data: Map.from_struct(bookings)})
+  end
+
   # Private functions
   defp error_response(conn, status, message) do
     data = %{data: message}
