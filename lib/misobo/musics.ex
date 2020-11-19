@@ -206,13 +206,16 @@ defmodule Misobo.Musics do
   end
 
   def track_user_music_progress(id, user_id, progress) do
-    result =
+    data =
       case get_user_music_progress_by(%{music_id: id, user_id: user_id}) do
         # Entry not found, we build one
         nil -> %UserMusicProgress{}
         # Entry exists, let's use it
         post -> post
       end
+
+    result =
+      data
       |> UserMusicProgress.changeset(%{music_id: id, user_id: user_id, progress: progress})
       |> Repo.insert_or_update()
 

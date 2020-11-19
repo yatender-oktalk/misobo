@@ -1,4 +1,7 @@
 defmodule Misobo.Musics.Music do
+  @moduledoc """
+  This module contains the data relatted to music context
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -8,9 +8,10 @@ defmodule MisoboWeb.MusicController do
         conn,
         %{"id" => id, "user_id" => user_id, "progress" => progress} = _params
       ) do
-    with {:ok, data} <- Musics.track_user_music_progress(id, user_id, progress) do
-      response(conn, 200, %{data: data})
-    else
+    case Musics.track_user_music_progress(id, user_id, progress) do
+      {:ok, data} ->
+        response(conn, 200, %{data: data})
+
       {:error, changeset} ->
         error =
           Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)

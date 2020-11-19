@@ -1,9 +1,12 @@
 defmodule Misobo.Musics.UserMusicProgress do
+  @moduledoc """
+  This module contains the data relatted to user music progress
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Misobo.Musics.Music
   alias Misobo.Accounts.User
+  alias Misobo.Musics.Music
 
   @required [:user_id, :music_id, :progress]
   @optional []
