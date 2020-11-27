@@ -8,6 +8,19 @@ defmodule Misobo.Accounts.LoginStreak do
   @required [:"1", :"2", :"3", :"4", :"5", :"6", :"7", :user_id]
   @optional [:streak_days]
 
+  @derive {Jason.Encoder,
+           [
+             only: [
+               :"1",
+               :"2",
+               :"3",
+               :"4",
+               :"5",
+               :"6",
+               :"7",
+               :user_id
+             ]
+           ]}
   schema "login_streaks" do
     field :"1", :boolean, default: false
     field :"2", :boolean, default: false

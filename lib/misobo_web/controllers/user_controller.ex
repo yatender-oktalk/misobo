@@ -8,8 +8,11 @@ defmodule MisoboWeb.UserController do
 
   import Misobo.Commons
 
-  def index(conn, _params) do
-    response(conn, 200, :ok)
+  def index(conn, %{"id" => id}) do
+    case Accounts.get_user_profile(id) do
+      nil -> response(conn, 200, %{data: %{}, msg: "user not found"})
+      user -> response(conn, 200, %{data: user, msg: "ok"})
+    end
   end
 
   def register_phone(

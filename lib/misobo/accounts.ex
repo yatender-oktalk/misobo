@@ -57,6 +57,13 @@ defmodule Misobo.Accounts do
   """
   def get_user_by(params), do: Repo.get_by(User, params)
 
+  def get_user_profile(id) do
+    from(u in User)
+    |> where([u], u.id == ^id)
+    |> preload(:login_streak)
+    |> Repo.one()
+  end
+
   @doc """
   Creates a user.
 
