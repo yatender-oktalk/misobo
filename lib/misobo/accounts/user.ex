@@ -20,7 +20,8 @@ defmodule Misobo.Accounts.User do
     :img,
     :weight,
     :bmi,
-    :height
+    :height,
+    :login_streak_days
   ]
 
   @derive {Jason.Encoder,
@@ -38,7 +39,9 @@ defmodule Misobo.Accounts.User do
                :img,
                :weight,
                :bmi,
-               :height
+               :height,
+               :login_streak_days,
+               :login_streak
              ]
            ]}
   schema "users" do
@@ -55,6 +58,7 @@ defmodule Misobo.Accounts.User do
     field :weight, :float
     field :bmi, :float
     field :height, :float
+    field :login_streak_days, :integer, default: 0
 
     belongs_to :registration, Registration
     has_one(:login_streak, LoginStreak, on_delete: :delete_all)
