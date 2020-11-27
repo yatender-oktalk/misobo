@@ -227,4 +227,39 @@ defmodule Misobo.Musics do
         {:error, changeset}
     end
   end
+
+  def add_user_musics_progress(%{entries: entries} = _data, user_id) do
+    user_musics = get_user_musics(user_id)
+
+    entries
+    |> Enum.map(fn entry ->
+      entry
+      |> Map.from_struct()
+      |> Map.delete(:__meta__)
+      |> Map.put(:progress, Map.get(user_musics, entry.id, 0))
+    end)
+  end
+
+  # Private functions
+
+  defp get_user_musics(user_id) do
+    base_user_music_progress()
+    |> filter_by_user_id(user_id)
+    |> filter_select()
+    |> Repo.all()
+    |> mapify()
+  end
+
+  defp base_user_music_progress, do: from(u in UserMusicProgress)
+  defp filter_by_user_id(q, user_id), do: q |> where([u], u.user_id == ^user_id)
+  defp filter_select(q), do: q |> select([u], {u.music_id, u.progress})
+
+  # Mapify
+  defp mapify([]), do: []
+
+  defp mapify(music_progress_list) do
+    Enum.reduce(music_progress_list, %{}, fn {music_id, progress}, acc ->
+      Map.put(acc, music_id, progress)
+    end)
+  end
 end
