@@ -3,6 +3,7 @@ defmodule MisoboWeb.MusicController do
 
   alias Misobo.Musics
   alias Misobo.Musics.Music
+  alias Misobo.Accounts.User
 
   def track_user_music_progress(
         conn,
@@ -20,9 +21,14 @@ defmodule MisoboWeb.MusicController do
     end
   end
 
-  def index(conn, %{"page" => page} = _params) do
-    data = Musics.list_musics_paginated(page)
-    response(conn, 200, Map.from_struct(data))
+  def index(%{assigns: %{user: %User{id: user_id}}} = conn, %{"page" => page} = _params) do
+    data =
+      page
+      |> Musics.list_musics_paginated()
+      |> Map.from_struct()
+      |> Musics.add_user_musics_progress(user_id)
+
+    response(conn, 200, data)
   end
 
   def show(conn, %{"id" => id} = _params) do
