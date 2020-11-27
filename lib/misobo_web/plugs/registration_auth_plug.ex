@@ -21,6 +21,8 @@ defmodule MisoboWeb.RegistrationAuthPlug do
          %Registration{id: registration_id} = registration <- Accounts.get_registration(id),
          user <- Accounts.get_user_by(%{registration_id: id}),
          true <- id == registration_id do
+      spawn(fn -> Misobo.Accounts.handle_login_streak(user) end)
+
       conn |> assign(:registration, registration) |> assign(:user, user)
     else
       {:error, :invalid} -> unauth(conn, %{data: "unauthorized token"})
