@@ -1,4 +1,7 @@
 defmodule MisoboWeb.PackController do
+  @moduledoc """
+  Pack controller related to pack modules
+  """
   use MisoboWeb, :controller
 
   alias Misobo.Packs

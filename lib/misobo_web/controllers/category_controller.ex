@@ -1,6 +1,4 @@
 defmodule MisoboWeb.CategoryController do
-  MisoboWeb.CategoryController
-
   @moduledoc """
   This module defines the categories releated stuff
   """
