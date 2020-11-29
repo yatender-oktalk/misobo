@@ -67,6 +67,9 @@ defmodule MisoboWeb.Router do
       patch("/music/:id/progress", MusicController, :track_user_music_progress)
 
       get("/packs", PackController, :index)
+
+      get("/blogs", BlogController, :index)
+      get("/blogs/:id", BlogController, :show)
     end
   end
 
