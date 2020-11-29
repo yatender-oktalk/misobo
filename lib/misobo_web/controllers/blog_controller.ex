@@ -6,7 +6,7 @@ defmodule MisoboWeb.BlogController do
   alias Misobo.Blogs
 
   def index(conn, _params) do
-    response(conn, 200, Blogs.list_blogs())
+    response(conn, 200, %{data: Blogs.list_blogs(), msg: :ok})
   end
 
   def show(conn, %{"id" => id}) do
