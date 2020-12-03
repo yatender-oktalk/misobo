@@ -11,6 +11,8 @@ defmodule MisoboWeb.MusicController do
       ) do
     case Musics.track_user_music_progress(id, user_id, progress) do
       {:ok, data} ->
+        spawn(fn -> Misobo.Karmas.handle_karma_points(user_id, id, progress) end)
+
         response(conn, 200, %{data: data})
 
       {:error, changeset} ->

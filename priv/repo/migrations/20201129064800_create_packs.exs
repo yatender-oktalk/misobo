@@ -10,6 +10,5 @@ defmodule Misobo.Repo.Migrations.CreatePacks do
 
       timestamps()
     end
-
   end
 end

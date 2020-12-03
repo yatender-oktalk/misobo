@@ -11,6 +11,5 @@ defmodule Misobo.Repo.Migrations.CreateBlogs do
 
       timestamps()
     end
-
   end
 end

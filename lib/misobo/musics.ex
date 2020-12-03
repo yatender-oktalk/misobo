@@ -42,6 +42,8 @@ defmodule Misobo.Musics do
   """
   def get_music!(id), do: Repo.get!(Music, id)
 
+  def get_music(id), do: Repo.get(Music, id)
+
   @doc """
   Creates a music.
 
@@ -255,7 +257,7 @@ defmodule Misobo.Musics do
   defp filter_select(q), do: q |> select([u], {u.music_id, u.progress})
 
   # Mapify
-  defp mapify([]), do: %{} 
+  defp mapify([]), do: %{}
 
   defp mapify(music_progress_list) do
     Enum.reduce(music_progress_list, %{}, fn {music_id, progress}, acc ->

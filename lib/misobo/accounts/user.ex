@@ -70,5 +70,6 @@ defmodule Misobo.Accounts.User do
     user
     |> cast(attrs, @required ++ @optional)
     |> validate_required(@required)
+    |> validate_number(:karma_points, greater_than: 0)
   end
 end
