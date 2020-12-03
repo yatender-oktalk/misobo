@@ -17,8 +17,7 @@ defmodule Misobo.Accounts.LoginStreak do
                :"4",
                :"5",
                :"6",
-               :"7",
-               :user_id
+               :"7"
              ]
            ]}
   schema "login_streaks" do
