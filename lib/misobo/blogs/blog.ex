@@ -9,12 +9,14 @@ defmodule Misobo.Blogs.Blog do
                :category,
                :content,
                :is_enabled,
+               :image,
                :title
              ]
            ]}
   schema "blogs" do
     field :category, :string
     field :content, :string
+    field :image, :string
     field :is_enabled, :boolean, default: false
     field :title, :string
 
@@ -24,7 +26,7 @@ defmodule Misobo.Blogs.Blog do
   @doc false
   def changeset(blog, attrs) do
     blog
-    |> cast(attrs, [:title, :content, :is_enabled, :category])
+    |> cast(attrs, [:title, :content, :is_enabled, :category, :image])
     |> validate_required([:title, :content, :is_enabled])
   end
 end
