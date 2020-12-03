@@ -3,9 +3,14 @@ defmodule Misobo.Karmas do
   The Karmas context.
   """
 
+  @music_listen_complete Application.get_env(:misobo, Misobo.Env)[:music_listen_activity]
+
+  require Logger
   import Ecto.Query, warn: false
   alias Misobo.Repo
 
+  alias Misobo.Musics
+  alias Misobo.Musics.Music
   alias Misobo.Karmas.KarmaActivity
 
   @doc """
@@ -36,6 +41,10 @@ defmodule Misobo.Karmas do
 
   """
   def get_karma_activity!(id), do: Repo.get!(KarmaActivity, id)
+
+  # get karma acitivity by params
+
+  def get_karma_activity_by(params), do: Repo.get_by(KarmaActivity, params)
 
   @doc """
   Creates a karma_activity.
@@ -104,5 +113,57 @@ defmodule Misobo.Karmas do
 
   def get_karma_changeset(attrs) do
     KarmaActivity.changeset(%KarmaActivity{}, attrs)
+  end
+
+  def handle_karma_points(user_id, music_id, progress) do
+    Logger.info(
+      "Handling Karma points for user_id #{user_id} for music_id #{music_id} for progress #{
+        progress
+      }"
+    )
+
+    music = Musics.get_music(music_id)
+
+    user_id
+    |> get_karma_music_activity(music_id)
+    |> handle_music_karma_activity(music, user_id: user_id, progress: progress)
+  end
+
+  # Add the karma points to user if points not given
+  def handle_music_karma_activity(nil, %Music{id: id, karma: karma, duration: duration},
+        user_id: user_id,
+        progress: progress
+      ) do
+    Logger.info(
+      "Karma points Adding for user_id #{user_id} for music_id #{id} progress #{progress}"
+    )
+
+    if get_duration_progress_percentage(duration, progress) >= 95 do
+      Misobo.Accounts.add_karma(user_id, karma, @music_listen_complete, id)
+    else
+      Logger.info(
+        "Karma points for user_id #{user_id} for #{id} not added as progress is less than 95%"
+      )
+    end
+  end
+
+  def handle_music_karma_activity(
+        %KarmaActivity{user_id: user_id, music_id: music_id} = _activity,
+        _music,
+        _data_list
+      ) do
+    Logger.info("Karma points for user_id #{user_id} for #{music_id} already added to user")
+  end
+
+  def get_karma_music_activity(user_id, music_id) do
+    get_karma_activity_by(%{
+      user_id: user_id,
+      music_id: music_id,
+      event_type: @music_listen_complete
+    })
+  end
+
+  def get_duration_progress_percentage(duration, progress) do
+    floor(100 * progress / duration)
   end
 end

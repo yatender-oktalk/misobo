@@ -476,13 +476,14 @@ defmodule Misobo.Accounts do
     {:ok, %{"bmi" => Float.ceil(bmi, 2), "result" => bmi_result(bmi)}}
   end
 
-  def add_karma(user_id, karma_points, event_type) do
+  def add_karma(user_id, karma_points, event_type, music_id \\ nil) do
     Repo.transaction(fn ->
       with {:ok, %KarmaActivity{}} <-
              Karmas.create_karma_activity(%{
                user_id: user_id,
                karma_points: karma_points,
-               event_type: event_type
+               event_type: event_type,
+               music_id: music_id
              }),
            %User{karma_points: existing_karma_points} = user <- get_user_locked(user_id),
            {:ok, %User{} = user} <-

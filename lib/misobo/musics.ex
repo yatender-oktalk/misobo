@@ -42,6 +42,8 @@ defmodule Misobo.Musics do
   """
   def get_music!(id), do: Repo.get!(Music, id)
 
+  def get_music(id), do: Repo.get(Music, id)
+
   @doc """
   Creates a music.
 
