@@ -30,6 +30,8 @@ config :misobo, :communication, sms: Misobo.Communication.SMSProvider.TextLocal
 
 config :misobo, MisoboWeb.Authentication, namespace: "user_auth"
 
+config :misobo, Misobo.Env, signup_karma: 501
+
 config :misobo, Misobo.Communication.SMSProvider.TextLocal,
   api_key: System.get_env("TEXT_LOCAL_API_KEY")
 
