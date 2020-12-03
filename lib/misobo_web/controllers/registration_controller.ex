@@ -6,6 +6,9 @@ defmodule MisoboWeb.RegistrationController do
   alias Misobo.Accounts.User
   alias Misobo.Authentication
 
+  @signup_event "SIGNUP"
+  @signup_points Application.get_env(:misobo, Misobo.Env)[:signup_karma]
+
   def index(conn, _params) do
     response(conn, 200, :ok)
   end
@@ -14,6 +17,8 @@ defmodule MisoboWeb.RegistrationController do
     with {:ok, {%Registration{} = registration, %User{} = user}} <-
            Accounts.create_registration_user(params),
          token <- Authentication.generate_token(registration) do
+      spawn(fn -> Accounts.add_karma(user.id, @signup_points, @signup_event) end)
+
       response(conn, 201, %{
         data: %{
           msg: "user registered successfully",

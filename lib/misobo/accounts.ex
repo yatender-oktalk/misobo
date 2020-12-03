@@ -4,12 +4,16 @@ defmodule Misobo.Accounts do
   """
 
   import Ecto.Query, warn: false
+
   alias Misobo.Accounts.User
   alias Misobo.Categories.Category
   alias Misobo.Categories.RegistrationCategory
   alias Misobo.Categories.RegistrationSubCategory
   alias Misobo.Categories.SubCategory
   alias Misobo.Repo
+  alias Misobo.Karmas
+  alias Misobo.Karmas.KarmaActivity
+
   import Misobo.TimeUtils
 
   @doc """
@@ -470,6 +474,57 @@ defmodule Misobo.Accounts do
   def calculate_bmi(height, weight) do
     bmi = weight / (height * height)
     {:ok, %{"bmi" => Float.ceil(bmi, 2), "result" => bmi_result(bmi)}}
+  end
+
+  def add_karma(user_id, karma_points, event_type, music_id \\ nil) do
+    Repo.transaction(fn ->
+      with {:ok, %KarmaActivity{}} <-
+             Karmas.create_karma_activity(%{
+               user_id: user_id,
+               karma_points: karma_points,
+               event_type: event_type,
+               music_id: music_id
+             }),
+           %User{karma_points: existing_karma_points} = user <- get_user_locked(user_id),
+           {:ok, %User{} = user} <-
+             update_user(user, %{karma_points: existing_karma_points + karma_points}) do
+        {:ok, user}
+      else
+        {:error, changeset} ->
+          error =
+            Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
+
+          Repo.rollback(error)
+          {:error, error}
+      end
+    end)
+  end
+
+  def deduct_karma(user_id, karma_points, event_type) do
+    Repo.transaction(fn ->
+      with {:ok, %KarmaActivity{}} <-
+             Karmas.create_karma_activity(%{
+               user_id: user_id,
+               karma_points: -1 * karma_points,
+               event_type: event_type
+             }),
+           %User{karma_points: existing_karma_points} = user <- get_user_locked(user_id),
+           {:ok, %User{} = user} <-
+             update_user(user, %{karma_points: existing_karma_points - karma_points}) do
+        {:ok, user}
+      else
+        {:error, changeset} ->
+          error =
+            Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
+
+          Repo.rollback(error)
+          {:error, error}
+      end
+    end)
+  end
+
+  def get_user_locked(id) do
+    Repo.one(from a in User, where: a.id == ^id, lock: "FOR UPDATE")
   end
 
   defp bmi_result(bmi) do
