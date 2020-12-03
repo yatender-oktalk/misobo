@@ -6,8 +6,18 @@ defmodule Misobo.BlogsTest do
   describe "blogs" do
     alias Misobo.Blogs.Blog
 
-    @valid_attrs %{category: "some category", content: "some content", is_enabled: true, title: "some title"}
-    @update_attrs %{category: "some updated category", content: "some updated content", is_enabled: false, title: "some updated title"}
+    @valid_attrs %{
+      category: "some category",
+      content: "some content",
+      is_enabled: true,
+      title: "some title"
+    }
+    @update_attrs %{
+      category: "some updated category",
+      content: "some updated content",
+      is_enabled: false,
+      title: "some updated title"
+    }
     @invalid_attrs %{category: nil, content: nil, is_enabled: nil, title: nil}
 
     def blog_fixture(attrs \\ %{}) do

@@ -41,14 +41,20 @@ defmodule Misobo.KarmasTest do
 
     test "update_karma_activity/2 with valid data updates the karma_activity" do
       karma_activity = karma_activity_fixture()
-      assert {:ok, %KarmaActivity{} = karma_activity} = Karmas.update_karma_activity(karma_activity, @update_attrs)
+
+      assert {:ok, %KarmaActivity{} = karma_activity} =
+               Karmas.update_karma_activity(karma_activity, @update_attrs)
+
       assert karma_activity.event_type == "some updated event_type"
       assert karma_activity.karma_points == 43
     end
 
     test "update_karma_activity/2 with invalid data returns error changeset" do
       karma_activity = karma_activity_fixture()
-      assert {:error, %Ecto.Changeset{}} = Karmas.update_karma_activity(karma_activity, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Karmas.update_karma_activity(karma_activity, @invalid_attrs)
+
       assert karma_activity == Karmas.get_karma_activity!(karma_activity.id)
     end
 

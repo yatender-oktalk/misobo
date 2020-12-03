@@ -15,7 +15,7 @@ Security in case of vulnerabilities. -->
 
 ## [0.4.2]
 
-# Added 
+# Added
 
 - Category Experts API
 - Experts API
