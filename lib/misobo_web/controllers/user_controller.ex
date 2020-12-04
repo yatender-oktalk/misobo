@@ -71,14 +71,11 @@ defmodule MisoboWeb.UserController do
 
   def update(%{assigns: %{user: %User{id: user_id}}} = conn, %{"id" => id} = _params) do
     with true <- to_string(user_id) == id,
-         %User{is_enabled: true} = user <- Accounts.get_user(id),
+         %User{} = user <- Accounts.get_user(id),
          {:ok, %User{} = user} <-
            Accounts.update_user(user, conn.body_params) do
       response(conn, 200, %{data: user})
     else
-      %User{is_enabled: false} ->
-        error_response(conn, 400, "User has not verified the OTP")
-
       false ->
         error_response(conn, 400, "bad request, not allow to modify this user's data")
 
