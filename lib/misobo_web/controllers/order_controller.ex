@@ -20,7 +20,7 @@ defmodule MisoboWeb.OrderController do
            Transactions.create_order(pg_order_params),
          {:ok, %Transaction{id: transaction_id}} <-
            Transactions.update_transaction(tranaction, %{order_id: order_id, status: "ORDER"}) do
-      response(conn, 400, %{
+      response(conn, 200, %{
         data: %{
           pg_order_id: pg_order_id,
           transaction_id: transaction_id,
