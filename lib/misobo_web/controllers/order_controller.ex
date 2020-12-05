@@ -46,8 +46,8 @@ defmodule MisoboWeb.OrderController do
           "amount" => amount
         } = _params
       ) do
-    {:ok, %Transaction{} = transaction} = Transactions.get_transaction(transaction_id)
-    {:ok, %Order{amount: order_amount} = order} = Transactions.get_order(order_id)
+    %Transaction{} = transaction = Transactions.get_transaction(transaction_id)
+    %Order{amount: order_amount} = order = Transactions.get_order(order_id)
 
     {code, status} =
       with true <- amount * 100 == order_amount,
@@ -75,8 +75,11 @@ defmodule MisoboWeb.OrderController do
           {400, "failed"}
       end
 
-    {:ok, %Transaction{} = transaction} = Transactions.get_transaction(transaction_id)
-    {:ok, %Order{} = order} = Transactions.get_order(order_id)
+    %Transaction{} = transaction = Transactions.get_transaction(transaction_id)
+    %Order{} = order = Transactions.get_order(order_id)
+
+    IO.inspect(code)
+    IO.inspect(status)
 
     case {code, status} do
       {200, _status} ->
