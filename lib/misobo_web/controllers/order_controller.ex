@@ -78,9 +78,6 @@ defmodule MisoboWeb.OrderController do
     %Transaction{} = transaction = Transactions.get_transaction(transaction_id)
     %Order{} = order = Transactions.get_order(order_id)
 
-    IO.inspect(code)
-    IO.inspect(status)
-
     case {code, status} do
       {200, _status} ->
         Transactions.update_transaction(transaction, %{status: "COMPLETED"})
