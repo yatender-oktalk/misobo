@@ -14,6 +14,7 @@ defmodule Misobo.Transactions.Order do
     field :offer_id, :string
     field :receipt, :string
     field :status, :string
+    field :pg_order_id, :string
 
     timestamps()
   end
@@ -32,7 +33,8 @@ defmodule Misobo.Transactions.Order do
       :notes,
       :offer_id,
       :receipt,
-      :status
+      :status,
+      :pg_order_id
     ])
     |> validate_required([
       :amount,
@@ -42,7 +44,8 @@ defmodule Misobo.Transactions.Order do
       :currency,
       :entity,
       :receipt,
-      :status
+      :status,
+      :pg_order_id
     ])
   end
 end
