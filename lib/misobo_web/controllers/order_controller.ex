@@ -36,6 +36,61 @@ defmodule MisoboWeb.OrderController do
     end
   end
 
+  def capture(
+        conn,
+        %{
+          "payment_id" => payment_id,
+          "signature" => signature,
+          "order_id" => order_id,
+          "transaction_id" => transaction_id,
+          "amount" => amount
+        } = _params
+      ) do
+    {:ok, %Transaction{} = transaction} = Transactions.get_transaction(transaction_id)
+    {:ok, %Order{amount: order_amount} = order} = Transactions.get_order(order_id)
+
+    {code, status} =
+      with true <- amount * 100 == order_amount,
+           {:ok, %Transaction{} = _transaction} <-
+             Transactions.update_transaction(transaction, %{status: "INITATED_CAPTURE"}),
+           {:ok, %Order{} = _order} <-
+             Transactions.update_order(order, %{
+               status: "INITATED_CAPTURE",
+               signature: signature,
+               payment_id: payment_id
+             }),
+           :success <- Transactions.initiate_capture(payment_id, order_amount) do
+        {200, "success"}
+      else
+        false ->
+          {400, "failed"}
+
+        :failed ->
+          {400, "failed"}
+
+        {:error, _error} ->
+          {400, "failed"}
+
+        _ ->
+          {400, "failed"}
+      end
+
+    {:ok, %Transaction{} = transaction} = Transactions.get_transaction(transaction_id)
+    {:ok, %Order{} = order} = Transactions.get_order(order_id)
+
+    case {code, status} do
+      {200, _status} ->
+        Transactions.update_transaction(transaction, %{status: "COMPLETED"})
+        Transactions.update_order(order, %{status: "COMPLETED"})
+        response(conn, code, %{data: %{msg: "Success"}})
+
+      _ ->
+        Transactions.update_transaction(transaction, %{status: "FAILED"})
+        Transactions.update_order(order, %{status: "FAILED"})
+        response(conn, code, %{data: %{msg: "failed to caputre payment"}})
+    end
+  end
+
   # Private functions
 
   defp response(conn, status, data) do

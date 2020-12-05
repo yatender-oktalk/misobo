@@ -7,6 +7,7 @@ defmodule Misobo.Transactions do
   alias Misobo.Repo
 
   alias Misobo.Transactions.Order
+  alias Misobo.Network.PG.Provider
 
   @doc """
   Returns the list of orders.
@@ -36,6 +37,8 @@ defmodule Misobo.Transactions do
 
   """
   def get_order!(id), do: Repo.get!(Order, id)
+
+  def get_order(id), do: Repo.get(Order, id)
 
   @doc """
   Creates a order.
@@ -133,6 +136,8 @@ defmodule Misobo.Transactions do
   """
   def get_transaction!(id), do: Repo.get!(Transaction, id)
 
+  def get_transaction(id), do: Repo.get(Transaction, id)
+
   @doc """
   Creates a transaction.
 
@@ -199,7 +204,7 @@ defmodule Misobo.Transactions do
   end
 
   def create_pg_order(order_params) do
-    Misobo.Network.PG.Provider.create_order(order_params)
+    Provider.create_order(order_params)
   end
 
   def transaction_params(user_id, amount, receipt) do
@@ -219,5 +224,12 @@ defmodule Misobo.Transactions do
       receipt: receipt,
       notes: notes || %{}
     }
+  end
+
+  def initiate_capture(payment_id, amount) do
+    case Provider.capture_payment(payment_id, %{amount: amount, currency: "INR"}) do
+      {:ok, _resp} -> :success
+      {:error, _resp} -> :failed
+    end
   end
 end

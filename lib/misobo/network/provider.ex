@@ -14,7 +14,7 @@ defmodule Misobo.Network.PG.Provider do
 
   def create_order(params) do
     case post("/orders", params) do
-      {:ok, %Tesla.Env{body: %{error: error}} = response} ->
+      {:ok, %Tesla.Env{body: %{error: error}} = _response} ->
         {:error, error}
 
       {:ok, %Tesla.Env{} = response} ->
@@ -27,7 +27,16 @@ defmodule Misobo.Network.PG.Provider do
   end
 
   def capture_payment(payment_id, params) do
-    # case post("/payments/#{payment_id}/capture") do
-    # end
+    case post("/payments/#{payment_id}/capture", params) do
+      {:ok, %Tesla.Env{body: %{error: error}} = _response} ->
+        {:error, error}
+
+      {:ok, %Tesla.Env{} = response} ->
+        {:ok, response.body}
+
+      {:error, err} ->
+        Logger.error(err)
+        {:error, "capture failed"}
+    end
   end
 end
