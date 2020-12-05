@@ -43,7 +43,7 @@ defmodule Misobo.Accounts do
       {:ok, nil}
 
   """
-  def get_user(id), do: Repo.get(User, id)
+  def get_user(id), do: User |> Repo.get(id) |> Repo.preload(:login_streak)
 
   @doc """
   Gets user by params.
@@ -59,7 +59,7 @@ defmodule Misobo.Accounts do
       %User{}
 
   """
-  def get_user_by(params), do: Repo.get_by(User, params)
+  def get_user_by(params), do: User |> Repo.get_by(params) |> Repo.preload(:login_streak)
 
   def get_user_profile(id) do
     from(u in User)
