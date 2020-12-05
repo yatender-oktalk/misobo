@@ -13,5 +13,8 @@ defmodule Misobo.Commons do
     :lt == NaiveDateTime.compare(NaiveDateTime.utc_now(), otp_timeout)
   end
 
+  def generate_receipt,
+    do: (-1 * :erlang.monotonic_time()) |> Integer.to_string(32) |> String.replace("FVVV", "")
+
   def validate_otp(otp, valid_otp), do: {:sms, to_string(valid_otp) == to_string(otp)}
 end
