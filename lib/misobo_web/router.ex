@@ -70,6 +70,8 @@ defmodule MisoboWeb.Router do
 
       get("/blogs", BlogController, :index)
       get("/blogs/:id", BlogController, :show)
+
+      post("/order", OrderController, :create)
     end
   end
 
