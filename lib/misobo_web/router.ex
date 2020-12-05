@@ -72,6 +72,7 @@ defmodule MisoboWeb.Router do
       get("/blogs/:id", BlogController, :show)
 
       post("/order", OrderController, :create)
+      post("/order/capture", OrderController, :capture)
     end
   end
 
