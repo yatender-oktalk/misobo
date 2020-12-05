@@ -25,4 +25,9 @@ defmodule Misobo.Network.PG.Provider do
         {:error, "PG call failed"}
     end
   end
+
+  def capture_payment(payment_id, params) do
+    # case post("/payments/#{payment_id}/capture") do
+    # end
+  end
 end

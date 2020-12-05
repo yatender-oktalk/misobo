@@ -16,11 +16,17 @@ defmodule MisoboWeb.OrderController do
          order_params <- Transactions.order_params(amount, receipt, params["notes"]),
          {:ok, pg_resp} <- Transactions.create_pg_order(order_params),
          pg_order_params <- pg_resp |> Map.put("pg_order_id", pg_resp["id"]),
-         {:ok, %Order{id: order_id} = _order} <-
+         {:ok, %Order{id: order_id, pg_order_id: pg_order_id} = _order} <-
            Transactions.create_order(pg_order_params),
-         {:ok, %Transaction{}} <-
+         {:ok, %Transaction{id: transaction_id}} <-
            Transactions.update_transaction(tranaction, %{order_id: order_id, status: "ORDER"}) do
-      response(conn, 400, %{data: order_id})
+      response(conn, 400, %{
+        data: %{
+          pg_order_id: pg_order_id,
+          transaction_id: transaction_id,
+          order_id: order_id
+        }
+      })
     else
       {:error, "PG call failed" = msg} ->
         response(conn, 400, %{data: msg})
