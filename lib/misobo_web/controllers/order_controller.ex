@@ -37,7 +37,7 @@ defmodule MisoboWeb.OrderController do
   end
 
   def capture(
-        conn,
+        %{assigns: %{user: %User{id: user_id}}} = conn,
         %{
           "payment_id" => payment_id,
           "signature" => signature,
@@ -76,12 +76,22 @@ defmodule MisoboWeb.OrderController do
       end
 
     %Transaction{} = transaction = Transactions.get_transaction(transaction_id)
-    %Order{} = order = Transactions.get_order(order_id)
+    %Order{id: ord_id, notes: notes} = order = Transactions.get_order(order_id)
 
     case {code, status} do
       {200, _status} ->
         Transactions.update_transaction(transaction, %{status: "COMPLETED"})
         Transactions.update_order(order, %{status: "COMPLETED"})
+
+        # Fetch packs
+        case Misobo.Packs.get_pack(notes["package"]) do
+          nil ->
+            ""
+
+          %Misobo.Packs.Pack{karma_coins: coins} ->
+            Misobo.Accounts.add_karma(user_id, coins, "BUY_PACK:order_#{ord_id}")
+        end
+
         response(conn, code, %{data: %{msg: "Success"}})
 
       _ ->
