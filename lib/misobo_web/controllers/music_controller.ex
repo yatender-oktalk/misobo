@@ -9,7 +9,7 @@ defmodule MisoboWeb.MusicController do
         conn,
         %{"id" => id, "user_id" => user_id, "progress" => progress} = _params
       ) do
-    case Musics.track_user_music_progress(id, user_id, progress) do
+    case Musics.track_user_music_progress(String.to_integer(id), user_id, progress) do
       {:ok, data} ->
         spawn(fn -> Misobo.Karmas.handle_karma_points(user_id, id, progress) end)
 
