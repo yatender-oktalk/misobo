@@ -93,7 +93,13 @@ defmodule MisoboWeb.UserController do
       ) do
     with {:ok, %{"bmi" => bmi} = data} <- Accounts.calculate_bmi(height, weight),
          %User{} = user <- Accounts.get_user(user_id),
-         {:ok, %User{}} <- Accounts.update_user(user, %{height: height, weight: weight, bmi: bmi}) do
+         {:ok, %User{}} <-
+           Accounts.update_user(user, %{
+             height: height,
+             weight: weight,
+             bmi: bmi,
+             bmi_checked_at: Misobo.TimeUtils.utc_to_indian_timezone(DateTime.utc_now())
+           }) do
       response(conn, 200, %{data: data})
     else
       {:error, changeset} ->

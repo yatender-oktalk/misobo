@@ -21,7 +21,8 @@ defmodule Misobo.Accounts.User do
     :weight,
     :bmi,
     :height,
-    :login_streak_days
+    :login_streak_days,
+    :bmi_checked_at
   ]
 
   @derive {Jason.Encoder,
@@ -41,7 +42,8 @@ defmodule Misobo.Accounts.User do
                :bmi,
                :height,
                :login_streak_days,
-               :login_streak
+               :login_streak,
+               :bmi_checked_at
              ]
            ]}
   schema "users" do
@@ -59,6 +61,7 @@ defmodule Misobo.Accounts.User do
     field :bmi, :float
     field :height, :float
     field :login_streak_days, :integer, default: 0
+    field :bmi_checked_at, :naive_datetime, default: nil
 
     belongs_to :registration, Registration
     has_one(:login_streak, LoginStreak, on_delete: :delete_all)
