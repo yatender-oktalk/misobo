@@ -42,6 +42,8 @@ defmodule Misobo.Packs do
   """
   def get_pack!(id), do: Repo.get!(Pack, id)
 
+  def get_pack(id), do: Repo.get(Pack, id)
+
   @doc """
   Creates a pack.
 
