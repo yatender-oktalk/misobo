@@ -15,6 +15,6 @@ defmodule Misobo.Karmas.KarmaActivity do
   def changeset(karma_activity, attrs) do
     karma_activity
     |> cast(attrs, [:karma_points, :event_type, :user_id, :music_id])
-    |> validate_required([:karma_points, :event_type, :user_id, :music_id])
+    |> validate_required([:karma_points, :event_type, :user_id])
   end
 end

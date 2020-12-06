@@ -511,7 +511,7 @@ defmodule Misobo.Accounts do
            %User{karma_points: existing_karma_points} = user <- get_user_locked(user_id),
            {:ok, %User{} = user} <-
              update_user(user, %{karma_points: existing_karma_points - karma_points}) do
-        {:ok, user}
+        user
       else
         {:error, changeset} ->
           error =

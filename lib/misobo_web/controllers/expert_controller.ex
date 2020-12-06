@@ -42,7 +42,7 @@ defmodule MisoboWeb.ExpertController do
       ) do
     %{
       assigns: %{
-        user: %User{id: id, karma_points: _karma_points, is_enabled: is_enabled}
+        user: %User{id: id, karma_points: karma_points, is_enabled: is_enabled}
       }
     } = conn
 
@@ -51,10 +51,20 @@ defmodule MisoboWeb.ExpertController do
            {:slot,
             Experts.slot_available?(%{start_time_unix: start_time_unix, expert_id: expert_id})},
          %Expert{consult_karma: karma} <- Experts.get_expert(expert_id),
+         {:karma, true} <- {:karma, karma_points >= karma},
          {:ok, %Booking{} = booking} <-
-           Experts.create_expert_booking(id, expert_id, start_time_unix, karma) do
+           Experts.create_expert_booking(id, expert_id, start_time_unix, karma),
+         {:ok, %User{}} <-
+           Misobo.Accounts.deduct_karma(
+             id,
+             karma,
+             "EXPERT_BOOKING:#{expert_id}:SLOT:#{start_time_unix}"
+           ) do
       response(conn, 200, %{status: "success", data: booking})
     else
+      {:karma, false} ->
+        error_response(conn, 402, "User does not have sufficient karma")
+
       {:enabled, false} ->
         error_response(conn, 401, "User has not verified the phone")
 
