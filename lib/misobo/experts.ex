@@ -502,7 +502,8 @@ defmodule Misobo.Experts do
       karma: karma
     }
 
-    create_booking(data)
+    {:ok, booking} = create_booking(data)
+    {:ok, Repo.preload(booking, :expert)}
   end
 
   def user_expert_bookings(id, page) do
