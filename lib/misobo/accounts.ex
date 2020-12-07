@@ -43,7 +43,8 @@ defmodule Misobo.Accounts do
       {:ok, nil}
 
   """
-  def get_user(id), do: User |> Repo.get(id) |> Repo.preload(:login_streak)
+  def get_user(id),
+    do: User |> Repo.get(id) |> Repo.preload(:login_streak) |> handle_login_streak_resp()
 
   @doc """
   Gets user by params.
@@ -59,14 +60,51 @@ defmodule Misobo.Accounts do
       %User{}
 
   """
-  def get_user_by(params), do: User |> Repo.get_by(params) |> Repo.preload(:login_streak)
+  def get_user_by(params),
+    do: User |> Repo.get_by(params) |> Repo.preload(:login_streak) |> handle_login_streak_resp
 
   def get_user_profile(id) do
     from(u in User)
     |> where([u], u.id == ^id)
     |> preload(:login_streak)
     |> Repo.one()
+    |> handle_login_streak_resp()
   end
+
+  def handle_login_streak_resp(nil), do: nil
+
+  def handle_login_streak_resp(struct) do
+    day_of_week = get_day_of_week_today()
+
+    login_streak =
+      case day_of_week do
+        7 ->
+          Map.put(struct.login_streak, :"7", "TODAY")
+
+        _ ->
+          Enum.reduce(day_of_week..7, struct.login_streak, fn day, acc ->
+            case day == day_of_week do
+              true ->
+                Map.put(acc, :"#{day}", "TODAY")
+
+              false ->
+                Map.put(acc, :"#{day}", "")
+            end
+          end)
+      end
+
+    login_streak =
+      Enum.reduce(1..7, login_streak, fn day, acc ->
+        Map.put(acc, :"#{day}", Map.get(login_streak, :"#{day}") |> modify_val())
+      end)
+
+    Map.put(struct, :login_streak, login_streak)
+  end
+
+  def modify_val(""), do: ""
+  def modify_val(true), do: "TRUE"
+  def modify_val(false), do: "FALSE"
+  def modify_val(data), do: data
 
   @doc """
   Creates a user.
