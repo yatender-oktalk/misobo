@@ -95,7 +95,6 @@ defmodule Misobo.Accounts do
 
     login_streak =
       Enum.reduce(1..7, login_streak, fn day, acc ->
-        IO.inspect(Map.get(login_streak, :"#{day}") |> modify_val())
         Map.put(acc, :"#{day}", Map.get(login_streak, :"#{day}") |> modify_val())
       end)
 
