@@ -76,29 +76,35 @@ defmodule Misobo.Accounts do
   def handle_login_streak_resp(struct) do
     day_of_week = get_day_of_week_today()
 
-    login_streak =
-      case day_of_week do
-        7 ->
-          Map.put(struct.login_streak, :"7", "TODAY")
+    case struct.login_streak do
+      nil ->
+        struct
 
-        _ ->
-          Enum.reduce(day_of_week..7, struct.login_streak, fn day, acc ->
-            case day == day_of_week do
-              true ->
-                Map.put(acc, :"#{day}", "TODAY")
+      _ ->
+        login_streak =
+          case day_of_week do
+            7 ->
+              Map.put(struct.login_streak, :"7", "TODAY")
 
-              false ->
-                Map.put(acc, :"#{day}", "")
-            end
+            _ ->
+              Enum.reduce(day_of_week..7, struct.login_streak, fn day, acc ->
+                case day == day_of_week do
+                  true ->
+                    Map.put(acc, :"#{day}", "TODAY")
+
+                  false ->
+                    Map.put(acc, :"#{day}", "")
+                end
+              end)
+          end
+
+        login_streak =
+          Enum.reduce(1..7, login_streak, fn day, acc ->
+            Map.put(acc, :"#{day}", Map.get(login_streak, :"#{day}") |> modify_val())
           end)
-      end
 
-    login_streak =
-      Enum.reduce(1..7, login_streak, fn day, acc ->
-        Map.put(acc, :"#{day}", Map.get(login_streak, :"#{day}") |> modify_val())
-      end)
-
-    Map.put(struct, :login_streak, login_streak)
+        Map.put(struct, :login_streak, login_streak)
+    end
   end
 
   def modify_val(""), do: ""
