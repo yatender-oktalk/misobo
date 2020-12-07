@@ -79,13 +79,13 @@ defmodule Misobo.Accounts do
     login_streak =
       case day_of_week do
         7 ->
-          Map.put(struct.login_streak, :"7", "Today")
+          Map.put(struct.login_streak, :"7", "TODAY")
 
         _ ->
           Enum.reduce(day_of_week..7, struct.login_streak, fn day, acc ->
             case day == day_of_week do
               true ->
-                Map.put(acc, :"#{day}", "Today")
+                Map.put(acc, :"#{day}", "TODAY")
 
               false ->
                 Map.put(acc, :"#{day}", "")
@@ -93,8 +93,19 @@ defmodule Misobo.Accounts do
           end)
       end
 
+    login_streak =
+      Enum.reduce(1..7, login_streak, fn day, acc ->
+        IO.inspect(Map.get(login_streak, :"#{day}") |> modify_val())
+        Map.put(acc, :"#{day}", Map.get(login_streak, :"#{day}") |> modify_val())
+      end)
+
     Map.put(struct, :login_streak, login_streak)
   end
+
+  def modify_val(""), do: ""
+  def modify_val(true), do: "TRUE"
+  def modify_val(false), do: "FALSE"
+  def modify_val(data), do: data
 
   @doc """
   Creates a user.
