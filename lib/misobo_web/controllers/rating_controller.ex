@@ -27,7 +27,7 @@ defmodule MisoboWeb.RatingController do
          avg_rating <- Experts.get_average_rating(expert_id),
          %Expert{} = expert <- Experts.get_expert(expert_id),
          {:ok, %Expert{}} = Experts.update_expert(expert, %{rating: avg_rating}) do
-      response(conn, 200, "Rating submitted")
+      response(conn, 200, %{data: "Rating submitted"})
     else
       {:booking, nil} ->
         error_response(conn, 400, "Booking not found!")
