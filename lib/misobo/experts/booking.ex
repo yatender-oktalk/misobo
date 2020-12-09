@@ -18,7 +18,7 @@ defmodule Misobo.Experts.Booking do
     :end_time_unix,
     :karma
   ]
-  @optional []
+  @optional [:is_rated]
 
   @derive {Jason.Encoder,
            [
@@ -38,6 +38,8 @@ defmodule Misobo.Experts.Booking do
     field :end_time_unix, :integer
     field :start_time_unix, :integer
     field :karma, :integer
+    field :is_rated, :boolean
+
     belongs_to :expert, Expert
     belongs_to :user, User
 

@@ -326,4 +326,63 @@ defmodule Misobo.ExpertsTest do
   #     assert %Ecto.Changeset{} = Experts.change_booking(booking)
   #   end
   # end
+
+  # describe "ratings" do
+  #   alias Misobo.Experts.Rating
+
+  #   @valid_attrs %{rating: 42}
+  #   @update_attrs %{rating: 43}
+  #   @invalid_attrs %{rating: nil}
+
+  #   def rating_fixture(attrs \\ %{}) do
+  #     {:ok, rating} =
+  #       attrs
+  #       |> Enum.into(@valid_attrs)
+  #       |> Experts.create_rating()
+
+  #     rating
+  #   end
+
+  #   test "list_ratings/0 returns all ratings" do
+  #     rating = rating_fixture()
+  #     assert Experts.list_ratings() == [rating]
+  #   end
+
+  #   test "get_rating!/1 returns the rating with given id" do
+  #     rating = rating_fixture()
+  #     assert Experts.get_rating!(rating.id) == rating
+  #   end
+
+  #   test "create_rating/1 with valid data creates a rating" do
+  #     assert {:ok, %Rating{} = rating} = Experts.create_rating(@valid_attrs)
+  #     assert rating.rating == 42
+  #   end
+
+  #   test "create_rating/1 with invalid data returns error changeset" do
+  #     assert {:error, %Ecto.Changeset{}} = Experts.create_rating(@invalid_attrs)
+  #   end
+
+  #   test "update_rating/2 with valid data updates the rating" do
+  #     rating = rating_fixture()
+  #     assert {:ok, %Rating{} = rating} = Experts.update_rating(rating, @update_attrs)
+  #     assert rating.rating == 43
+  #   end
+
+  #   test "update_rating/2 with invalid data returns error changeset" do
+  #     rating = rating_fixture()
+  #     assert {:error, %Ecto.Changeset{}} = Experts.update_rating(rating, @invalid_attrs)
+  #     assert rating == Experts.get_rating!(rating.id)
+  #   end
+
+  #   test "delete_rating/1 deletes the rating" do
+  #     rating = rating_fixture()
+  #     assert {:ok, %Rating{}} = Experts.delete_rating(rating)
+  #     assert_raise Ecto.NoResultsError, fn -> Experts.get_rating!(rating.id) end
+  #   end
+
+  #   test "change_rating/1 returns a rating changeset" do
+  #     rating = rating_fixture()
+  #     assert %Ecto.Changeset{} = Experts.change_rating(rating)
+  #   end
+  # end
 end
