@@ -73,6 +73,8 @@ defmodule MisoboWeb.Router do
 
       post("/order", OrderController, :create)
       post("/order/capture", OrderController, :capture)
+
+      post("/rating", RatingController, :create)
     end
   end
 
