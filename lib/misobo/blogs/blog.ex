@@ -10,7 +10,8 @@ defmodule Misobo.Blogs.Blog do
                :content,
                :is_enabled,
                :image,
-               :title
+               :title,
+               :time_to_read
              ]
            ]}
   schema "blogs" do
@@ -19,6 +20,7 @@ defmodule Misobo.Blogs.Blog do
     field :image, :string
     field :is_enabled, :boolean, default: false
     field :title, :string
+    field :time_to_read, :string
 
     timestamps()
   end
@@ -26,7 +28,7 @@ defmodule Misobo.Blogs.Blog do
   @doc false
   def changeset(blog, attrs) do
     blog
-    |> cast(attrs, [:title, :content, :is_enabled, :category, :image])
+    |> cast(attrs, [:title, :content, :is_enabled, :category, :image, :time_to_read])
     |> validate_required([:title, :content, :is_enabled])
   end
 end
