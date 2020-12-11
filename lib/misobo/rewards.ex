@@ -7,6 +7,7 @@ defmodule Misobo.Rewards do
   alias Misobo.Repo
 
   alias Misobo.Rewards.Reward
+  alias Misobo.Accounts.User
 
   @doc """
   Returns the list of rewards.
@@ -204,99 +205,9 @@ defmodule Misobo.Rewards do
     RewardCode.changeset(reward_code, attrs)
   end
 
-  alias Misobo.Rewards.UserRewards
-
-  @doc """
-  Returns the list of user_rewards.
-
-  ## Examples
-
-      iex> list_user_rewards()
-      [%UserRewards{}, ...]
-
-  """
-  def list_user_rewards do
-    Repo.all(UserRewards)
-  end
-
-  @doc """
-  Gets a single user_rewards.
-
-  Raises `Ecto.NoResultsError` if the User rewards does not exist.
-
-  ## Examples
-
-      iex> get_user_rewards!(123)
-      %UserRewards{}
-
-      iex> get_user_rewards!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_user_rewards!(id), do: Repo.get!(UserRewards, id)
-
-  @doc """
-  Creates a user_rewards.
-
-  ## Examples
-
-      iex> create_user_rewards(%{field: value})
-      {:ok, %UserRewards{}}
-
-      iex> create_user_rewards(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_user_rewards(attrs \\ %{}) do
-    %UserRewards{}
-    |> UserRewards.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a user_rewards.
-
-  ## Examples
-
-      iex> update_user_rewards(user_rewards, %{field: new_value})
-      {:ok, %UserRewards{}}
-
-      iex> update_user_rewards(user_rewards, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_user_rewards(%UserRewards{} = user_rewards, attrs) do
-    user_rewards
-    |> UserRewards.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a user_rewards.
-
-  ## Examples
-
-      iex> delete_user_rewards(user_rewards)
-      {:ok, %UserRewards{}}
-
-      iex> delete_user_rewards(user_rewards)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_user_rewards(%UserRewards{} = user_rewards) do
-    Repo.delete(user_rewards)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking user_rewards changes.
-
-  ## Examples
-
-      iex> change_user_rewards(user_rewards)
-      %Ecto.Changeset{data: %UserRewards{}}
-
-  """
-  def change_user_rewards(%UserRewards{} = user_rewards, attrs \\ %{}) do
-    UserRewards.changeset(user_rewards, attrs)
+  def redeem_reward(
+        %User{id: user_id, karma_points: karma_points} = user,
+        %Reward{is_active: true, karma: karma} = reward
+      ) do
   end
 end
