@@ -75,6 +75,11 @@ defmodule MisoboWeb.Router do
       post("/order/capture", OrderController, :capture)
 
       post("/rating", RatingController, :create)
+
+      get("/rewards", RewardController, :index)
+      get("/rewards/:id", RewardController, :show)
+
+      post("/rewards/:reward_id/redeem", RewardController, :redeem)
     end
   end
 
