@@ -18,7 +18,11 @@ defmodule Misobo.Rewards do
 
   """
   def list_rewards do
-    Repo.all(Reward)
+    query =
+      from u in Reward,
+        where: u.is_active == true
+
+    Repo.all(query)
   end
 
   @doc """
@@ -36,6 +40,8 @@ defmodule Misobo.Rewards do
 
   """
   def get_reward!(id), do: Repo.get!(Reward, id)
+
+  def get_reward(id), do: Repo.get(Reward, id)
 
   @doc """
   Creates a reward.

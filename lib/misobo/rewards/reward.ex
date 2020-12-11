@@ -12,6 +12,7 @@ defmodule Misobo.Rewards.Reward do
     field :people_unlocked, :integer, default: 0
     field :terms_and_conditions, :string
     field :title, :string
+    field :is_active, :boolean, default: true
 
     timestamps()
   end
