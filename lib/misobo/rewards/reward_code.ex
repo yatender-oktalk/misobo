@@ -9,6 +9,7 @@ defmodule Misobo.Rewards.RewardCode do
     field :valid_from, :naive_datetime
     field :valid_upto, :naive_datetime
     field :reward_id, :id
+    field :user_id, :id
 
     timestamps()
   end
@@ -16,7 +17,15 @@ defmodule Misobo.Rewards.RewardCode do
   @doc false
   def changeset(reward_code, attrs) do
     reward_code
-    |> cast(attrs, [:code, :valid_from, :valid_upto, :is_active, :redeemed_on, :reward_id])
+    |> cast(attrs, [
+      :code,
+      :valid_from,
+      :valid_upto,
+      :is_active,
+      :redeemed_on,
+      :reward_id,
+      :user_id
+    ])
     |> validate_required([:code, :valid_from, :valid_upto, :is_active, :reward_id])
   end
 end

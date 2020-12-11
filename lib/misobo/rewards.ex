@@ -205,9 +205,41 @@ defmodule Misobo.Rewards do
     RewardCode.changeset(reward_code, attrs)
   end
 
-  def redeem_reward(
-        %User{id: user_id, karma_points: karma_points} = user,
-        %Reward{is_active: true, karma: karma} = reward
-      ) do
+  def redeem_reward(user_id, %Reward{karma: karma, id: reward_id}) do
+    Repo.transaction(fn ->
+      # update user in reward_codes
+      with %RewardCode{is_active: true} = reward_code <- fetch_codes_for_reward(reward_id),
+           {:ok, %RewardCode{is_active: false}} <-
+             update_reward_code(reward_code, %{user_id: user_id, is_active: false}),
+           # reduce karma points basically
+           {:ok, %User{}} <-
+             Misobo.Accounts.deduct_karma(
+               user_id,
+               karma,
+               "REDEEM:#{reward_id}"
+             ) do
+        {:ok, reward_code}
+      else
+        nil ->
+          {:ok, :no_more_rewards_available}
+
+        {:error, reason} ->
+          {:error, reason}
+      end
+    end)
+  end
+
+  def fetch_codes_for_reward(reward_id) do
+    query =
+      from u in RewardCode,
+        select: u,
+        where:
+          u.reward_id == ^reward_id and
+            u.is_active == ^true and
+            u.valid_from <= ^DateTime.utc_now() and
+            u.valid_upto >= ^DateTime.utc_now(),
+        limit: 1
+
+    Repo.one(query)
   end
 end
