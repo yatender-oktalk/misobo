@@ -519,6 +519,19 @@ defmodule Misobo.Experts do
     Repo.paginate(q, page: page)
   end
 
+  def unrated_bookings(id) do
+    q =
+      from u in Booking,
+        where:
+          u.user_id == ^id and u.end_time < ^DateTime.utc_now() and
+            fragment("is_rated is not true"),
+        select: u,
+        limit: 1,
+        preload: :expert
+
+    Repo.all(q)
+  end
+
   alias Misobo.Experts.Rating
 
   @doc """
