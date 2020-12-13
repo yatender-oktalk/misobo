@@ -43,6 +43,12 @@ config :misobo, :env,
   end_time: System.get_env("END_TIME", "64800"),
   slot_duration: System.get_env("SLOT_DURATION", "1800")
 
+config :misobo, Misobo.Scheduler,
+  jobs: [
+    # Every Monday 5:30 AM
+    {"30 5 * * 1", {Misobo.Accounts, :clear_login_streak, []}}
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

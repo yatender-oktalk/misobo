@@ -16,6 +16,8 @@ defmodule Misobo.Accounts do
 
   import Misobo.TimeUtils
 
+  require Logger
+
   @doc """
   Returns the list of users.
 
@@ -281,16 +283,30 @@ defmodule Misobo.Accounts do
     LoginStreak.changeset(login_streak, attrs)
   end
 
-  def handle_login_streak(%User{id: id} = _user) do
+  def handle_login_streak(%User{id: id} = user) do
     day_of_week = get_day_of_week_today()
+    login_streak = id |> checkout_login_streak()
+    changeset = login_streak |> LoginStreak.changeset(%{"#{day_of_week}": true})
 
-    id
-    |> checkout_login_streak()
-    |> LoginStreak.changeset(%{"#{day_of_week}": true})
-    |> Repo.insert_or_update()
+    handle_increase_streak(changeset, user)
+    handle_reset_streak(login_streak, user)
+
+    Repo.insert_or_update(changeset)
   end
 
-  defp checkout_login_streak(user_id) do
+  def handle_increase_streak(changeset, %User{login_streak_days: login_streak_days} = user) do
+    if(changeset.valid? == true and changeset.changes != Map.new()) do
+      update_user(user, %{login_streak_days: login_streak_days + 1})
+    end
+  end
+
+  def handle_reset_streak(%LoginStreak{} = login_streak, %User{} = user) do
+    if Map.from_struct(login_streak)[:"#{get_last_day()}"] == true do
+      update_user(user, %{login_streak_days: 0})
+    end
+  end
+
+  def checkout_login_streak(user_id) do
     case result = get_login_streak(user_id) do
       nil ->
         %LoginStreak{user_id: user_id}
@@ -298,6 +314,16 @@ defmodule Misobo.Accounts do
       _ ->
         result
     end
+  end
+
+  def get_last_day() do
+    result =
+      case get_day_of_week_today() - 1 do
+        0 -> 7
+        result -> result
+      end
+
+    to_string(result)
   end
 
   alias Misobo.Accounts.Registration
@@ -588,5 +614,10 @@ defmodule Misobo.Accounts do
       true ->
         "Nothing"
     end
+  end
+
+  def clear_login_streak() do
+    Logger.info("cleared Loggin streak")
+    Repo.delete_all(LoginStreak)
   end
 end

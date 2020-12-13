@@ -9,6 +9,8 @@ defmodule Misobo.Application do
     children = [
       # Start the Ecto repository
       Misobo.Repo,
+      # Start the scheduler
+      Misobo.Scheduler,
       # Start the Telemetry supervisor
       MisoboWeb.Telemetry,
       # Start the PubSub system
