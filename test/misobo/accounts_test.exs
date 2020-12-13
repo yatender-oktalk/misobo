@@ -339,4 +339,63 @@ defmodule Misobo.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_registration(registration)
     end
   end
+
+  describe "user_logins" do
+    alias Misobo.Accounts.UserLogins
+
+    @valid_attrs %{login_date: ~N[2010-04-17 14:00:00]}
+    @update_attrs %{login_date: ~N[2011-05-18 15:01:01]}
+    @invalid_attrs %{login_date: nil}
+
+    def user_logins_fixture(attrs \\ %{}) do
+      {:ok, user_logins} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_user_logins()
+
+      user_logins
+    end
+
+    test "list_user_logins/0 returns all user_logins" do
+      user_logins = user_logins_fixture()
+      assert Accounts.list_user_logins() == [user_logins]
+    end
+
+    test "get_user_logins!/1 returns the user_logins with given id" do
+      user_logins = user_logins_fixture()
+      assert Accounts.get_user_logins!(user_logins.id) == user_logins
+    end
+
+    test "create_user_logins/1 with valid data creates a user_logins" do
+      assert {:ok, %UserLogins{} = user_logins} = Accounts.create_user_logins(@valid_attrs)
+      assert user_logins.login_date == ~N[2010-04-17 14:00:00]
+    end
+
+    test "create_user_logins/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user_logins(@invalid_attrs)
+    end
+
+    test "update_user_logins/2 with valid data updates the user_logins" do
+      user_logins = user_logins_fixture()
+      assert {:ok, %UserLogins{} = user_logins} = Accounts.update_user_logins(user_logins, @update_attrs)
+      assert user_logins.login_date == ~N[2011-05-18 15:01:01]
+    end
+
+    test "update_user_logins/2 with invalid data returns error changeset" do
+      user_logins = user_logins_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user_logins(user_logins, @invalid_attrs)
+      assert user_logins == Accounts.get_user_logins!(user_logins.id)
+    end
+
+    test "delete_user_logins/1 deletes the user_logins" do
+      user_logins = user_logins_fixture()
+      assert {:ok, %UserLogins{}} = Accounts.delete_user_logins(user_logins)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_user_logins!(user_logins.id) end
+    end
+
+    test "change_user_logins/1 returns a user_logins changeset" do
+      user_logins = user_logins_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_user_logins(user_logins)
+    end
+  end
 end
