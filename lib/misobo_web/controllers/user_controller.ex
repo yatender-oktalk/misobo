@@ -115,6 +115,11 @@ defmodule MisoboWeb.UserController do
     response(conn, 200, %{data: Map.from_struct(bookings)})
   end
 
+  def unrated_bookings(conn, %{"id" => id}) do
+    bookings = Misobo.Experts.unrated_bookings(id)
+    response(conn, 200, %{data: bookings})
+  end
+
   # Private functions
   defp error_response(conn, status, message) do
     data = %{data: message}

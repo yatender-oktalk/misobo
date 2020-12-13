@@ -58,6 +58,7 @@ defmodule MisoboWeb.Router do
       get("/user/:id", UserController, :index)
       put("/user/:id", UserController, :update)
       get("/user/:id/expert_bookings", UserController, :expert_bookings)
+      get("/user/:id/unrated_bookings", UserController, :unrated_bookings)
 
       post("/expert/:id/slots", ExpertController, :expert_slots)
       post("/expert/:expert_id/book_slot", ExpertController, :book_slot)
