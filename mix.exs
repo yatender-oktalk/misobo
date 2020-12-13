@@ -4,7 +4,7 @@ defmodule Misobo.MixProject do
   def project do
     [
       app: :misobo,
-      version: "0.8.1",
+      version: "0.8.2",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -55,7 +55,8 @@ defmodule Misobo.MixProject do
       {:tesla, "~> 1.3.0"},
       {:timex, "~> 3.5"},
       {:scrivener_ecto, "~> 2.0"},
-      {:hackney, "~> 1.10"}
+      {:hackney, "~> 1.10"},
+      {:quantum, "~> 3.0"}
       # dev internal
     ]
   end
