@@ -2,6 +2,18 @@ defmodule Misobo.Rewards.RewardCode do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder,
+           [
+             only: [
+               :code,
+               :is_active,
+               :redeemed_on,
+               :valid_from,
+               :valid_upto,
+               :reward_id,
+               :user_id
+             ]
+           ]}
   schema "reward_codes" do
     field :code, :string
     field :is_active, :boolean, default: true

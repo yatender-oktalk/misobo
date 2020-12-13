@@ -218,13 +218,18 @@ defmodule Misobo.Rewards do
                karma,
                "REDEEM:#{reward_id}"
              ) do
-        {:ok, reward_code}
+        reward_code
       else
         nil ->
-          {:ok, :no_more_rewards_available}
+          "Rewards Not available anymore"
 
-        {:error, reason} ->
-          {:error, reason}
+        {:error, changeset} ->
+          error =
+            Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
+
+          Repo.rollback(error)
+
+          {:error, error}
       end
     end)
   end
