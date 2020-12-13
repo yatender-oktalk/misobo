@@ -288,21 +288,25 @@ defmodule Misobo.Accounts do
     login_streak = id |> checkout_login_streak()
     changeset = login_streak |> LoginStreak.changeset(%{"#{day_of_week}": true})
 
-    handle_increase_streak(changeset, user)
-    handle_reset_streak(login_streak, user)
+    # Then increase the streak
+    handle_streak(changeset, login_streak, user)
 
     Repo.insert_or_update(changeset)
   end
 
-  def handle_increase_streak(changeset, %User{login_streak_days: login_streak_days} = user) do
-    if(changeset.valid? == true and changeset.changes != Map.new()) do
-      update_user(user, %{login_streak_days: login_streak_days + 1})
-    end
-  end
-
-  def handle_reset_streak(%LoginStreak{} = login_streak, %User{} = user) do
-    if Map.from_struct(login_streak)[:"#{get_last_day()}"] == true do
-      update_user(user, %{login_streak_days: 0})
+  def handle_streak(
+        changeset,
+        login_streak,
+        %User{login_streak_days: login_streak_days} = user
+      ) do
+    # Reset if last day didn't login
+    if Map.from_struct(login_streak)[:"#{get_last_day()}"] == false do
+      update_user(user, %{login_streak_days: 1})
+    else
+      # if logged in then just update 1
+      if(changeset.valid? == true and changeset.changes != Map.new()) do
+        update_user(user, %{login_streak_days: login_streak_days + 1})
+      end
     end
   end
 
