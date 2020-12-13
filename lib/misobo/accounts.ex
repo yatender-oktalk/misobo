@@ -14,6 +14,7 @@ defmodule Misobo.Accounts do
   alias Misobo.Karmas
   alias Misobo.Karmas.KarmaActivity
 
+  alias Misobo.TimeUtils
   import Misobo.TimeUtils
 
   require Logger
@@ -290,23 +291,36 @@ defmodule Misobo.Accounts do
 
     # Then increase the streak
     handle_streak(changeset, login_streak, user)
+    handle_create_login(id)
 
     Repo.insert_or_update(changeset)
   end
 
   def handle_streak(
         changeset,
-        login_streak,
-        %User{login_streak_days: login_streak_days} = user
+        _login_streak,
+        %User{login_streak_days: login_streak_days, id: id} = user
       ) do
     # Reset if last day didn't login
-    if Map.from_struct(login_streak)[:"#{get_last_day()}"] == false do
+    end_time = DateTime.utc_now() |> DateTime.add(-84600) |> TimeUtils.end_time_today()
+    start_time = DateTime.utc_now() |> DateTime.add(-84600) |> TimeUtils.start_time_today()
+
+    if !get_user_logins(id, start_time, end_time) do
       update_user(user, %{login_streak_days: 1})
     else
       # if logged in then just update 1
       if(changeset.valid? == true and changeset.changes != Map.new()) do
         update_user(user, %{login_streak_days: login_streak_days + 1})
       end
+    end
+  end
+
+  def handle_create_login(id) do
+    end_time_today = TimeUtils.end_time_today(DateTime.utc_now())
+    start_time_today = TimeUtils.start_time_today(DateTime.utc_now())
+    # create user login
+    if !get_user_logins(id, start_time_today, end_time_today) do
+      create_user_logins(%{login_date: DateTime.utc_now(), user_id: id})
     end
   end
 
@@ -623,5 +637,112 @@ defmodule Misobo.Accounts do
   def clear_login_streak() do
     Logger.info("cleared Loggin streak")
     Repo.delete_all(LoginStreak)
+  end
+
+  alias Misobo.Accounts.UserLogins
+
+  @doc """
+  Returns the list of user_logins.
+
+  ## Examples
+
+      iex> list_user_logins()
+      [%UserLogins{}, ...]
+
+  """
+  def list_user_logins do
+    Repo.all(UserLogins)
+  end
+
+  @doc """
+  Gets a single user_logins.
+
+  Raises `Ecto.NoResultsError` if the User logins does not exist.
+
+  ## Examples
+
+      iex> get_user_logins!(123)
+      %UserLogins{}
+
+      iex> get_user_logins!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_user_logins!(id), do: Repo.get!(UserLogins, id)
+
+  def get_user_logins(id, start_time, end_time) do
+    query =
+      from u in UserLogins,
+        where:
+          u.login_date >= ^start_time and
+            u.login_date <= ^end_time and
+            u.user_id == ^id
+
+    Repo.exists?(query)
+  end
+
+  @doc """
+  Creates a user_logins.
+
+  ## Examples
+
+      iex> create_user_logins(%{field: value})
+      {:ok, %UserLogins{}}
+
+      iex> create_user_logins(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_user_logins(attrs \\ %{}) do
+    %UserLogins{}
+    |> UserLogins.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a user_logins.
+
+  ## Examples
+
+      iex> update_user_logins(user_logins, %{field: new_value})
+      {:ok, %UserLogins{}}
+
+      iex> update_user_logins(user_logins, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_logins(%UserLogins{} = user_logins, attrs) do
+    user_logins
+    |> UserLogins.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a user_logins.
+
+  ## Examples
+
+      iex> delete_user_logins(user_logins)
+      {:ok, %UserLogins{}}
+
+      iex> delete_user_logins(user_logins)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_user_logins(%UserLogins{} = user_logins) do
+    Repo.delete(user_logins)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking user_logins changes.
+
+  ## Examples
+
+      iex> change_user_logins(user_logins)
+      %Ecto.Changeset{data: %UserLogins{}}
+
+  """
+  def change_user_logins(%UserLogins{} = user_logins, attrs \\ %{}) do
+    UserLogins.changeset(user_logins, attrs)
   end
 end
