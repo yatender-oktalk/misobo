@@ -2,6 +2,21 @@ defmodule Misobo.Rewards.Reward do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder,
+           [
+             only: [
+               :company,
+               :company_logo,
+               :how_to_redeem,
+               :img,
+               :karma,
+               :offer_details,
+               :people_unlocked,
+               :terms_and_conditions,
+               :title,
+               :is_active
+             ]
+           ]}
   schema "rewards" do
     field :company, :string
     field :company_logo, :string

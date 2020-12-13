@@ -18,13 +18,16 @@ defmodule MisoboWeb.RewardController do
     end
   end
 
-  def redeem(%{assigns: %{user: %User{id: user_id, karma_points: karma_points} = user}} = conn, %{
-        "reward_id" => reward_id
-      }) do
+  def redeem(
+        %{assigns: %{user: %User{id: user_id, karma_points: karma_points}}} = conn,
+        %{
+          "reward_id" => reward_id
+        }
+      ) do
     with %Reward{is_active: true, karma: karma} = reward <- Rewards.get_reward(reward_id),
          {:karma, true} <- {:karma, karma_points >= karma},
-         {:ok, resp} <- Rewards.redeem_reward(user, reward) do
-      response(conn, 400, %{data: "Reward ok", msg: :ok})
+         {:ok, resp} <- Rewards.redeem_reward(user_id, reward) do
+      response(conn, 200, %{data: resp, msg: :ok})
     else
       %Reward{is_active: false} ->
         response(conn, 400, %{data: "Reward inactive", msg: :error})
@@ -33,7 +36,7 @@ defmodule MisoboWeb.RewardController do
         response(conn, 402, %{data: "User does not have enough karma coins", msg: :error})
 
       {:error, resp} ->
-        response(conn, 500, %{data: "Some error", msg: :error})
+        response(conn, 500, %{data: resp, msg: :error})
     end
 
     # get the reward
