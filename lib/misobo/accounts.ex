@@ -16,6 +16,8 @@ defmodule Misobo.Accounts do
 
   import Misobo.TimeUtils
 
+  require Logger
+
   @doc """
   Returns the list of users.
 
@@ -612,5 +614,10 @@ defmodule Misobo.Accounts do
       true ->
         "Nothing"
     end
+  end
+
+  def clear_login_streak() do
+    Logger.info("cleared Loggin streak")
+    Repo.delete_all(LoginStreak)
   end
 end

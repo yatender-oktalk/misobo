@@ -55,7 +55,8 @@ defmodule Misobo.MixProject do
       {:tesla, "~> 1.3.0"},
       {:timex, "~> 3.5"},
       {:scrivener_ecto, "~> 2.0"},
-      {:hackney, "~> 1.10"}
+      {:hackney, "~> 1.10"},
+      {:quantum, "~> 3.0"}
       # dev internal
     ]
   end
