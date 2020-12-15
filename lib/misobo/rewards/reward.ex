@@ -5,6 +5,7 @@ defmodule Misobo.Rewards.Reward do
   @derive {Jason.Encoder,
            [
              only: [
+               :id,
                :company,
                :company_logo,
                :how_to_redeem,
