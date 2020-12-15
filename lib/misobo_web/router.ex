@@ -81,6 +81,7 @@ defmodule MisoboWeb.Router do
       get("/rewards/:id", RewardController, :show)
 
       post("/rewards/:reward_id/redeem", RewardController, :redeem)
+      get("/rewards/:user_id/redeemed", RewardController, :redeemed)
     end
   end
 

@@ -43,6 +43,14 @@ defmodule MisoboWeb.RewardController do
     # check if the reward is active
   end
 
+  def redeemed(
+        %{assigns: %{user: %User{id: user_id}}} = conn,
+        _params
+      ) do
+    data = Rewards.redeemed_rewards(user_id)
+    response(conn, 200, %{data: data, msg: :ok})
+  end
+
   # Private functions
 
   defp response(conn, status, data) do

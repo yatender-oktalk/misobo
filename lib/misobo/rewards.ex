@@ -247,4 +247,33 @@ defmodule Misobo.Rewards do
 
     Repo.one(query)
   end
+
+  def redeemed_rewards(id) do
+    query =
+      from u in RewardCode,
+        where: u.user_id == ^id,
+        join: r in Reward,
+        on: r.id == u.reward_id,
+        select: %{
+          redeemed_on: u.redeemed_on,
+          valid_from: u.valid_from,
+          valid_upto: u.valid_upto,
+          user_id: u.user_id,
+          code: u.code,
+          reward: %{
+            id: u.reward_id,
+            company_logo: r.company_logo,
+            how_to_redeem: r.how_to_redeem,
+            img: r.img,
+            karma: r.karma,
+            offer_details: r.offer_details,
+            people_unlocked: r.people_unlocked,
+            terms_and_conditions: r.terms_and_conditions,
+            title: r.title,
+            is_active: r.is_active
+          }
+        }
+
+    Repo.all(query)
+  end
 end
