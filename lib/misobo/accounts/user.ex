@@ -7,9 +7,8 @@ defmodule Misobo.Accounts.User do
   alias Misobo.Accounts.LoginStreak
   alias Misobo.Accounts.Registration
 
-  @required [:registration_id]
+  @required [:registration_id, :phone]
   @optional [
-    :phone,
     :otp_valid_time,
     :name,
     :is_enabled,
@@ -73,6 +72,7 @@ defmodule Misobo.Accounts.User do
     user
     |> cast(attrs, @required ++ @optional)
     |> validate_required(@required)
+    |> unique_constraint(:phone, name: :users_phone_index)
     |> validate_number(:karma_points, greater_than: 0)
   end
 end
