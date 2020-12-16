@@ -52,7 +52,7 @@ defmodule MisoboWeb.RegistrationController do
          message <- Message.get_signup_sms(otp),
          :ok <- SMSProvider.send_sms(phone, message),
          token <- Authentication.generate_token(user) do
-      # spawn(fn -> Accounts.add_karma(user.id, @signup_points, @signup_event) end)
+      spawn(fn -> Accounts.add_karma(user.id, @signup_points, @signup_event) end)
 
       response(conn, 201, %{
         data: %{
