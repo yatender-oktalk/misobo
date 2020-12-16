@@ -14,6 +14,7 @@ defmodule Misobo.Accounts do
   alias Misobo.Karmas
   alias Misobo.Karmas.KarmaActivity
 
+  alias Misobo.Accounts.Registration
   alias Misobo.TimeUtils
   import Misobo.TimeUtils
 
@@ -72,6 +73,14 @@ defmodule Misobo.Accounts do
     |> preload(:login_streak)
     |> Repo.one()
     |> handle_login_streak_resp()
+  end
+
+  def handle_user_create(nil, params) do
+    create_user(params)
+  end
+
+  def handle_user_create(%User{} = user, params) do
+    update_user(user, params)
   end
 
   def handle_login_streak_resp(nil), do: nil
@@ -389,6 +398,8 @@ defmodule Misobo.Accounts do
       nil
 
   """
+  def get_registration(nil), do: nil
+
   def get_registration(id),
     do: Registration |> Repo.get(id) |> Repo.preload([:categories, :sub_categories])
 

@@ -38,15 +38,14 @@ defmodule MisoboWeb.UserController do
   end
 
   def verify(
-        %{assigns: %{registration: registration}} = conn,
-        %{"phone" => phone, "otp" => otp, "user_id" => id} = _params
+        %{assigns: %{user: user}} = conn,
+        %{"phone" => phone, "otp" => otp, "user_id" => _id, "id" => id} = _params
       ) do
-    with %User{otp_valid_time: otp_timeout, otp: valid_otp, phone: ^phone} = user <-
-           Accounts.get_user(id),
+    with %User{otp_valid_time: otp_timeout, otp: valid_otp, phone: ^phone} <- user,
          {:sms, true} <- validate_otp(otp, valid_otp),
          true <- still_validate?(otp_timeout),
          {:ok, %User{} = user} <-
-           Accounts.update_user(user, %{is_enabled: true, registration_id: registration.id}) do
+           Accounts.update_user(user, %{is_enabled: true, registration_id: id}) do
       response(conn, 200, %{data: user})
     else
       nil ->
@@ -56,7 +55,8 @@ defmodule MisoboWeb.UserController do
         error_response(conn, 400, "Invalid OTP")
 
       false ->
-        error_response(conn, 400, "OTP not valid now please generate new one")
+        generate_otp(user, phone)
+        error_response(conn, 400, "OTP not valid now please enter the new received OTP")
 
       {:error, changeset} ->
         error =
@@ -120,7 +120,24 @@ defmodule MisoboWeb.UserController do
     response(conn, 200, %{data: bookings})
   end
 
+  def send_sms(%{assigns: %{user: %User{} = user}} = conn, %{"phone" => phone}) do
+    :ok = generate_otp(user, phone)
+    response(conn, 200, %{data: "Successfully sent SMS"})
+  end
+
   # Private functions
+  defp generate_otp(user, phone) do
+    # Again update the OTP and valid time
+    {otp, otp_valid_time} = Message.generate_user_otp(user)
+
+    {:ok, %User{} = _user} =
+      Accounts.update_user(user, %{phone: phone, otp: otp, otp_valid_time: otp_valid_time})
+
+    phone = Message.add_prefix(phone)
+    message = Message.get_signup_sms(otp)
+    :ok = SMSProvider.send_sms(phone, message)
+  end
+
   defp error_response(conn, status, message) do
     data = %{data: message}
     response(conn, status, data)

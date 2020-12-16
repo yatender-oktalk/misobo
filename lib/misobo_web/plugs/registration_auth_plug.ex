@@ -18,12 +18,15 @@ defmodule MisoboWeb.RegistrationAuthPlug do
   def call(%Plug.Conn{req_headers: headers} = conn, _params) do
     with headers <- Map.new(headers),
          {:ok, %{id: id} = _data} <- Misobo.Authentication.verify(headers["token"]),
-         %Registration{id: registration_id} = registration <- Accounts.get_registration(id),
-         user <- Accounts.get_user_by(%{registration_id: id}),
-         true <- id == registration_id do
+         %Misobo.Accounts.User{id: user_id, registration_id: registration_id} = user <-
+           Accounts.get_user(id),
+         registration = Accounts.get_registration(registration_id),
+         true <-
+           id ==
+             user_id do
       spawn(fn -> Misobo.Accounts.handle_login_streak(user) end)
 
-      conn |> assign(:registration, registration) |> assign(:user, user)
+      conn |> assign(:user, user) |> assign(:registration, registration)
     else
       {:error, :invalid} -> unauth(conn, %{data: "unauthorized token"})
       false -> unauth(conn, %{data: "invalid token for this user"})
