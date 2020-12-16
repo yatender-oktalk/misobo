@@ -45,8 +45,8 @@ config :misobo, :env,
 
 config :misobo, Misobo.Scheduler,
   jobs: [
-    # Every Monday 5:30 AM
-    {"30 5 * * 1", {Misobo.Accounts, :clear_login_streak, []}}
+    # Every Monday 00:00 AM
+    {"0 0 * * 1", {Misobo.Accounts, :clear_login_streak, []}}
   ]
 
 # Import environment specific config. This must remain at the bottom

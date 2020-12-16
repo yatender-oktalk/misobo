@@ -219,6 +219,8 @@ defmodule Misobo.Accounts do
 
   def get_login_streak(id), do: Repo.get(LoginStreak, id)
 
+  def get_login_streak_by(params), do: Repo.get_by(LoginStreak, params)
+
   @doc """
   Creates a login_streak.
 
@@ -325,7 +327,7 @@ defmodule Misobo.Accounts do
   end
 
   def checkout_login_streak(user_id) do
-    case result = get_login_streak(user_id) do
+    case result = get_login_streak_by(%{user_id: user_id}) do
       nil ->
         %LoginStreak{user_id: user_id}
 
