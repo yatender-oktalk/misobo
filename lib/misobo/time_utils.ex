@@ -54,7 +54,7 @@ defmodule Misobo.TimeUtils do
   def unix_to_date_time(unix_time), do: Timex.from_unix(unix_time)
 
   def start_time_today(date),
-    do: date |> Timex.beginning_of_day() |> utc_to_indian_timezone()
+    do: date |> Timex.beginning_of_day() |> DateTime.add(-19800)
 
-  def end_time_today(date), do: date |> Timex.end_of_day() |> utc_to_indian_timezone()
+  def end_time_today(date), do: date |> Timex.end_of_day() |> DateTime.add(-19800)
 end
