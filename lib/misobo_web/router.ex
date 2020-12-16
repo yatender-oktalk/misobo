@@ -6,9 +6,9 @@ defmodule MisoboWeb.Router do
     plug MisoboWeb.DbHealthPlug
   end
 
-  # pipeline :authenticated do
-  #   plug MisoboWeb.AuthPlug
-  # end
+  pipeline :user_activated do
+    plug MisoboWeb.ActivateAuthPlug
+  end
 
   pipeline :registration_authenticated do
     plug MisoboWeb.RegistrationAuthPlug
@@ -21,67 +21,77 @@ defmodule MisoboWeb.Router do
     get("/health", HealthController, :index)
 
     # Registration realated APIs
-    post("/registration", RegistrationController, :create)
-
-    get("/experts", ExpertController, :fetch)
-    get("/experts/:id", ExpertController, :show)
-
-    get("/category_experts/:id", CategoryController, :category_experts)
-    get("/expert_categories", ExpertController, :get_categories)
+    post("/registration", RegistrationController, :create_new)
 
     scope("/") do
       pipe_through :registration_authenticated
-      get("/categories", CategoryController, :index)
 
-      put(
-        "/registration/:registration_id/categories",
-        CategoryController,
-        :update_registration_categories
-      )
-
-      get(
-        "/registration/:registration_id",
-        RegistrationController,
-        :show
-      )
-
-      put(
-        "/registration/:registration_id/sub_categories",
-        CategoryController,
-        :update_registration_sub_categories
-      )
-
-      post("/user", UserController, :register_phone)
       post("/user/:user_id/verify", UserController, :verify)
-      post("/user/:user_id/bmi", UserController, :calculate_bmi)
+      post("/user/:user_id/send_sms", UserController, :send_sms)
 
-      get("/user/:id", UserController, :index)
-      put("/user/:id", UserController, :update)
-      get("/user/:id/expert_bookings", UserController, :expert_bookings)
-      get("/user/:id/unrated_bookings", UserController, :unrated_bookings)
+      scope("/") do
+        pipe_through :user_activated
 
-      post("/expert/:id/slots", ExpertController, :expert_slots)
-      post("/expert/:expert_id/book_slot", ExpertController, :book_slot)
+        get("/categories", CategoryController, :index)
+        get("/experts", ExpertController, :fetch)
+        get("/experts/:id", ExpertController, :show)
 
-      get("/music", MusicController, :index)
-      get("/music/:id", MusicController, :show)
-      patch("/music/:id/progress", MusicController, :track_user_music_progress)
+        get("/category_experts/:id", CategoryController, :category_experts)
+        get("/expert_categories", ExpertController, :get_categories)
 
-      get("/packs", PackController, :index)
+        put(
+          "/registration/:registration_id/categories",
+          CategoryController,
+          :update_registration_categories
+        )
 
-      get("/blogs", BlogController, :index)
-      get("/blogs/:id", BlogController, :show)
+        get(
+          "/registration/:registration_id",
+          RegistrationController,
+          :show
+        )
 
-      post("/order", OrderController, :create)
-      post("/order/capture", OrderController, :capture)
+        put(
+          "/registration/:registration_id/sub_categories",
+          CategoryController,
+          :update_registration_sub_categories
+        )
 
-      post("/rating", RatingController, :create)
+        post("/user", UserController, :register_phone)
+        post("/user/:user_id/bmi", UserController, :calculate_bmi)
 
-      get("/rewards", RewardController, :index)
-      get("/rewards/:id", RewardController, :show)
+        get("/user/:id", UserController, :index)
+        put("/user/:id", UserController, :update)
+        get("/user/:id/expert_bookings", UserController, :expert_bookings)
+        get("/user/:id/unrated_bookings", UserController, :unrated_bookings)
 
-      post("/rewards/:reward_id/redeem", RewardController, :redeem)
-      get("/rewards/:user_id/redeemed", RewardController, :redeemed)
+        post("/expert/:id/slots", ExpertController, :expert_slots)
+        post("/expert/:expert_id/book_slot", ExpertController, :book_slot)
+
+        scope("/music") do
+          get("/", MusicController, :index)
+          get("/:id", MusicController, :show)
+          patch("/:id/progress", MusicController, :track_user_music_progress)
+        end
+
+        get("/packs", PackController, :index)
+
+        get("/blogs", BlogController, :index)
+        get("/blogs/:id", BlogController, :show)
+
+        post("/order", OrderController, :create)
+        post("/order/capture", OrderController, :capture)
+
+        post("/rating", RatingController, :create)
+
+        scope("/rewards") do
+          get("/", RewardController, :index)
+          get("/:id", RewardController, :show)
+
+          post("/:reward_id/redeem", RewardController, :redeem)
+          get("/:user_id/redeemed", RewardController, :redeemed)
+        end
+      end
     end
   end
 

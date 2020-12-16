@@ -7,7 +7,7 @@ defmodule Misobo.Authentication do
 
   @spec generate_token(map) :: binary()
   def generate_token(params) do
-    user_data = Map.take(params, [:id, :phone, :is_enabled])
+    user_data = Map.take(params, [:id, :phone])
     Phoenix.Token.sign(MisoboWeb.Endpoint, @namespace, user_data)
   end
 
