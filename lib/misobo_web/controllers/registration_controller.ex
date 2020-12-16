@@ -5,6 +5,8 @@ defmodule MisoboWeb.RegistrationController do
   alias Misobo.Accounts.Registration
   alias Misobo.Accounts.User
   alias Misobo.Authentication
+  alias Misobo.Communication.Message
+  alias Misobo.Communication.SMSProvider
 
   @signup_event "SIGNUP"
   @signup_points Application.get_env(:misobo, Misobo.Env)[:signup_karma]
@@ -18,6 +20,39 @@ defmodule MisoboWeb.RegistrationController do
            Accounts.create_registration_user(params),
          token <- Authentication.generate_token(registration) do
       spawn(fn -> Accounts.add_karma(user.id, @signup_points, @signup_event) end)
+
+      response(conn, 201, %{
+        data: %{
+          msg: "user registered successfully",
+          token: token,
+          id: registration.id,
+          user_id: user.id
+        }
+      })
+    else
+      {:error, changeset} ->
+        error =
+          Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
+
+        error_response(conn, 400, error)
+    end
+  end
+
+  def create_new(conn, %{"device_id" => _device_id, "phone" => phone} = params) do
+    with {:ok, %Registration{} = registration} <- Accounts.create_registration(params),
+         user <- Accounts.get_user_by(%{phone: phone}),
+         {otp, otp_valid_time} <- Message.generate_user_otp(user),
+         {:ok, %User{} = user} <-
+           Accounts.handle_user_create(user, %{
+             phone: phone,
+             otp: otp,
+             otp_valid_time: otp_valid_time
+           }),
+         phone <- Message.add_prefix(phone),
+         message <- Message.get_signup_sms(otp),
+         :ok <- SMSProvider.send_sms(phone, message),
+         token <- Authentication.generate_token(user) do
+      # spawn(fn -> Accounts.add_karma(user.id, @signup_points, @signup_event) end)
 
       response(conn, 201, %{
         data: %{

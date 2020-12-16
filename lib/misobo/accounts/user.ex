@@ -7,8 +7,9 @@ defmodule Misobo.Accounts.User do
   alias Misobo.Accounts.LoginStreak
   alias Misobo.Accounts.Registration
 
-  @required [:registration_id, :phone]
+  @required [:phone]
   @optional [
+    :registration_id,
     :otp_valid_time,
     :name,
     :is_enabled,

@@ -16,7 +16,8 @@ defmodule Misobo.Experts.Booking do
     :end_time,
     :start_time_unix,
     :end_time_unix,
-    :karma
+    :karma,
+    :is_rated
   ]
   @optional [:is_rated]
 
