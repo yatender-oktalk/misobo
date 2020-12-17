@@ -19,7 +19,7 @@ defmodule MisoboWeb.Router do
 
     # Health endpoints
     get("/health", HealthController, :index)
-
+    get("/token/:id/generate", TokenController, :generate)
     # Registration realated APIs
     post("/registration", RegistrationController, :create_new)
 
@@ -91,6 +91,8 @@ defmodule MisoboWeb.Router do
           post("/:reward_id/redeem", RewardController, :redeem)
           get("/:user_id/redeemed", RewardController, :redeemed)
         end
+
+        get("/token/info", TokenController, :info)
       end
     end
   end
