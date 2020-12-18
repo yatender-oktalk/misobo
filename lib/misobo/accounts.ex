@@ -578,27 +578,36 @@ defmodule Misobo.Accounts do
   end
 
   def add_karma(user_id, karma_points, event_type, music_id \\ nil) do
-    Repo.transaction(fn ->
-      with {:ok, %KarmaActivity{}} <-
-             Karmas.create_karma_activity(%{
-               user_id: user_id,
-               karma_points: karma_points,
-               event_type: event_type,
-               music_id: music_id
-             }),
-           %User{karma_points: existing_karma_points} = user <- get_user_locked(user_id),
-           {:ok, %User{} = user} <-
-             update_user(user, %{karma_points: existing_karma_points + karma_points}) do
-        user
-      else
-        {:error, changeset} ->
-          error =
-            Ecto.Changeset.traverse_errors(changeset, &MisoboWeb.ErrorHelpers.translate_error/1)
+    case Karmas.get_karma_activity_by(%{event_type: event_type, user_id: user_id}) do
+      nil ->
+        Repo.transaction(fn ->
+          with {:ok, %KarmaActivity{}} <-
+                 Karmas.create_karma_activity(%{
+                   user_id: user_id,
+                   karma_points: karma_points,
+                   event_type: event_type,
+                   music_id: music_id
+                 }),
+               %User{karma_points: existing_karma_points} = user <- get_user_locked(user_id),
+               {:ok, %User{} = user} <-
+                 update_user(user, %{karma_points: existing_karma_points + karma_points}) do
+            user
+          else
+            {:error, changeset} ->
+              error =
+                Ecto.Changeset.traverse_errors(
+                  changeset,
+                  &MisoboWeb.ErrorHelpers.translate_error/1
+                )
 
-          Repo.rollback(error)
-          {:error, error}
-      end
-    end)
+              Repo.rollback(error)
+              {:error, error}
+          end
+        end)
+
+      _ ->
+        {:ok, Misobo.Accounts.get_user(user_id)}
+    end
   end
 
   def deduct_karma(user_id, karma_points, event_type) do
