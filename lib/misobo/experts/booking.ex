@@ -16,8 +16,7 @@ defmodule Misobo.Experts.Booking do
     :end_time,
     :start_time_unix,
     :end_time_unix,
-    :karma,
-    :is_rated
+    :karma
   ]
   @optional [:is_rated]
 
@@ -30,7 +29,8 @@ defmodule Misobo.Experts.Booking do
                :user_id,
                :start_time,
                :end_time,
-               :expert
+               :expert,
+               :is_rated
              ]
            ]}
   schema "bookings" do
@@ -39,7 +39,7 @@ defmodule Misobo.Experts.Booking do
     field :end_time_unix, :integer
     field :start_time_unix, :integer
     field :karma, :integer
-    field :is_rated, :boolean
+    field :is_rated, :boolean, default: false
 
     belongs_to :expert, Expert
     belongs_to :user, User
