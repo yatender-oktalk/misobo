@@ -221,7 +221,7 @@ defmodule Misobo.Rewards do
         reward_code
       else
         nil ->
-          "Rewards Not available anymore"
+          {:error, "Rewards Not available anymore"}
 
         {:error, changeset} ->
           error =
