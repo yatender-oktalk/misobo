@@ -221,7 +221,10 @@ defmodule Misobo.Rewards do
         reward_code
       else
         nil ->
-          {:error, "Rewards Not available anymore"}
+          error = "Rewards Not available anymore"
+
+          Repo.rollback(error)
+          {:error, error}
 
         {:error, changeset} ->
           error =

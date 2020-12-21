@@ -35,6 +35,9 @@ defmodule MisoboWeb.RewardController do
       {:karma, false} ->
         response(conn, 402, %{data: "User does not have enough karma coins", msg: :error})
 
+      {:error, "Rewards Not available anymore"} ->
+        response(conn, 403, %{data: "Rewards Not available anymore", msg: :error})
+
       {:error, resp} ->
         response(conn, 500, %{data: resp, msg: :error})
     end
