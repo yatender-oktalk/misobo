@@ -516,8 +516,9 @@ defmodule Misobo.Accounts do
     sub_categories = Repo.all(q)
 
     registration_id
-    |> get_registration()
-    |> Map.put(:sub_categories, sub_categories)
+    |> get_registration() ||
+      %{}
+      |> Map.put(:sub_categories, sub_categories)
   end
 
   def registration_categories_preloaded(registration_id) do
