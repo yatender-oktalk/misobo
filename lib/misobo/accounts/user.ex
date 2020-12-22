@@ -22,7 +22,9 @@ defmodule Misobo.Accounts.User do
     :bmi,
     :height,
     :login_streak_days,
-    :bmi_checked_at
+    :bmi_checked_at,
+    :is_body_pack_unlocked,
+    :is_mind_pack_unlocked
   ]
 
   @derive {Jason.Encoder,
@@ -43,13 +45,17 @@ defmodule Misobo.Accounts.User do
                :height,
                :login_streak_days,
                :login_streak,
-               :bmi_checked_at
+               :bmi_checked_at,
+               :is_body_pack_unlocked,
+               :is_mind_pack_unlocked
              ]
            ]}
   schema "users" do
     field :dob, :naive_datetime
     field :otp_valid_time, :naive_datetime
     field :is_enabled, :boolean, default: false
+    field :is_body_pack_unlocked, :boolean, default: false
+    field :is_mind_pack_unlocked, :boolean, default: false
     field :karma_points, :integer, default: 0
     field :name, :string
     field :otp, :integer
