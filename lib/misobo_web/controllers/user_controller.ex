@@ -41,12 +41,19 @@ defmodule MisoboWeb.UserController do
         %{assigns: %{user: user}} = conn,
         %{"phone" => phone, "otp" => otp, "user_id" => _id, "id" => id} = _params
       ) do
-    with %User{otp_valid_time: otp_timeout, otp: valid_otp, phone: ^phone} <- user,
+    with %User{
+           otp_valid_time: otp_timeout,
+           otp: valid_otp,
+           phone: ^phone,
+           registration_id: regisration_id
+         } <- user,
          {:sms, true} <- validate_otp(otp, valid_otp),
          true <- still_validate?(otp_timeout),
          {:ok, %User{} = user} <-
-           Accounts.update_user(user, %{is_enabled: true, registration_id: id}) do
-      response(conn, 200, %{data: user})
+           Accounts.update_user(user, %{is_enabled: true, registration_id: id}),
+         registration_categories <- Accounts.registration_sub_catgories(regisration_id),
+         {:user, is_new_user} <- {:user, registration_categories.sub_categories == []} do
+      response(conn, 200, %{data: user, is_new_user: is_new_user})
     else
       nil ->
         error_response(conn, 400, "User not found")

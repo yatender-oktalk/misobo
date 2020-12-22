@@ -13,6 +13,10 @@ defmodule Misobo.Communication.Message do
     {generate_otp(), Misobo.Commons.get_otp_timeout()}
   end
 
+  def generate_user_otp(%Misobo.Accounts.User{otp: _otp, otp_valid_time: nil}) do
+    generate_user_otp(nil)
+  end
+
   def generate_user_otp(%Misobo.Accounts.User{otp: otp, otp_valid_time: otp_valid_time}) do
     case NaiveDateTime.diff(
            otp_valid_time,
