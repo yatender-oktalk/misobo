@@ -45,14 +45,16 @@ defmodule MisoboWeb.UserController do
            otp_valid_time: otp_timeout,
            otp: valid_otp,
            phone: ^phone,
-           registration_id: regisration_id
+           registration_id: registration_id
          } <- user,
          {:sms, true} <- validate_otp(otp, valid_otp),
          true <- still_validate?(otp_timeout),
          {:ok, %User{} = user} <-
            Accounts.update_user(user, %{is_enabled: true, registration_id: id}),
-         registration_categories <- Accounts.registration_sub_catgories(regisration_id),
-         {:user, is_new_user} <- {:user, registration_categories.sub_categories == []} do
+         registration_categories <- Accounts.registration_sub_catgories(registration_id),
+         {:user, is_new_user} <- {:user, registration_categories.sub_categories == []},
+         {_, nil} <-
+           Misobo.Categories.update_registration_sub_categories_registration(registration_id, id) do
       response(conn, 200, %{data: user, is_new_user: is_new_user})
     else
       nil ->
