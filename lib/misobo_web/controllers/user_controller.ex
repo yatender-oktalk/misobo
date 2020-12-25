@@ -100,14 +100,16 @@ defmodule MisoboWeb.UserController do
         %{assigns: %{user: %User{id: user_id}}} = conn,
         %{"height" => height, "weight" => weight, "user_id" => _id} = _params
       ) do
-    with {:ok, %{"bmi" => bmi} = data} <- Accounts.calculate_bmi(height, weight),
+    with {:ok, %{"bmi" => bmi, "result" => result} = data} <-
+           Accounts.calculate_bmi(height, weight),
          %User{} = user <- Accounts.get_user(user_id),
          {:ok, %User{}} <-
            Accounts.update_user(user, %{
              height: height,
              weight: weight,
              bmi: bmi,
-             bmi_checked_at: Misobo.TimeUtils.utc_to_indian_timezone(DateTime.utc_now())
+             bmi_checked_at: Misobo.TimeUtils.utc_to_indian_timezone(DateTime.utc_now()),
+             result: result
            }) do
       response(conn, 200, %{data: data})
     else
