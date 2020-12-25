@@ -6,7 +6,7 @@ defmodule Misobo.Musics.Music do
   import Ecto.Changeset
 
   @required [:title, :url, :hls_url, :duration, :karma]
-  @optional [:production_name, :author_name]
+  @optional [:production_name, :author_name, :tag]
 
   @derive {Jason.Encoder,
            [
@@ -18,7 +18,8 @@ defmodule Misobo.Musics.Music do
                :karma,
                :production_name,
                :title,
-               :url
+               :url,
+               :tag
              ]
            ]}
   schema "musics" do
@@ -29,6 +30,7 @@ defmodule Misobo.Musics.Music do
     field :production_name, :string
     field :title, :string
     field :url, :string
+    field :tag, :string
 
     timestamps()
   end
