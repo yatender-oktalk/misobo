@@ -23,10 +23,21 @@ defmodule MisoboWeb.MusicController do
     end
   end
 
-  def index(%{assigns: %{user: %User{id: user_id}}} = conn, %{"page" => page} = _params) do
+  def index(
+        %{
+          assigns: %{
+            user: %User{
+              id: user_id,
+              is_mind_pack_unlocked: is_mind_pack_unlocked,
+              is_body_pack_unlocked: is_body_pack_unlocked
+            }
+          }
+        } = conn,
+        %{"page" => page} = _params
+      ) do
     data =
       page
-      |> Musics.list_musics_paginated()
+      |> Musics.list_musics_paginated(is_mind_pack_unlocked, is_body_pack_unlocked)
       |> Map.from_struct()
       |> Musics.add_user_musics_progress(user_id)
 
