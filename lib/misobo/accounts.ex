@@ -75,6 +75,19 @@ defmodule Misobo.Accounts do
     |> handle_login_streak_resp()
   end
 
+  def get_all_users_by(daily_reminder_minutes) do
+    q =
+      from u in User,
+        where: u.daily_reminder == ^daily_reminder_minutes and u.is_enabled == ^true,
+        select: %{
+          id: u.id,
+          fcm_registration_token: u.fcm_registration_token,
+          daily_reminder: u.daily_reminder
+        }
+
+    Repo.all(q)
+  end
+
   def handle_user_create(nil, params) do
     create_user(params)
   end
@@ -516,9 +529,8 @@ defmodule Misobo.Accounts do
     sub_categories = Repo.all(q)
 
     registration_id
-    |> get_registration() ||
-      %{}
-      |> Map.put(:sub_categories, sub_categories)
+    |> get_registration()
+    |> Map.put(:sub_categories, sub_categories)
   end
 
   def registration_categories_preloaded(registration_id) do
