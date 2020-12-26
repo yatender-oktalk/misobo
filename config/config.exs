@@ -46,7 +46,8 @@ config :misobo, :env,
 config :misobo, Misobo.Scheduler,
   jobs: [
     # Every Monday 00:00 AM
-    {"0 0 * * 1", {Misobo.Accounts, :clear_login_streak, []}}
+    {"0 0 * * 1", {Misobo.Accounts, :clear_login_streak, []}},
+    {"*/1 * * * *", {Misobo.Services.Notifications.DailyNotificationWorker, :send_reminder, []}}
   ]
 
 config :pigeon, :fcm,
