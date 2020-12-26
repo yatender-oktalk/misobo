@@ -7,7 +7,13 @@ defmodule Misobo.Services.Notifications.FCMIntegration do
 
   require Logger
 
+  def send_many_notifications([], _text) do
+    Logger.info("No Eligible candidate at #{inspect(DateTime.utc_now())}")
+  end
+
   def send_many_notifications(fcm_registrations, text) do
+    Logger.info("Sending notifications Eligible candidate at #{inspect(DateTime.utc_now())}")
+
     on_response = fn n ->
       case n.status do
         :success ->

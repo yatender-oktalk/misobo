@@ -3,29 +3,10 @@ defmodule Misobo.Services.Notifications.DailyNotificationWorker do
   This module takes care of the daily notifications to user
   """
 
-  use GenServer
+  require Logger
 
   @notification_provider Misobo.Services.Notifications.FCMIntegration
   alias Misobo.Services.Notifications.NotificationText
-
-  def start_link(opts \\ []) do
-    IO.inspect("starting..")
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
-  end
-
-  def init(_opts) do
-    state = %{}
-    {:ok, state}
-  end
-
-  def handle_call(_, _from, state) do
-    resp = %{}
-    {:reply, resp, state}
-  end
-
-  def handle_cast(_, state) do
-    {:noreply, state}
-  end
 
   # Time conversion
   def get_minutes_now() do
@@ -34,6 +15,8 @@ defmodule Misobo.Services.Notifications.DailyNotificationWorker do
   end
 
   def send_reminder() do
+    Logger.debug("Sending reminder..")
+
     get_minutes_now()
     |> get_eligible_users()
     |> @notification_provider.send_many_notifications(get_text())
