@@ -49,6 +49,12 @@ config :misobo, Misobo.Scheduler,
     {"0 0 * * 1", {Misobo.Accounts, :clear_login_streak, []}}
   ]
 
+config :pigeon, :fcm,
+  fcm_default: %{
+    key:
+      "AAAAJbbFAoY:APA91bFimkkK75Y9T6XBZW9KAvoK8MXieMyTVDj_J3NatMzvF989HURclv4pYbmcuAl13Hy1H9Mnzo7p06kGEJRfbxKVjmroEbJAGGkwazInU8m-2mz0iLFLPwpnmSa1kZAz6ey4gf9K"
+  }
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
