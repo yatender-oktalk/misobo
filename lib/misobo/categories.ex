@@ -312,6 +312,17 @@ defmodule Misobo.Categories do
     |> Repo.update()
   end
 
+  def update_registration_sub_categories_registration(
+        old_registration_id,
+        new_registration_id
+      ) do
+    query =
+      from u in RegistrationSubCategory,
+        where: u.registration_id == ^old_registration_id
+
+    Repo.update_all(query, set: [registration_id: new_registration_id])
+  end
+
   @doc """
   Deletes a registration_sub_category.
 

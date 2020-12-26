@@ -25,7 +25,8 @@ defmodule Misobo.Accounts.User do
     :bmi_checked_at,
     :is_body_pack_unlocked,
     :is_mind_pack_unlocked,
-    :fcm_registration_token
+    :fcm_registration_token,
+    :result
   ]
 
   @derive {Jason.Encoder,
@@ -48,7 +49,8 @@ defmodule Misobo.Accounts.User do
                :login_streak,
                :bmi_checked_at,
                :is_body_pack_unlocked,
-               :is_mind_pack_unlocked
+               :is_mind_pack_unlocked,
+               :result
              ]
            ]}
   schema "users" do
@@ -70,6 +72,7 @@ defmodule Misobo.Accounts.User do
     field :login_streak_days, :integer, default: 0
     field :bmi_checked_at, :naive_datetime, default: nil
     field :fcm_registration_token, :string
+    field :result, :string
 
     belongs_to :registration, Registration
     has_one(:login_streak, LoginStreak, on_delete: :delete_all)

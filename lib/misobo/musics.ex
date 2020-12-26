@@ -21,9 +21,23 @@ defmodule Misobo.Musics do
     Repo.all(Music)
   end
 
-  def list_musics_paginated(page) do
-    Music
+  def list_musics_paginated(page, is_mind_pack_unlocked, is_body_pack_unlocked) do
+    query = get_music_list_query(is_mind_pack_unlocked, is_body_pack_unlocked)
+
+    query
     |> Repo.paginate(page: page)
+  end
+
+  def get_music_list_query(true, false) do
+    from u in Music, where: u.tag == ^"MIND"
+  end
+
+  def get_music_list_query(false, true) do
+    from u in Music, where: u.tag == ^"BODY"
+  end
+
+  def get_music_list_query(_is_mind_pack_unlocked, _is_body_pack_unlocked) do
+    Music
   end
 
   @doc """
