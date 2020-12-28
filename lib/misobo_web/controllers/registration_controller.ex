@@ -46,7 +46,8 @@ defmodule MisoboWeb.RegistrationController do
            Accounts.handle_user_create(user, %{
              phone: phone,
              otp: otp,
-             otp_valid_time: otp_valid_time
+             otp_valid_time: otp_valid_time,
+             otp_sent_phone: phone
            }),
          phone <- Message.add_prefix(phone),
          message <- Message.get_signup_sms(otp),
