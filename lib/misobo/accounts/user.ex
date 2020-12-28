@@ -26,7 +26,8 @@ defmodule Misobo.Accounts.User do
     :is_body_pack_unlocked,
     :is_mind_pack_unlocked,
     :fcm_registration_token,
-    :result
+    :result,
+    :otp_sent_phone
   ]
 
   @derive {Jason.Encoder,
@@ -73,6 +74,7 @@ defmodule Misobo.Accounts.User do
     field :bmi_checked_at, :naive_datetime, default: nil
     field :fcm_registration_token, :string
     field :result, :string
+    field :otp_sent_phone, :string
 
     belongs_to :registration, Registration
     has_one(:login_streak, LoginStreak, on_delete: :delete_all)

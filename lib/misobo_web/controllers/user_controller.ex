@@ -39,18 +39,24 @@ defmodule MisoboWeb.UserController do
 
   def verify(
         %{assigns: %{user: user}} = conn,
-        %{"phone" => phone, "otp" => otp, "user_id" => _id, "id" => id} = _params
+        %{"phone" => phone, "otp" => otp, "id" => id} = _params
       ) do
     with %User{
            otp_valid_time: otp_timeout,
            otp: valid_otp,
            phone: ^phone,
-           registration_id: registration_id
+           registration_id: registration_id,
+           otp_sent_phone: otp_sent_phone
          } <- user,
+         {:phone, true} <- {:phone, otp_sent_phone == phone},
          {:sms, true} <- validate_otp(otp, valid_otp),
          true <- still_validate?(otp_timeout),
          {:ok, %User{} = user} <-
-           Accounts.update_user(user, %{is_enabled: true, registration_id: id}),
+           Accounts.update_user(user, %{
+             is_enabled: true,
+             registration_id: id,
+             otp_sent_phone: otp_sent_phone
+           }),
          registration_categories <- Accounts.registration_sub_catgories(registration_id),
          {:user, is_new_user} <- {:user, registration_categories.sub_categories == []},
          {_, nil} <-
@@ -62,6 +68,9 @@ defmodule MisoboWeb.UserController do
 
       {:sms, false} ->
         error_response(conn, 400, "Invalid OTP")
+
+      {:phone, false} ->
+        error_response(conn, 400, "Phone OTP sent is differnt than you are verifying")
 
       false ->
         generate_otp(user, phone)
@@ -131,9 +140,18 @@ defmodule MisoboWeb.UserController do
     response(conn, 200, %{data: bookings})
   end
 
-  def send_sms(%{assigns: %{user: %User{} = user}} = conn, %{"phone" => phone}) do
-    :ok = generate_otp(user, phone)
-    response(conn, 200, %{data: "Successfully sent SMS"})
+  def send_sms(%{assigns: %{user: %User{registration_id: id, id: user_id} = user}} = conn, %{
+        "phone" => phone
+      }) do
+    :ok = regenerate_otp(user, phone)
+
+    response(conn, 200, %{
+      data: %{
+        id: id,
+        msg: "Successfully sent SMS",
+        user_id: user_id
+      }
+    })
   end
 
   # Private functions
@@ -143,6 +161,22 @@ defmodule MisoboWeb.UserController do
 
     {:ok, %User{} = _user} =
       Accounts.update_user(user, %{phone: phone, otp: otp, otp_valid_time: otp_valid_time})
+
+    phone = Message.add_prefix(phone)
+    message = Message.get_signup_sms(otp)
+    :ok = SMSProvider.send_sms(phone, message)
+  end
+
+  defp regenerate_otp(user, phone) do
+    # Again update the OTP and valid time
+    {otp, otp_valid_time} = Message.generate_user_otp(user)
+
+    {:ok, %User{} = _user} =
+      Accounts.update_user(user, %{
+        otp: otp,
+        otp_valid_time: otp_valid_time,
+        otp_sent_phone: phone
+      })
 
     phone = Message.add_prefix(phone)
     message = Message.get_signup_sms(otp)
