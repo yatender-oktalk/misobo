@@ -13,6 +13,7 @@ defmodule Misobo.Services.Notifications.BookingNotificationWorker do
   @notification_provider Misobo.Services.Notifications.FCMIntegration
 
   def send_reminder() do
+    Logger.info("Starting the send reminder at #{inspect(DateTime.utc_now())}")
     bookings = get_eligilbe_bookings()
     send_notifications(bookings)
     mark_notifications_sent(bookings)

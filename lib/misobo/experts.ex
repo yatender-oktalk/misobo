@@ -550,8 +550,8 @@ defmodule Misobo.Experts do
     q =
       from u in Booking,
         where:
-          u.start_time_unix >= ^start_time and
-            u.start_time_unix <= ^end_time and
+          u.start_time >= ^start_time and
+            u.start_time <= ^end_time and
             u.precall_expert_notification_sent != true and
             u.precall_customer_notification_sent != true,
         select: u
