@@ -16,5 +16,11 @@ defmodule Misobo.Commons do
   def generate_receipt,
     do: (-1 * :erlang.monotonic_time()) |> Integer.to_string(32) |> String.replace("FVVV", "")
 
-  def validate_otp(otp, valid_otp), do: {:sms, to_string(valid_otp) == to_string(otp)}
+  def validate_otp(otp, valid_otp) do
+    IO.inspect(otp)
+    IO.inspect(valid_otp)
+    IO.inspect(to_string(valid_otp) == to_string(otp))
+
+    {:sms, to_string(valid_otp) == to_string(otp)}
+  end
 end
