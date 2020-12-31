@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Terms and conditions</title>
+  </head>
+  <body style="margin: 10%;">
+    <div>
+      <h1 style="text-align: center;">Terms and conditions</h1>
+    </div>
+    <div>
+      <h4>1. What happens if i want to book again?</h4>
+      <p>
+        If you want to book again, go through a, b and c. If you want to book again, go through a, b and c. If you want to
+        book again, go through a, b and c. If you want to book again, go through a, b and c.
+      </p>
+    </div>
+    <div>
+      <h4>
+        2. What happens if i want to book again?
+      </h4>
+      <p>
+        If you want to book again, go through a, b and c. If you want to book again, go through a, b and c. If you
+        want to
+        book again, go through a, b and c. If you want to book again, go through a, b and c.
+      </p>
+    </div>
+    <div>
+      <h4>
+        3. What happens if i want to book again?
+      </h4>
+      <p>
+        If you want to book again, go through a, b and c. If you want to book again, go through a, b and c. If you
+        want to
+        book again, go through a, b and c. If you want to book again, go through a, b and c.
+      </p>
+    </div>
+  </body>
+</html>

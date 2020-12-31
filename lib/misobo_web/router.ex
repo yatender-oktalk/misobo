@@ -20,6 +20,10 @@ defmodule MisoboWeb.Router do
     # Health endpoints
     get("/health", HealthController, :index)
     get("/token/:id/generate", TokenController, :generate)
+
+    # Terms and condition
+    get("/terms", TermsController, :index)
+
     # Registration realated APIs
     post("/registration", RegistrationController, :create)
 
