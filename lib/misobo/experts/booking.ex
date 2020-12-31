@@ -18,7 +18,13 @@ defmodule Misobo.Experts.Booking do
     :end_time_unix,
     :karma
   ]
-  @optional [:is_rated]
+  @optional [
+    :is_rated,
+    :precall_expert_notification_sent,
+    :precall_customer_notification_sent,
+    :booking_expert_notification_sent,
+    :booking_customer_notification_sent
+  ]
 
   @derive {Jason.Encoder,
            [
@@ -40,6 +46,10 @@ defmodule Misobo.Experts.Booking do
     field :start_time_unix, :integer
     field :karma, :integer
     field :is_rated, :boolean, default: false
+    field :precall_expert_notification_sent, :boolean, default: false
+    field :precall_customer_notification_sent, :boolean, default: false
+    field :booking_expert_notification_sent, :boolean, default: false
+    field :booking_customer_notification_sen, :boolean, default: false
 
     belongs_to :expert, Expert
     belongs_to :user, User
