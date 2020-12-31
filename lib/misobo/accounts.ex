@@ -93,6 +93,7 @@ defmodule Misobo.Accounts do
   end
 
   def handle_user_create(%User{} = user, params) do
+    params = Map.delete(params, :registration_id)
     update_user(user, params)
   end
 

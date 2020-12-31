@@ -21,7 +21,7 @@ defmodule MisoboWeb.Router do
     get("/health", HealthController, :index)
     get("/token/:id/generate", TokenController, :generate)
     # Registration realated APIs
-    post("/registration", RegistrationController, :create_new)
+    post("/registration", RegistrationController, :create)
 
     scope("/") do
       pipe_through :registration_authenticated
