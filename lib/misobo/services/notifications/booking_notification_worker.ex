@@ -12,7 +12,7 @@ defmodule Misobo.Services.Notifications.BookingNotificationWorker do
 
   @notification_provider Misobo.Services.Notifications.FCMIntegration
 
-  def send_customer_reminders() do
+  def send_reminder() do
     bookings = get_eligilbe_bookings()
     send_notifications(bookings)
     mark_notifications_sent(bookings)
