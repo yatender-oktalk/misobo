@@ -46,8 +46,6 @@ defmodule Misobo.Experts.Booking do
     field :is_rated, :boolean, default: false
     field :precall_expert_notification_sent, :boolean, default: false
     field :precall_customer_notification_sent, :boolean, default: false
-    field :booking_expert_notification_sent, :boolean, default: false
-    field :booking_customer_notification_sen, :boolean, default: false
 
     belongs_to :expert, Expert
     belongs_to :user, User

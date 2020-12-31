@@ -393,6 +393,16 @@ defmodule Misobo.Experts do
     query |> Repo.all() |> List.flatten()
   end
 
+  def mark_notification_sent_for_booking(booking_ids) do
+    query =
+      from u in Booking,
+        where: u.id in ^booking_ids
+
+    Repo.update_all(query,
+      set: [precall_expert_notification_sent: true, precall_customer_notification_sent: true]
+    )
+  end
+
   @doc """
   Returns the list of bookings.
 
@@ -532,6 +542,19 @@ defmodule Misobo.Experts do
         select: u,
         limit: 1,
         preload: :expert
+
+    Repo.all(q)
+  end
+
+  def get_booking_between_duration(start_time, end_time) do
+    q =
+      from u in Booking,
+        where:
+          u.start_time_unix >= ^start_time and
+            u.start_time_unix <= ^end_time and
+            u.precall_expert_notification_sent != true and
+            u.precall_customer_notification_sent != true,
+        select: u
 
     Repo.all(q)
   end
