@@ -4,6 +4,9 @@ defmodule Misobo.Experts do
   """
 
   import Ecto.Query, warn: false
+  alias Misobo.Communication.Message
+  alias Misobo.Communication.SMSProvider
+
   alias Misobo.Experts.Booking
   alias Misobo.Experts.ExpertCategory
   alias Misobo.Repo
@@ -11,6 +14,7 @@ defmodule Misobo.Experts do
 
   @slot_duration Application.get_env(:misobo, :env)[:slot_duration]
 
+  @notification_provider Misobo.Services.Notifications.FCMIntegration
   @doc """
   Returns the list of expert_categories.
 
@@ -631,5 +635,41 @@ defmodule Misobo.Experts do
   def get_average_rating(expert_id) do
     query = from u in Rating, where: u.expert_id == ^expert_id
     Repo.aggregate(query, :avg, :rating)
+  end
+
+  def notify_expert_booking(nil, _start_time), do: :ok
+
+  def notify_expert_booking(expert_phone, start_time_unix) do
+    msg =
+      start_time_unix
+      |> Message.get_expert_booking_msg()
+
+    expert_phone
+    |> Message.add_prefix()
+    |> SMSProvider.send_sms(msg)
+
+    :ok
+  end
+
+  def notify_customer_booking(nil, phone, start_time_unix, expert_name) do
+    msg = start_time_unix |> customer_booking_msg(expert_name)
+
+    phone
+    |> Message.add_prefix()
+    |> SMSProvider.send_sms(msg)
+
+    :ok
+  end
+
+  def notify_customer_booking(token, _phone, start_time_unix, expert_name) do
+    msg = start_time_unix |> customer_booking_msg(expert_name)
+    msg = %{heading: "Booking intimation", text: msg}
+
+    @notification_provider.send_many_notifications([token], msg)
+    :ok
+  end
+
+  defp customer_booking_msg(start_time_unix, expert_name) do
+    Message.get_customer_booking_msg(start_time_unix, expert_name)
   end
 end

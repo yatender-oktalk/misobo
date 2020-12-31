@@ -21,9 +21,7 @@ defmodule Misobo.Experts.Booking do
   @optional [
     :is_rated,
     :precall_expert_notification_sent,
-    :precall_customer_notification_sent,
-    :booking_expert_notification_sent,
-    :booking_customer_notification_sent
+    :precall_customer_notification_sent
   ]
 
   @derive {Jason.Encoder,
