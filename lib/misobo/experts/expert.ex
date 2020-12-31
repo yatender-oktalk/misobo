@@ -19,7 +19,8 @@ defmodule Misobo.Experts.Expert do
     :is_enabled,
     :order,
     :rating,
-    :total_consultations
+    :total_consultations,
+    :phone
   ]
 
   @derive {Jason.Encoder,
@@ -49,6 +50,7 @@ defmodule Misobo.Experts.Expert do
     field :order, :integer
     field :rating, :decimal
     field :total_consultations, :integer, default: 0
+    field :phone, :string
 
     many_to_many(
       :expert_categories,

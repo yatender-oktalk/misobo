@@ -57,4 +57,15 @@ defmodule Misobo.TimeUtils do
     do: date |> Timex.beginning_of_day() |> DateTime.add(-19800)
 
   def end_time_today(date), do: date |> Timex.end_of_day() |> DateTime.add(-19800)
+
+  def get_unix_to_date_time(unix_time) do
+    date_time = unix_time |> Timex.from_unix()
+    date = date_time |> DateTime.to_date() |> to_string()
+    {:ok, time} = date_time |> to_time()
+    {date, time}
+  end
+
+  defp to_time(time) do
+    Timex.format(time, "%I:%M%P", :strftime)
+  end
 end
