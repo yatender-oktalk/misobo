@@ -25,6 +25,5 @@ defmodule Misobo.Repo.Migrations.CreateCalls do
 
       timestamps()
     end
-
   end
 end

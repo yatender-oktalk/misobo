@@ -29,7 +29,27 @@ defmodule Misobo.Calls.Call do
   @doc false
   def changeset(call, attrs) do
     call
-    |> cast(attrs, [:sid, :parent_call_sid, :date_created, :date_updated, :account_sid, :to, :from, :phone_number_sid, :status, :start_time, :end_time, :duration, :price, :direction, :answered_by, :forwared_from, :caller_name, :url, :recording_url])
+    |> cast(attrs, [
+      :sid,
+      :parent_call_sid,
+      :date_created,
+      :date_updated,
+      :account_sid,
+      :to,
+      :from,
+      :phone_number_sid,
+      :status,
+      :start_time,
+      :end_time,
+      :duration,
+      :price,
+      :direction,
+      :answered_by,
+      :forwared_from,
+      :caller_name,
+      :url,
+      :recording_url
+    ])
     |> validate_required([:sid])
   end
 end

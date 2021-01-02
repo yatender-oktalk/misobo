@@ -17,6 +17,5 @@ defmodule Misobo.Repo.Migrations.CreateOrders do
 
       timestamps()
     end
-
   end
 end

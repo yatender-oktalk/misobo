@@ -6,9 +6,69 @@ defmodule Misobo.CallsTest do
   describe "calls" do
     alias Misobo.Calls.Call
 
-    @valid_attrs %{account_sid: "some account_sid", answered_by: "some answered_by", caller_name: "some caller_name", date_created: ~N[2010-04-17 14:00:00], date_updated: ~N[2010-04-17 14:00:00], direction: "some direction", duration: 42, end_time: ~N[2010-04-17 14:00:00], forwared_from: "some forwared_from", from: "some from", parent_call_sid: "some parent_call_sid", phone_number_sid: "some phone_number_sid", price: "120.5", recording_url: "some recording_url", sid: "some sid", start_time: ~N[2010-04-17 14:00:00], status: "some status", to: "some to", url: "some url"}
-    @update_attrs %{account_sid: "some updated account_sid", answered_by: "some updated answered_by", caller_name: "some updated caller_name", date_created: ~N[2011-05-18 15:01:01], date_updated: ~N[2011-05-18 15:01:01], direction: "some updated direction", duration: 43, end_time: ~N[2011-05-18 15:01:01], forwared_from: "some updated forwared_from", from: "some updated from", parent_call_sid: "some updated parent_call_sid", phone_number_sid: "some updated phone_number_sid", price: "456.7", recording_url: "some updated recording_url", sid: "some updated sid", start_time: ~N[2011-05-18 15:01:01], status: "some updated status", to: "some updated to", url: "some updated url"}
-    @invalid_attrs %{account_sid: nil, answered_by: nil, caller_name: nil, date_created: nil, date_updated: nil, direction: nil, duration: nil, end_time: nil, forwared_from: nil, from: nil, parent_call_sid: nil, phone_number_sid: nil, price: nil, recording_url: nil, sid: nil, start_time: nil, status: nil, to: nil, url: nil}
+    @valid_attrs %{
+      account_sid: "some account_sid",
+      answered_by: "some answered_by",
+      caller_name: "some caller_name",
+      date_created: ~N[2010-04-17 14:00:00],
+      date_updated: ~N[2010-04-17 14:00:00],
+      direction: "some direction",
+      duration: 42,
+      end_time: ~N[2010-04-17 14:00:00],
+      forwared_from: "some forwared_from",
+      from: "some from",
+      parent_call_sid: "some parent_call_sid",
+      phone_number_sid: "some phone_number_sid",
+      price: "120.5",
+      recording_url: "some recording_url",
+      sid: "some sid",
+      start_time: ~N[2010-04-17 14:00:00],
+      status: "some status",
+      to: "some to",
+      url: "some url"
+    }
+    @update_attrs %{
+      account_sid: "some updated account_sid",
+      answered_by: "some updated answered_by",
+      caller_name: "some updated caller_name",
+      date_created: ~N[2011-05-18 15:01:01],
+      date_updated: ~N[2011-05-18 15:01:01],
+      direction: "some updated direction",
+      duration: 43,
+      end_time: ~N[2011-05-18 15:01:01],
+      forwared_from: "some updated forwared_from",
+      from: "some updated from",
+      parent_call_sid: "some updated parent_call_sid",
+      phone_number_sid: "some updated phone_number_sid",
+      price: "456.7",
+      recording_url: "some updated recording_url",
+      sid: "some updated sid",
+      start_time: ~N[2011-05-18 15:01:01],
+      status: "some updated status",
+      to: "some updated to",
+      url: "some updated url"
+    }
+    @invalid_attrs %{
+      account_sid: nil,
+      answered_by: nil,
+      caller_name: nil,
+      date_created: nil,
+      date_updated: nil,
+      direction: nil,
+      duration: nil,
+      end_time: nil,
+      forwared_from: nil,
+      from: nil,
+      parent_call_sid: nil,
+      phone_number_sid: nil,
+      price: nil,
+      recording_url: nil,
+      sid: nil,
+      start_time: nil,
+      status: nil,
+      to: nil,
+      url: nil
+    }
 
     def call_fixture(attrs \\ %{}) do
       {:ok, call} =
