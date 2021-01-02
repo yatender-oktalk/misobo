@@ -39,23 +39,22 @@ defmodule MisoboWeb.UserController do
 
   def verify(
         %{assigns: %{user: user}} = conn,
-        %{"phone" => phone, "otp" => otp, "id" => id} = _params
+        %{"phone" => user_otp_sent_phone, "otp" => otp, "id" => id} = _params
       ) do
     with %User{
            otp_valid_time: otp_timeout,
            otp: valid_otp,
-           phone: ^phone,
            registration_id: registration_id,
            otp_sent_phone: otp_sent_phone
          } <- user,
-         {:phone, true} <- {:phone, otp_sent_phone == phone},
+         {:phone, true} <- {:phone, otp_sent_phone == user_otp_sent_phone},
          {:sms, true} <- validate_otp(otp, valid_otp),
          true <- still_validate?(otp_timeout),
          {:ok, %User{} = user} <-
            Accounts.update_user(user, %{
              is_enabled: true,
              registration_id: id,
-             otp_sent_phone: otp_sent_phone
+             phone: otp_sent_phone
            }),
          registration_categories <- Accounts.registration_sub_catgories(registration_id),
          {:user, is_new_user} <- {:user, registration_categories.sub_categories == []},
@@ -73,7 +72,7 @@ defmodule MisoboWeb.UserController do
         error_response(conn, 400, "Phone OTP sent is differnt than you are verifying")
 
       false ->
-        generate_otp(user, phone)
+        generate_otp(user, user_otp_sent_phone)
         error_response(conn, 400, "OTP not valid now please enter the new received OTP")
 
       {:error, changeset} ->
@@ -82,7 +81,8 @@ defmodule MisoboWeb.UserController do
 
         error_response(conn, 400, error)
 
-      _ ->
+      err ->
+        IO.inspect(err)
         error_response(conn, 400, "are you sure that request params are valid?")
     end
   end
