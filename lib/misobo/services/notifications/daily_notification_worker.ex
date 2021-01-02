@@ -8,18 +8,18 @@ defmodule Misobo.Services.Notifications.DailyNotificationWorker do
   @notification_provider Misobo.Services.Notifications.FCMIntegration
   alias Misobo.Services.Notifications.NotificationText
 
-  # Time conversion
-  def get_minutes_now() do
-    time = Misobo.TimeUtils.utc_to_indian_timezone() |> DateTime.to_time()
-    time.hour * 60 + time.minute
-  end
-
   def send_reminder() do
     Logger.debug("Sending reminder..")
 
     get_minutes_now()
     |> get_eligible_users()
     |> @notification_provider.send_many_notifications(get_text())
+  end
+
+  # Time conversion
+  def get_minutes_now() do
+    time = Misobo.TimeUtils.utc_to_indian_timezone() |> DateTime.to_time()
+    time.hour * 60 + time.minute
   end
 
   def get_text() do

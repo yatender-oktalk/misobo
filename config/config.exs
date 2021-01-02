@@ -26,7 +26,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :misobo, :communication, sms: Misobo.Communication.SMSProvider.TextLocal
+config :misobo, :communication,
+  sms: Misobo.Communication.SMSProvider.TextLocal,
+  call: Misobo.Communication.CallProvider.Exotel
 
 config :misobo, MisoboWeb.Authentication, namespace: "user_auth"
 
