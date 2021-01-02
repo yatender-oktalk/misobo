@@ -23,6 +23,7 @@ defmodule MisoboWeb.Router do
 
     # Terms and condition
     get("/terms", TermsController, :index)
+    post("/call-status", CallController, :update)
 
     # Registration realated APIs
     post("/registration", RegistrationController, :create)
