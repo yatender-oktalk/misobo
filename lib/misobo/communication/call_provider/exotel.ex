@@ -16,15 +16,16 @@ defmodule Misobo.Communication.CallProvider.Exotel do
 
     case ExotelTesla.post("/Calls/connect.json", request) do
       {:ok, resp} ->
-        case resp.body.status do
+        case resp.status do
           200 ->
+            body = Jason.decode!(resp.body)["Call"]
+            Misobo.Calls.create_call(body)
             :ok
 
           _ ->
             Logger.error("Could not place the call for #{inspect(phone1)} and #{inspect(phone2)}")
+            :error
         end
-
-        :ok
 
       err ->
         Logger.error("Error occured while placing the call #{inspect(err)}")
