@@ -15,6 +15,5 @@ defmodule Misobo.Repo.Migrations.CreateRewards do
 
       timestamps()
     end
-
   end
 end

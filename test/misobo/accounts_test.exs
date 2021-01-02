@@ -377,13 +377,19 @@ defmodule Misobo.AccountsTest do
 
     test "update_user_logins/2 with valid data updates the user_logins" do
       user_logins = user_logins_fixture()
-      assert {:ok, %UserLogins{} = user_logins} = Accounts.update_user_logins(user_logins, @update_attrs)
+
+      assert {:ok, %UserLogins{} = user_logins} =
+               Accounts.update_user_logins(user_logins, @update_attrs)
+
       assert user_logins.login_date == ~N[2011-05-18 15:01:01]
     end
 
     test "update_user_logins/2 with invalid data returns error changeset" do
       user_logins = user_logins_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_user_logins(user_logins, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.update_user_logins(user_logins, @invalid_attrs)
+
       assert user_logins == Accounts.get_user_logins!(user_logins.id)
     end
 
