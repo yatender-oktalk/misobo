@@ -4,7 +4,7 @@ defmodule Misobo.MixProject do
   def project do
     [
       app: :misobo,
-      version: "0.10.3",
+      version: "0.10.4",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -58,8 +58,8 @@ defmodule Misobo.MixProject do
       {:hackney, "~> 1.10"},
       {:quantum, "~> 3.0"},
       {:pigeon, "~> 1.5.1"},
-      {:kadabra, "~> 0.4.4"}
       # dev internal
+      {:kadabra, "~> 0.4.4"}
     ]
   end
 
