@@ -27,7 +27,9 @@ defmodule Misobo.Accounts.User do
     :is_mind_pack_unlocked,
     :fcm_registration_token,
     :result,
-    :otp_sent_phone
+    :otp_sent_phone,
+    :email,
+    :gender
   ]
 
   @derive {Jason.Encoder,
@@ -51,7 +53,9 @@ defmodule Misobo.Accounts.User do
                :bmi_checked_at,
                :is_body_pack_unlocked,
                :is_mind_pack_unlocked,
-               :result
+               :result,
+               :email,
+               :gender
              ]
            ]}
   schema "users" do
@@ -75,6 +79,8 @@ defmodule Misobo.Accounts.User do
     field :fcm_registration_token, :string
     field :result, :string
     field :otp_sent_phone, :string
+    field :email, :string
+    field :gender, :string
 
     belongs_to :registration, Registration
     has_one(:login_streak, LoginStreak, on_delete: :delete_all)
