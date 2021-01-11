@@ -20,6 +20,11 @@ defmodule Misobo.Experts.Expert do
     :order,
     :rating,
     :total_consultations,
+    :qualification,
+    :expertise,
+    :location,
+    :tags,
+    :email,
     :phone
   ]
 
@@ -35,6 +40,11 @@ defmodule Misobo.Experts.Expert do
                :is_enabled,
                :language,
                :rating,
+               :qualification,
+               :expertise,
+               :location,
+               :tags,
+               :email,
                :total_consultations
              ]
            ]}
@@ -51,6 +61,11 @@ defmodule Misobo.Experts.Expert do
     field :rating, :decimal
     field :total_consultations, :integer, default: 0
     field :phone, :string
+    field :qualification, :string
+    field :expertise, :string
+    field :location, :string
+    field :tags, :string
+    field :email, :string
 
     many_to_many(
       :expert_categories,
