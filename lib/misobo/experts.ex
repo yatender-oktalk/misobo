@@ -121,7 +121,11 @@ defmodule Misobo.Experts do
 
   """
   def list_experts do
-    Repo.all(Expert)
+    query =
+      from u in Expert,
+        where: u.is_enabled == true
+
+    Repo.all(query)
   end
 
   @doc """
@@ -232,7 +236,10 @@ defmodule Misobo.Experts do
     |> Repo.paginate(page: page)
   end
 
-  def expert_base, do: from(u in Expert)
+  def expert_base do
+    from u in Expert,
+      where: u.is_enabled == true
+  end
 
   alias Misobo.Experts.ExpertCategoryMapping
 
