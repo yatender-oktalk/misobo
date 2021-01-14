@@ -21,6 +21,14 @@ defmodule Misobo.Blogs do
     Repo.all(Blog)
   end
 
+  def fetch_blogs() do
+    query =
+      from u in Blog,
+        where: u.is_enabled == true
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single blog.
 
