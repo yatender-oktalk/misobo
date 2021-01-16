@@ -6,7 +6,7 @@ defmodule Misobo.Communication.Message do
   alias Misobo.TimeUtils
 
   def get_signup_sms(otp) do
-    "Thank you for registering with Misobo your OTP is #{otp}"
+    "Dear user, please use the OTP #{otp} to login. Never share your OTP with anyone."
   end
 
   def get_expert_booking_msg(start_time_unix) do
