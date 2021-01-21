@@ -35,11 +35,14 @@ defmodule MisoboWeb.MusicController do
         } = conn,
         %{"page" => page} = _params
       ) do
-    data =
+    entries =
       page
       |> Musics.list_musics_paginated(is_mind_pack_unlocked, is_body_pack_unlocked)
       |> Map.from_struct()
-      |> Musics.add_user_musics_progress(user_id)
+
+    entry_data = Musics.add_user_musics_progress(entries, user_id)
+
+    data = Map.put(entries, :entries, entry_data)
 
     response(conn, 200, data)
   end
