@@ -387,7 +387,15 @@ defmodule Misobo.Experts do
     end)
   end
 
-  def get_booked_slots_for_day(expert_id, date) do
+  def unavailable_day?(nil, _date) do
+    []
+  end
+
+  def unavailable_day?(unavailable_days, date) do
+    (date |> TimeUtils.get_day() |> to_string()) in String.split(unavailable_days, ",")
+  end
+
+  def get_booked_slots_for_day(expert_id, date, false) do
     {start_time_unix, end_time_unix} = TimeUtils.get_start_end_day(date)
 
     query =
@@ -398,6 +406,20 @@ defmodule Misobo.Experts do
         select: [u.start_time_unix]
 
     query |> Repo.all() |> List.flatten()
+  end
+
+  def get_booked_slots_for_day(_expert_id, date, true) do
+    {start_time_unix, end_time_unix} = TimeUtils.get_start_end_day(date)
+    TimeUtils.all_slots(start_time_unix, end_time_unix)
+  end
+
+  def unavailable_slots_expert(expert_id) do
+    %Expert{unavailable_days: unavailable_days} = get_expert(expert_id)
+
+    case unavailable_days do
+      nil -> []
+      _ -> String.split(unavailable_days, ",")
+    end
   end
 
   def mark_notification_sent_for_booking(booking_ids) do

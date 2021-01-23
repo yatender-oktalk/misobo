@@ -27,10 +27,15 @@ defmodule MisoboWeb.ExpertController do
 
   def expert_slots(conn, %{"id" => id, "date" => date}) do
     with {true, parsed_date} <- Misobo.TimeUtils.valid_date_format?(date),
-         booked_slots <- Experts.get_booked_slots_for_day(id, date),
+         %Expert{unavailable_days: unavailable_days} <- Experts.get_expert(id),
+         unavailable_day? <- Experts.unavailable_day?(unavailable_days, date),
+         booked_slots <- Experts.get_booked_slots_for_day(id, date, unavailable_day?),
          data <- Experts.get_available_slots(parsed_date, booked_slots) do
       response(conn, 200, data)
     else
+      nil ->
+        error_response(conn, 400, "Expert not found")
+
       {false, error} ->
         error_response(conn, 400, error)
     end

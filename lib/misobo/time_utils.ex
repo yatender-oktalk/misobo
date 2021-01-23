@@ -39,9 +39,13 @@ defmodule Misobo.TimeUtils do
   defp get_end_of_day_time(start_of_day), do: String.to_integer(@end_time) + start_of_day
 
   defp get_slots(start_time, end_time) do
+    all_slots(start_time, end_time)
+    |> Enum.chunk_every(2, 1, :discard)
+  end
+
+  def all_slots(start_time, end_time) do
     start_time..end_time
     |> Enum.take_every(String.to_integer(@slot_duration))
-    |> Enum.chunk_every(2, 1, :discard)
   end
 
   def valid_date_format?(date) do
@@ -63,6 +67,16 @@ defmodule Misobo.TimeUtils do
     date = date_time |> DateTime.to_date() |> to_string()
     {:ok, time} = date_time |> to_time()
     {date, time}
+  end
+
+  def get_day(date) do
+    case date |> Timex.parse("{YYYY}-{0M}-{D}") do
+      {:ok, result} ->
+        result |> Timex.to_date() |> Date.day_of_week()
+
+      _ ->
+        []
+    end
   end
 
   defp to_time(time) do
