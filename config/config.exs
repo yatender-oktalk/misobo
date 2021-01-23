@@ -42,7 +42,7 @@ config :misobo, Misobo.Communication.SMSProvider.TextLocal,
 config :misobo, :env,
   timezone: System.get_env("TIMEZONE", "Asia/Kolkata"),
   start_time: System.get_env("START_TIME", "36000"),
-  end_time: System.get_env("END_TIME", "64800"),
+  end_time: System.get_env("END_TIME", "72000"),
   slot_duration: System.get_env("SLOT_DURATION", "1800")
 
 config :misobo, Misobo.Scheduler,

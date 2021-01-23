@@ -48,6 +48,19 @@ defmodule Misobo.TimeUtils do
     |> Enum.take_every(String.to_integer(@slot_duration))
   end
 
+  def slot_filteration(date, available_time) do
+    [start_time_expert, end_time_expert] =
+      available_time
+      |> String.split(",")
+      |> Enum.map(fn time ->
+        time |> String.trim() |> String.to_integer()
+      end)
+
+    {:ok, date} = date |> Timex.parse("{YYYY}-{0M}-{D}")
+    date = date |> Timex.to_unix()
+    {date + start_time_expert, date + end_time_expert}
+  end
+
   def valid_date_format?(date) do
     case date |> Timex.parse("{YYYY}-{0M}-{D}") do
       {:ok, result} -> {true, result}

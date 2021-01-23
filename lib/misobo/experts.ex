@@ -387,6 +387,26 @@ defmodule Misobo.Experts do
     end)
   end
 
+  def filter_availability(slots, _date, nil) do
+    slots
+  end
+
+  def filter_availability(slots, date, available_time) do
+    {start_time, end_time} = TimeUtils.slot_filteration(date, available_time)
+
+    Enum.map(slots, fn slot ->
+      resp = !(slot.unix_time >= start_time && slot.unix_time <= end_time)
+
+      case slot.is_booked do
+        true ->
+          slot
+
+        false ->
+          Map.put(slot, :is_booked, resp)
+      end
+    end)
+  end
+
   def unavailable_day?(nil, _date) do
     []
   end
