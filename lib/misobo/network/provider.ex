@@ -7,8 +7,8 @@ defmodule Misobo.Network.PG.Provider do
   plug Tesla.Middleware.Logger
   # static configuration
   plug Tesla.Middleware.BasicAuth,
-    username: "rzp_test_dTvKn9msFUzE7U",
-    password: "tduHCVfxg96EJrHTK8v8dqMt"
+    username: "rzp_live_2N116OfoXntg9j",
+    password: "mP4SFPAPLaH7DoluqScGbNVc"
 
   plug Tesla.Middleware.JSON
 
