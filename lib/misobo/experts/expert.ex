@@ -25,7 +25,8 @@ defmodule Misobo.Experts.Expert do
     :location,
     :tags,
     :email,
-    :phone
+    :phone,
+    :unavailable_days
   ]
 
   @derive {Jason.Encoder,
@@ -66,6 +67,7 @@ defmodule Misobo.Experts.Expert do
     field :location, :string
     field :tags, :string
     field :email, :string
+    field :unavailable_days, :string
 
     many_to_many(
       :expert_categories,
