@@ -13,6 +13,7 @@ defmodule Misobo.Accounts.UserLogins do
   def changeset(user_logins, attrs) do
     user_logins
     |> cast(attrs, [:login_date, :user_id])
+    |> unique_constraint(:user_logins_pkey, name: :user_logins_pkey)
     |> validate_required([:login_date, :user_id])
   end
 end
