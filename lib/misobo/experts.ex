@@ -576,7 +576,7 @@ defmodule Misobo.Experts do
       from u in Booking,
         where: u.user_id == ^id,
         select: u,
-        order_by: u.inserted_at,
+        order_by: [desc: u.inserted_at],
         preload: :expert
 
     Repo.paginate(q, page: page)
