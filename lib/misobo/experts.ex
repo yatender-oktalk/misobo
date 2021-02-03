@@ -25,7 +25,11 @@ defmodule Misobo.Experts do
 
   """
   def list_expert_categories do
-    Repo.all(ExpertCategory)
+    q =
+      from u in ExpertCategory,
+        where: u.is_enabled == true
+
+    Repo.all(q)
   end
 
   @doc """
