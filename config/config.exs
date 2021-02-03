@@ -33,7 +33,7 @@ config :misobo, :communication,
 config :misobo, MisoboWeb.Authentication, namespace: "user_auth"
 
 config :misobo, Misobo.Env,
-  signup_karma: 501,
+  signup_karma: 200,
   music_listen_activity: "MUSIC_LISTEN_COMPLETE"
 
 config :misobo, Misobo.Communication.SMSProvider.TextLocal,
