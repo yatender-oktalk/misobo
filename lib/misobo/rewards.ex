@@ -21,7 +21,8 @@ defmodule Misobo.Rewards do
   def list_rewards do
     query =
       from u in Reward,
-        where: u.is_active == true
+        where: u.is_active == true,
+        order_by: u.order
 
     Repo.all(query)
   end

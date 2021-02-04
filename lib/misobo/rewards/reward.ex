@@ -29,6 +29,7 @@ defmodule Misobo.Rewards.Reward do
     field :terms_and_conditions, :string
     field :title, :string
     field :is_active, :boolean, default: true
+    field :order, :integer
 
     timestamps()
   end
@@ -45,7 +46,8 @@ defmodule Misobo.Rewards.Reward do
       :people_unlocked,
       :offer_details,
       :how_to_redeem,
-      :terms_and_conditions
+      :terms_and_conditions,
+      :order
     ])
     |> validate_required([
       :title,
