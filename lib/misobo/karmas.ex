@@ -139,7 +139,7 @@ defmodule Misobo.Karmas do
     )
 
     if get_duration_progress_percentage(duration, progress) >= 95 do
-      Misobo.Accounts.add_karma(user_id, karma, @music_listen_complete, id)
+      Misobo.Accounts.add_karma(user_id, karma, "#{@music_listen_complete}:#{id}", id)
       {:karma_points, true}
     else
       Logger.info(
