@@ -29,11 +29,11 @@ defmodule Misobo.Musics do
   end
 
   def get_music_list_query(true, false) do
-    from u in Music, where: u.tag == ^"MIND"
+    from u in Music, where: u.tag in ^["Anxiety", "Depression", "Stress", "Mindfulness"]
   end
 
   def get_music_list_query(false, true) do
-    from u in Music, where: u.tag == ^"BODY"
+    from u in Music, where: u.tag in ^["Meditation", "Sleep"]
   end
 
   def get_music_list_query(_is_mind_pack_unlocked, _is_body_pack_unlocked) do
